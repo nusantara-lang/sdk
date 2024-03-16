@@ -1,0 +1,1 @@
+./build/bin/nusal_test
