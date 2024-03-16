@@ -1,19 +1,23 @@
-#include "nusal/nusal.h"
+#include "nusal/lexer.h"
+#include <exception>
 #include <iostream>
-#include <string>
 
-int main() {
-    nusal::lexer lexer;
-    lexer.input(
-        "kode",
-        "10+15=25;"
-    );
-    lexer.input(
-        "kode2",
-        "15-2=13;"
-    );
+int main(int argv, char* args[]) {
+  try {
+		if(!(argv > 1)) {
+			std::cout << "Nusantara Lexer" << "\n\n";
+			std::cout << "Penggunaan: nusal <nusantara-file>*" << "\n";
+			return 0;
+		}
+   	nusal::lexer lexer;
+		for(int index = 1; index < argv; ++index) {
+			lexer.input_filepath(args[index]);
+		} 
     while(auto token = lexer.ambil_token()) {
         std::cout << nusal::ubah_ke_string(*token) << "\n";
     }
-    return 0;
+	} catch(const std::exception& error) {
+		 std::cout << error.what() << "\n";
+  } 
+  return 0;
 }

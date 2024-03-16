@@ -1,2 +1,2 @@
 #!/bin/bash
-./build/bin/nusal
+./build/bin/nusal $@
