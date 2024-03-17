@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     if(!(argc > 1)) {
       std::cout << "Nusantara Lexer"
                 << "\n\n";
-      std::cout << "Penggunaan: nusal <nusantara-file>*"
+      std::cout << "Penggunaan: nusal <nusa-file>*"
                 << "\n";
       return 0;
     }
