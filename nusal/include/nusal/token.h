@@ -26,12 +26,11 @@ namespace nusal {
       token() = default;
 
       token(
-          const tipe_token& tipe, std::string nama, std::string sumber,
-          const baris& baris, const karakter& karakter, std::string nilai
+          const tipe_token& tipe, std::string sumber, const baris& baris,
+          const karakter& karakter, std::string nilai
       );
 
       tipe_token tipe = tipe_token::TIDAK_DIKETAHUI;
-      std::string nama = "tidak diketahui";
       std::string sumber = "tidak diketahui";
       baris baris;
       karakter karakter;

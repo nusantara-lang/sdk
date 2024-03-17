@@ -24,7 +24,6 @@ std::unique_ptr<nusal::token> nusal::buat_token(
            input, matches, pola, std::regex_constants::match_continuous
        )) {
       tkn.tipe = data.tipe;
-      tkn.nama = data.nama;
       tkn.nilai = matches.str();
       for(const char& character : tkn.nilai) {
         karakter.nilai++;

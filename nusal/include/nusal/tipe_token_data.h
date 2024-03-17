@@ -8,11 +8,8 @@ namespace nusal {
 
   struct tipe_token_data {
       tipe_token_data();
-      tipe_token_data(
-          const tipe_token& tipe, std::string nama, std::string pola
-      );
+      tipe_token_data(const tipe_token& tipe, std::string pola);
       tipe_token tipe;
-      std::string nama;
       std::string pola;
   };
 

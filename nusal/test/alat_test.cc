@@ -21,35 +21,30 @@ TEST(ALAT_TEST, FUNGSI_BUAT_TOKEN) {
     if(urutan == 0) {
       EXPECT_EQ(token->baris.nilai, 0);
       EXPECT_EQ(token->karakter.nilai, 0);
-      EXPECT_EQ(token->nama, "huruf");
       EXPECT_EQ(token->nilai, "f");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::HURUF);
     } else if(urutan == 1) {
       EXPECT_EQ(token->baris.nilai, 0);
       EXPECT_EQ(token->karakter.nilai, 1);
-      EXPECT_EQ(token->nama, "angka");
       EXPECT_EQ(token->nilai, "2");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::ANGKA);
     } else if(urutan == 2) {
       EXPECT_EQ(token->baris.nilai, 0);
       EXPECT_EQ(token->karakter.nilai, 2);
-      EXPECT_EQ(token->nama, "baris baru");
       EXPECT_EQ(token->nilai, "\n");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::BARIS_BARU);
     } else if(urutan == 3) {
       EXPECT_EQ(token->baris.nilai, 1);
       EXPECT_EQ(token->karakter.nilai, 0);
-      EXPECT_EQ(token->nama, "kutip satu");
       EXPECT_EQ(token->nilai, "'");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::KUTIP_SATU);
     } else if(urutan == 4) {
       EXPECT_EQ(token->baris.nilai, 1);
       EXPECT_EQ(token->karakter.nilai, 1);
-      EXPECT_EQ(token->nama, "tidak diketahui");
       EXPECT_EQ(token->nilai, ">");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::TIDAK_DIKETAHUI);
