@@ -1,9 +1,12 @@
 #include "nusal/lexer.h"
 #include "nusal/nusal.h"
+#include "nusal/tipe_token.h"
 
 #include <exception>
+#include <format>
 #include <iostream>
 #include <span>
+#include <stdexcept>
 
 int main(int argc, char* argv[]) {
   auto args = std::span(argv, size_t(argc));
@@ -20,6 +23,11 @@ int main(int argc, char* argv[]) {
       lexer.input_filepath(args[index]);
     }
     while(auto token = lexer.ambil_token()) {
+      if(token->tipe == nusal::tipe_token::TIDAK_DIKETAHUI) {
+        throw std::runtime_error(std::format(
+            "Nusantara tidak dapat mengenali karakter '{}'.", token->nilai
+        ));
+      }
       std::cout << nusal::ubah_ke_string(*token) << "\n";
     }
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }

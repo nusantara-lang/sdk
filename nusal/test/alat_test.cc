@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-enum class test_tipe_token { huruf, angka, baris_baru, kutip, tidak_diketahui };
+enum class test_tipe_token { huruf, angka, baris_baru, kutip, TIDAK_DIKETAHUI };
 
 std::string ubah_ke_string(const test_tipe_token& test) {
   switch(test) {
@@ -21,7 +21,7 @@ std::string ubah_ke_string(const test_tipe_token& test) {
       return "baris_baru";
     case test_tipe_token::kutip:
       return "kutip";
-    case test_tipe_token::tidak_diketahui:
+    case test_tipe_token::TIDAK_DIKETAHUI:
       return "tidak_diketahui";
   }
 }
@@ -77,7 +77,7 @@ TEST(ALAT_TEST, FUNGSI_BUAT_TOKEN) {
       EXPECT_EQ(token->nama, "tidak_diketahui");
       EXPECT_EQ(token->nilai, ">");
       EXPECT_EQ(token->sumber, "test");
-      EXPECT_EQ(token->tipe, test_tipe_token::tidak_diketahui);
+      EXPECT_EQ(token->tipe, test_tipe_token::TIDAK_DIKETAHUI);
     }
     ++urutan;
   }

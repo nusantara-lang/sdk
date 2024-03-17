@@ -33,7 +33,7 @@ namespace nusal {
           nama(std::move(nama)), sumber(std::move(sumber)), baris(baris),
           karakter(karakter), nilai(std::move(nilai)) {}
 
-      T tipe = T::tidak_diketahui;
+      T tipe = T::TIDAK_DIKETAHUI;
       std::string nama = "tidak_diketahui";
       std::string sumber = "tidak diketahui";
       baris baris;
@@ -47,6 +47,7 @@ namespace nusal {
         token.nama,
         (token.nilai == "\n")   ? "\\n"
         : (token.nilai == "\t") ? "\\t"
+        : (token.nilai == "\r") ? "\\r"
                                 : token.nilai
     );
   }
