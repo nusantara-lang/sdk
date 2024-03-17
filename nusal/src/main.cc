@@ -1,4 +1,5 @@
 #include "nusal/lexer.h"
+#include "nusal/nusal.h"
 #include <exception>
 #include <iostream>
 
@@ -9,7 +10,7 @@ int main(int argv, char* args[]) {
 			std::cout << "Penggunaan: nusal <nusantara-file>*" << "\n";
 			return 0;
 		}
-   	nusal::lexer lexer;
+   	nusal::lexer lexer(nusal::nusa_data_tipe_token);
 		for(int index = 1; index < argv; ++index) {
 			lexer.input_filepath(args[index]);
 		} 

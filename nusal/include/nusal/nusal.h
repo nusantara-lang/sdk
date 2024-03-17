@@ -1,11 +1,12 @@
 #pragma once
 
+#include "nusal/tipe_token.h"
 #include "nusal/tipe_token_data.h"
 #include <vector>
 
 namespace nusal { 
 
-    static std::vector<tipe_token_data> nusa_data_tipe_token = {
+    static std::vector<tipe_token_data<tipe_token>> nusa_data_tipe_token = {
         {
             tipe_token::spasi, 
             ubah_ke_string(tipe_token::spasi), 
