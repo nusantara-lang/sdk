@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
                 << "\n";
       return 0;
     }
-    nusal::lexer lexer(nusal::nusa_data_tipe_token());
+    nusal::lexer lexer(nusal::nusal_data_tipe_token());
     for(int index = 1; index < argc; ++index) {
       lexer.input_filepath(args[index]);
     }

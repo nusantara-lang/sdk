@@ -1,8 +1,46 @@
 #include "nusal/alat.h"
 
+#include "nusal/token.h"
+
 #include <format>
 #include <fstream>
+#include <regex>
 #include <sstream>
+
+std::unique_ptr<nusal::token> nusal::buat_token(
+    std::string& input, baris& baris, karakter& karakter,
+    const std::string& sumber, const std::vector<tipe_token_data>& datas
+) {
+  if(input.empty()) { return nullptr; }
+  token tkn;
+  tkn.sumber = sumber;
+  tkn.baris = baris;
+  size_t karakter_temp = karakter.nilai;
+  tkn.karakter.nilai = karakter_temp;
+  for(const auto& data : datas) {
+    std::regex pola("^" + data.pola);
+    std::smatch matches;
+    if(std::regex_search(
+           input, matches, pola, std::regex_constants::match_continuous
+       )) {
+      tkn.tipe = data.tipe;
+      tkn.nama = data.nama;
+      tkn.nilai = matches.str();
+      for(const char& character : tkn.nilai) {
+        karakter.nilai++;
+        if(character == '\n') {
+          baris.nilai++;
+          karakter.nilai = 0;
+        }
+      }
+      input.replace(0, tkn.nilai.length(), "");
+      return std::make_unique<token>(tkn);
+    }
+  }
+  tkn.nilai = input[0];
+  input.replace(0, tkn.nilai.length(), "");
+  return std::make_unique<token>(tkn);
+}
 
 std::string nusal::baca_file(const std::string& file_path) {
   // Buka file untuk dibaca dalam mode binary
