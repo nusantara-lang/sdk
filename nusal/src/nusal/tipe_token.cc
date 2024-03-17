@@ -1,7 +1,7 @@
 #include "nusal/tipe_token.h"
 
 std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
-    switch (tipe_token) {
+  switch(tipe_token) {
     case tipe_token::spasi:
       return "spasi";
     case tipe_token::baris_baru:
@@ -16,5 +16,5 @@ std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
       return "huruf";
     case tipe_token::tidak_diketahui:
       return "tidak_diketahui";
-    }
+  }
 }
