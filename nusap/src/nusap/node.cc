@@ -1,4 +1,5 @@
 #include "nusap/node.h"
+#include "nusal/tipe_token.h"
 #include "nusap/tipe_node.h"
 #include <iostream>
 
@@ -12,11 +13,10 @@ void nusap::cetak_node(const std::unique_ptr<node>& node, const int& level) {
     for (int i = 0; i < level; ++i) {
         std::cout << "  ";
     }
-    std::cout << nusap::ubah_ke_string(node->tipe);
     if(node->token != nullptr) {
-        std::cout << ": " << node->token->nilai << "\n";
+        std::cout << nusal::ubah_ke_string(node->token->tipe) << ": " << node->token->nilai << "\n";
     }else{
-        std::cout << "\n";
+        std::cout << nusap::ubah_ke_string(node->tipe) << "\n";
     }
     for (const auto& child : node->children) {
         cetak_node(child, level + 1);
