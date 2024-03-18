@@ -18,8 +18,8 @@ nusal::token::token(
 
 std::string nusal::ubah_ke_string(const token& token) {
   return std::format(
-      "{}:{}:{} {} {}", token.sumber, token.baris.nilai + 1, token.karakter.nilai + 1,
-      ubah_ke_string(token.tipe),
+      "{}:{}:{} {} {}", token.sumber, token.baris.nilai + 1,
+      token.karakter.nilai + 1, ubah_ke_string(token.tipe),
       (token.nilai == "\n")   ? "\\n"
       : (token.nilai == "\t") ? "\\t"
       : (token.nilai == "\r") ? "\\r"
