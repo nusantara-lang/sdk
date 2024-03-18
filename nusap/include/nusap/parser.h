@@ -23,7 +23,8 @@ namespace nusap {
       nusal::lexer lexer;
       std::unique_ptr<nusal::token> token_saat_ini;
       bool token_saat_ini_adalah(const nusal::tipe_token& tipe);
-      bool token_saat_ini_atau_adalah(const std::vector<nusal::tipe_token>& tipe);
+      bool token_saat_ini_atau_adalah(const std::vector<nusal::tipe_token>& tipe
+      );
       void lewati_spasi_putih();
       void token_selanjut_nya();
       std::unique_ptr<node> buat_node_aturan(const tipe_node& tipe);

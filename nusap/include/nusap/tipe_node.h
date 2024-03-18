@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 namespace nusap {
 
   enum class tipe_node {
@@ -19,4 +20,4 @@ namespace nusap {
 
   std::string ubah_ke_string(const tipe_node& node);
 
-}
+} // namespace nusap
