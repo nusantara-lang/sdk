@@ -1,15 +1,5 @@
-kata_kunci pria;
-kata_kunci wanita;
-alias kelamin = pria|wanita
-
-perkenalan(teks nama, bilangan umur, kelamin jenis_kelamin) {
-    cetak('Halo! nama saya $nama, umur saya $umur tahun, saya berjenis kelamin $jenis_kelamin.');
-}
-
-awal(teks[] args) {
+awal() {
     teks nama = 'Fern Aerell';
-    bilangan umur = 18;
-    kelamin jenis_kelamin = pria;
-    bilangan nilai = 100 - 10 / 2 * 6 + 11;
-    perkenalan(nama: nama, umur: umur, jenis_kelamin: jenis_kelamin);
+    bilangan umur = 1,9;
+    cetak('Nama saya $nama, umur saya $umur tahun.');
 }

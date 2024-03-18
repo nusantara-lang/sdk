@@ -1,6 +1,8 @@
 #include "nusal/lexer.h"
 
 #include "nusal/alat.h"
+#include <filesystem>
+#include <string>
 
 nusal::lexer::lexer(const std::vector<nusal::tipe_token_data>& tipe_token_data):
     tipe_token_data(tipe_token_data) {}
@@ -24,11 +26,12 @@ void nusal::lexer::input(const std::string& sumber, const std::string& input) {
 }
 
 void nusal::lexer::input_filepath(const std::string& file_path) {
-  if(this->sumber_berserta_input.contains(file_path)) {
-    this->sumber_berserta_input[file_path] =
-        this->sumber_berserta_input[file_path] + baca_file(file_path);
+  std::string file_path_absolute = std::filesystem::absolute(file_path).string();
+  if(this->sumber_berserta_input.contains(file_path_absolute)) {
+    this->sumber_berserta_input[file_path_absolute] =
+        this->sumber_berserta_input[file_path_absolute] + baca_file(file_path_absolute);
   } else {
-    this->sumber_berserta_input[file_path] = baca_file(file_path);
+    this->sumber_berserta_input[file_path_absolute] = baca_file(file_path_absolute);
   }
 }
 
