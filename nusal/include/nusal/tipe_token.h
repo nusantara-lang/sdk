@@ -14,7 +14,7 @@ namespace nusal {
     ALIAS,
     BILANGAN,
     TEKS,
-    HURUF,
+    IDENTIFIKASI,
     ANGKA,
     TAMBAH,
     TANDA_HUBUNG,
@@ -36,7 +36,8 @@ namespace nusal {
     KURUNG_SIKU_BUKA,
     KURUNG_SIKU_TUTUP,
     KURUNG_KURAWAL_BUKA,
-    KURUNG_KURAWAL_TUTUP
+    KURUNG_KURAWAL_TUTUP,
+    KARAKTER
   };
 
   std::string ubah_ke_string(const tipe_token& tipe_token);

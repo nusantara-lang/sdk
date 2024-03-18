@@ -20,8 +20,8 @@ std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
       return "bilangan";
     case tipe_token::TEKS:
       return "teks";
-    case tipe_token::HURUF:
-      return "huruf";
+    case tipe_token::IDENTIFIKASI:
+      return "identifikasi";
     case tipe_token::ANGKA:
       return "angka";
     case tipe_token::TAMBAH:
@@ -66,5 +66,7 @@ std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
       return "kurung kurawal buka";
     case tipe_token::KURUNG_KURAWAL_TUTUP:
       return "kurung kurawal tutup";
+    case tipe_token::KARAKTER:
+      return "karakter";
   }
 }

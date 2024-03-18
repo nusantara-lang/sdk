@@ -10,7 +10,7 @@
 #include <string>
 
 TEST(ALAT_TEST, FUNGSI_BUAT_TOKEN) {
-  std::string input = "f2\n'>";
+  std::string input = "teks nama = 'Fern Aerell';";
   std::string sumber = "test";
   nusal::baris baris;
   nusal::karakter karakter;
@@ -21,33 +21,75 @@ TEST(ALAT_TEST, FUNGSI_BUAT_TOKEN) {
     if(urutan == 0) {
       EXPECT_EQ(token->baris.nilai, 0);
       EXPECT_EQ(token->karakter.nilai, 0);
-      EXPECT_EQ(token->nilai, "f");
+      EXPECT_EQ(token->nilai, "teks");
       EXPECT_EQ(token->sumber, "test");
-      EXPECT_EQ(token->tipe, nusal::tipe_token::HURUF);
+      EXPECT_EQ(token->tipe, nusal::tipe_token::TEKS);
     } else if(urutan == 1) {
       EXPECT_EQ(token->baris.nilai, 0);
-      EXPECT_EQ(token->karakter.nilai, 1);
-      EXPECT_EQ(token->nilai, "2");
+      EXPECT_EQ(token->karakter.nilai, 4);
+      EXPECT_EQ(token->nilai, " ");
       EXPECT_EQ(token->sumber, "test");
-      EXPECT_EQ(token->tipe, nusal::tipe_token::ANGKA);
+      EXPECT_EQ(token->tipe, nusal::tipe_token::SPASI);
     } else if(urutan == 2) {
       EXPECT_EQ(token->baris.nilai, 0);
-      EXPECT_EQ(token->karakter.nilai, 2);
-      EXPECT_EQ(token->nilai, "\n");
+      EXPECT_EQ(token->karakter.nilai, 5);
+      EXPECT_EQ(token->nilai, "nama");
       EXPECT_EQ(token->sumber, "test");
-      EXPECT_EQ(token->tipe, nusal::tipe_token::BARIS_BARU);
+      EXPECT_EQ(token->tipe, nusal::tipe_token::IDENTIFIKASI);
     } else if(urutan == 3) {
-      EXPECT_EQ(token->baris.nilai, 1);
-      EXPECT_EQ(token->karakter.nilai, 0);
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 9);
+      EXPECT_EQ(token->nilai, " ");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::SPASI);
+    } else if(urutan == 4) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 10);
+      EXPECT_EQ(token->nilai, "=");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::SAMA_DENGAN);
+    } else if(urutan == 5) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 11);
+      EXPECT_EQ(token->nilai, " ");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::SPASI);
+    } else if(urutan == 6) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 12);
       EXPECT_EQ(token->nilai, "'");
       EXPECT_EQ(token->sumber, "test");
       EXPECT_EQ(token->tipe, nusal::tipe_token::KUTIP_SATU);
-    } else if(urutan == 4) {
-      EXPECT_EQ(token->baris.nilai, 1);
-      EXPECT_EQ(token->karakter.nilai, 1);
-      EXPECT_EQ(token->nilai, ">");
+    } else if(urutan == 7) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 13);
+      EXPECT_EQ(token->nilai, "Fern");
       EXPECT_EQ(token->sumber, "test");
-      EXPECT_EQ(token->tipe, nusal::tipe_token::TIDAK_DIKETAHUI);
+      EXPECT_EQ(token->tipe, nusal::tipe_token::IDENTIFIKASI);
+    } else if(urutan == 8) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 17);
+      EXPECT_EQ(token->nilai, " ");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::SPASI);
+    } else if(urutan == 9) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 18);
+      EXPECT_EQ(token->nilai, "Aerell");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::IDENTIFIKASI);
+    } else if(urutan == 10) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 24);
+      EXPECT_EQ(token->nilai, "'");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::KUTIP_SATU);
+    } else if(urutan == 11) {
+      EXPECT_EQ(token->baris.nilai, 0);
+      EXPECT_EQ(token->karakter.nilai, 25);
+      EXPECT_EQ(token->nilai, ";");
+      EXPECT_EQ(token->sumber, "test");
+      EXPECT_EQ(token->tipe, nusal::tipe_token::TITIK_KOMA);
     }
     ++urutan;
   }
