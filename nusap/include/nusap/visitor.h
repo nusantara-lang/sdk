@@ -13,18 +13,22 @@ namespace nusap {
     struct pernyataan_ctx;
 
     struct nusantara_ctx {
+        explicit nusantara_ctx(const node& node);
         std::vector<pernyataan_ctx> k_pernyataan_ctx;
     };
 
     struct teks_ctx {
+        explicit teks_ctx(const node& node);
         std::vector<nusal::token> k_token;
     };
 
     struct bilangan_ctx {
+        explicit bilangan_ctx(const node& node);
         std::vector<nusal::token> k_token;
     };
 
     struct buat_variable_ctx {
+        explicit buat_variable_ctx(const node& node);
         nusal::tipe_token tipe;
         std::string id;
         std::optional<teks_ctx> teks_ctx;
@@ -34,16 +38,20 @@ namespace nusap {
     struct pernyataan_blok_kode_ctx;
 
     struct blok_kode_ctx {
+        blok_kode_ctx() = default;
+        explicit blok_kode_ctx(const node& node);
         std::vector<pernyataan_blok_kode_ctx> k_pernyataan_blok_kode_ctx;
     };
 
     struct buat_fungsi_ctx {
+        explicit buat_fungsi_ctx(const node& node);
         std::string id;
         std::vector<buat_variable_ctx> k_buat_variable;
         blok_kode_ctx blok_kode_ctx;
     };
 
     struct pernyataan_ctx {
+        explicit pernyataan_ctx(const node& node);
         std::optional<buat_fungsi_ctx> buat_fungsi_ctx;
         std::optional<buat_variable_ctx> buat_variable_ctx;
     };
@@ -51,17 +59,20 @@ namespace nusap {
     struct ekspresi_ctx;
 
     struct manggil_fungsi_ctx {
+        explicit manggil_fungsi_ctx(const node& node);
         std::string id;
         std::vector<ekspresi_ctx> k_ekspresi_ctx;
     };
 
     struct pernyataan_blok_kode_ctx {
+        explicit pernyataan_blok_kode_ctx(const node& node);
         std::optional<buat_fungsi_ctx> buat_fungsi_ctx;
         std::optional<manggil_fungsi_ctx> manggil_fungsi_ctx;
         std::optional<buat_variable_ctx> buat_variable_ctx;
     };
 
     struct ekspresi_ctx {
+        explicit ekspresi_ctx(const node& node);
         std::optional<teks_ctx> teks_ctx;
         std::optional<bilangan_ctx> bilangan_ctx;
     };
