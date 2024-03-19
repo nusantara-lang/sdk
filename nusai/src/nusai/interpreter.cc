@@ -3,6 +3,7 @@
 #include "nusap/visitor.h"
 #include <any>
 #include <format>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -26,9 +27,21 @@ void nusai::interpreter::input_filepath(const std::string& file_path) {
 
 std::any nusai::interpreter::visit_nusantara(const nusap::nusantara_ctx& ctx) {
     this->k_kawasan[kawasan_global] = kawasan();
+    this->k_kawasan[kawasan_global].functions["cetak"] = [this](const std::vector<nusap::ekspresi_ctx>& k_ekspresi) -> std::any {
+        std::any hasil = this->visit_ekspresi(k_ekspresi[0]);
+        if(auto* ptr = std::any_cast<std::string>(&hasil)) {
+            std::cout << *ptr;
+        }else if(auto* ptr = std::any_cast<double>(&hasil)) {
+            std::cout << *ptr;
+        }else if(auto* ptr = std::any_cast<int>(&hasil)) {
+            std::cout << *ptr;
+        }
+        return {};
+    };
     for(const auto& child : ctx.k_pernyataan_ctx) {
         this->visit_pernyataan(child);
     }
+    this->k_kawasan[kawasan_global].functions["awal"]({});
     return {};
 }
 
