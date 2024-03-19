@@ -25,7 +25,7 @@ namespace nusap {
       bool token_saat_ini_adalah(const nusal::tipe_token& tipe);
       bool token_saat_ini_atau_adalah(const std::vector<nusal::tipe_token>& tipe
       );
-      void lewati_spasi_putih();
+      void lewati_spasi_putih_dan_komentar();
       void token_selanjut_nya();
       std::unique_ptr<node> buat_node_aturan(const tipe_node& tipe);
       std::unique_ptr<node> buat_node_token();
