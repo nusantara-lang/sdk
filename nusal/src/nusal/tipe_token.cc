@@ -68,5 +68,9 @@ std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
       return "kurung kurawal tutup";
     case tipe_token::KARAKTER:
       return "karakter";
+    case tipe_token::KOMENTAR_SATU_BARIS:
+      return "komentar satu baris";
+    case tipe_token::KOMENTAR_BANYAK_BARIS:
+      return "komentar banyak baris";
   }
 }

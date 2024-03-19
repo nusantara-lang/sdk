@@ -10,6 +10,8 @@ namespace nusal {
     BARIS_BARU,
     TAB,
     SPASI,
+    KOMENTAR_SATU_BARIS,
+    KOMENTAR_BANYAK_BARIS,
     KATA_KUNCI,
     ALIAS,
     BILANGAN,
