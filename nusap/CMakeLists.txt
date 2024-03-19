@@ -32,7 +32,11 @@ file(
 	"src/nusap/**/*.cc"
 )
 
-include_directories("C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
+if(WIN32)
+	include_directories("C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
+elseif(UNIX)
+	include_directories("/home/aerell/project/nusantara-lang/sdk/nusal/include")
+endif()
 include_directories("include")
 
 set(LIBRARY_NAME nusap)
@@ -44,8 +48,13 @@ add_library(
 	${LIBRARY_SOURCES}
 )
 
-target_include_directories(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
-target_link_libraries(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/build/lib/nusal/libnusal.a")
+if(WIN32)
+	target_include_directories(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
+	target_link_libraries(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/build/lib/nusal/libnusal.a")
+elseif(UNIX)
+	target_include_directories(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusal/include")
+	target_link_libraries(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusal/build/lib/nusal/libnusal.a")
+endif()
 
 set_target_properties(${LIBRARY_NAME} PROPERTIES OUTPUT_NAME ${LIBRARY_NAME_OUTPUT})
 set_target_properties(${LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/nusap")
