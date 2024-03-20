@@ -71,6 +71,13 @@ else()
 	message(STATUS "Unit Test (OFF)")
 endif()
 
+file(
+    COPY
+    "${CMAKE_SOURCE_DIR}/lib"
+    DESTINATION
+    "${CMAKE_BINARY_DIR}"
+)
+
 install(
     TARGETS nusantara
     DESTINATION bin

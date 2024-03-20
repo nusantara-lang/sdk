@@ -5,17 +5,11 @@
 namespace nusap {
 
   enum class tipe_node {
-    nusantara,
     token,
-    pernyataan,
-    pernyataan_blok_kode,
-    ekspresi,
-    teks,
-    bilangan,
-    buat_variable,
-    buat_fungsi,
-    manggil_fungsi,
-    blok_kode
+    nusantara,
+    muat_file,
+    nilai_teks,
+    pernyataan
   };
 
   std::string ubah_ke_string(const tipe_node& node);

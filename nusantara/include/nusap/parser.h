@@ -6,7 +6,10 @@
 #include "nusap/node.h"
 #include "nusap/tipe_node.h"
 
+#include <functional>
 #include <memory>
+#include <set>
+#include <string>
 #include <vector>
 
 namespace nusap {
@@ -22,23 +25,22 @@ namespace nusap {
     private:
       nusal::lexer lexer;
       std::unique_ptr<nusal::token> token_saat_ini;
-      bool token_saat_ini_adalah(const nusal::tipe_token& tipe);
-      bool token_saat_ini_atau_adalah(const std::vector<nusal::tipe_token>& tipe
-      );
-      void lewati_spasi_putih_dan_komentar();
-      void token_selanjut_nya();
-      std::unique_ptr<node> buat_node_aturan(const tipe_node& tipe);
-      std::unique_ptr<node> buat_node_token();
+      std::set<std::string> muatFile;
+      static const std::vector<nusal::tipe_token>& skipTipeToken();
+      bool tokenSaatIni(const nusal::tipe_token& tipe);
+      bool tokenSaatIni(const std::vector<nusal::tipe_token>& tipe);
+      void tokenSelanjutNya();
+      bool mengharapkanToken(const std::unique_ptr<node>& aturan, const nusal::tipe_token& tipe, const std::function<std::unique_ptr<node>()>& callback);
+      bool mengharapkanToken(const std::unique_ptr<node>& aturan, const std::vector<nusal::tipe_token>& tipe, const std::function<std::unique_ptr<node>()>& callback);
 
+      std::unique_ptr<node> buatNodeAturan(const tipe_node& tipe);
+      std::unique_ptr<node> buatNodeToken();
+      
+      // parse
+      void parseSkipToken();
       std::unique_ptr<node> parse_pernyataan();
-      std::unique_ptr<node> parse_pernyataan_blok_kode();
-      std::unique_ptr<node> parse_ekspresi();
-      std::unique_ptr<node> parse_blok_kode();
-      std::unique_ptr<node> parse_teks();
-      std::unique_ptr<node> parse_bilangan();
-      std::unique_ptr<node> parse_buat_variable();
-      std::unique_ptr<node> parse_buat_fungsi();
-      std::unique_ptr<node> parse_manggil_fungsi();
+      std::unique_ptr<node> parse_muat_file();
+      std::unique_ptr<node> parse_nilai_teks();
   };
 
 } // namespace nusap

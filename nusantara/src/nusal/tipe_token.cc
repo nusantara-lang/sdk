@@ -12,14 +12,16 @@ std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
       return "tab";
     case tipe_token::SPASI:
       return "spasi";
-    case tipe_token::KATA_KUNCI:
-      return "kata kunci";
-    case tipe_token::ALIAS:
-      return "alias";
+    case tipe_token::MUAT:
+      return "muat";
+    case tipe_token::LUAR:
+      return "luar";
     case tipe_token::BILANGAN:
       return "bilangan";
     case tipe_token::TEKS:
       return "teks";
+    case tipe_token::DINAMIS:
+      return "dinamis";
     case tipe_token::IDENTIFIKASI:
       return "identifikasi";
     case tipe_token::ANGKA:

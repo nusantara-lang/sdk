@@ -1,5 +1,0 @@
-awal() {
-    teks nama = 'Fern Aerell';
-    bilangan umur = 1,9;
-    cetak('Nama saya $nama, umur saya $umur tahun.');
-}
