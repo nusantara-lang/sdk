@@ -81,6 +81,33 @@ if(${UNIT_TEST} STREQUAL "ON")
     )
     include(GoogleTest)
     gtest_discover_tests(${EXECUTABLE_TEST_NAME})
+
+    install(
+        TARGETS ${EXECUTABLE_TEST_NAME}
+        DESTINATION bin
+    )
 else()
 	message(STATUS "Unit Test (OFF)")
 endif()
+
+install(
+    TARGETS ${LIBRARY_NAME}
+    ARCHIVE DESTINATION lib
+)
+
+install(
+    TARGETS ${EXECUTABLE_NAME}
+    DESTINATION bin
+)
+
+file(
+	GLOB_RECURSE 
+	LIBRARY_HEADER
+	"include/nusal/*.h"
+	"include/nusal/**/*.h"
+)
+
+install(
+    FILES ${LIBRARY_HEADER}
+    DESTINATION include/nusal
+)

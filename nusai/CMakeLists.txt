@@ -7,15 +7,27 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 set(UNIT_TEST OFF)
 
 if(WIN32)
-		message(STATUS "Platform (Windows)")
+	message(STATUS "Platform (Windows)")
     set(CMAKE_CXX_COMPILER "clang++")
     set(CMAKE_CXX_FLAGS "-Ofast -ffast-math -flto -march=native -mtune=native -fstack-protector -msse2 -mavx -g -Wall -Wextra")
     set(CMAKE_LINKER "lld")
 elseif(UNIX)
-		message(STATUS "Platform (Linux)")
+	message(STATUS "Platform (Linux)")
     set(CMAKE_CXX_COMPILER "clang++-17")
     set(CMAKE_CXX_FLAGS "-Ofast -ffast-math -flto -march=native -mtune=native -fstack-protector -g -fPIE -Wall -Wextra")
     set(CMAKE_LINKER "lld-17")
+endif()
+
+if(WIN32)
+    set(NUSAL_LIB "${CMAKE_INSTALL_PREFIX}/../nusal/lib/libnusal.a")
+    set(NUSAL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/../nusal/include")
+    set(NUSAP_LIB "${CMAKE_INSTALL_PREFIX}/../nusap/lib/libnusap.a")
+    set(NUSAP_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/../nusap/include")
+elseif(UNIX)
+    set(NUSAL_LIB "${CMAKE_INSTALL_PREFIX}/lib/libnusal.a")
+    set(NUSAL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+    set(NUSAP_LIB "${CMAKE_INSTALL_PREFIX}/lib/libnusap.a")
+    set(NUSAP_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 endif()
 
 project(
@@ -32,15 +44,11 @@ file(
 	"src/nusai/**/*.cc"
 )
 
-if(WIN32)
-	include_directories("C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
-	include_directories("C:/Aerell/AerellDev/nusantara-lang/sdk/nusap/include")
-elseif(UNIX)
-	include_directories("/home/aerell/project/nusantara-lang/sdk/nusal/include")
-	include_directories("/home/aerell/project/nusantara-lang/sdk/nusap/include")
-endif()
-
-include_directories("include")
+include_directories(
+    ${NUSAL_INCLUDE_DIR}
+    ${NUSAP_INCLUDE_DIR}
+    "include"
+)
 
 set(LIBRARY_NAME nusai)
 set(LIBRARY_NAME_OUTPUT nusai)
@@ -51,17 +59,19 @@ add_library(
 	${LIBRARY_SOURCES}
 )
 
-if(WIN32)
-	target_include_directories(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/include")
-	target_include_directories(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusap/include")
-	target_link_libraries(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusal/build/lib/nusal/libnusal.a")
-	target_link_libraries(${LIBRARY_NAME} PRIVATE "C:/Aerell/AerellDev/nusantara-lang/sdk/nusap/build/lib/nusap/libnusap.a")
-elseif(UNIX)
-	target_include_directories(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusal/include")
-	target_include_directories(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusap/include")
-	target_link_libraries(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusal/build/lib/nusal/libnusal.a")
-	target_link_libraries(${LIBRARY_NAME} PRIVATE "/home/aerell/project/nusantara-lang/sdk/nusap/build/lib/nusap/libnusap.a")
-endif()
+target_include_directories(
+    ${LIBRARY_NAME} 
+    PRIVATE 
+    ${NUSAL_INCLUDE_DIR}
+    ${NUSAP_INCLUDE_DIR}
+)
+
+target_link_libraries(
+    ${LIBRARY_NAME} 
+    PRIVATE 
+    ${NUSAL_LIB}
+    ${NUSAP_LIB}
+)
 
 set_target_properties(${LIBRARY_NAME} PROPERTIES OUTPUT_NAME ${LIBRARY_NAME_OUTPUT})
 set_target_properties(${LIBRARY_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/nusai")
@@ -101,6 +111,33 @@ if(${UNIT_TEST} STREQUAL "ON")
     )
     include(GoogleTest)
     gtest_discover_tests(${EXECUTABLE_TEST_NAME})
+
+    install(
+        TARGETS ${EXECUTABLE_TEST_NAME}
+        DESTINATION bin
+    )
 else()
 	message(STATUS "Unit Test (OFF)")
 endif()
+
+install(
+    TARGETS ${LIBRARY_NAME}
+    ARCHIVE DESTINATION lib
+)
+
+install(
+    TARGETS ${EXECUTABLE_NAME}
+    DESTINATION bin
+)
+
+file(
+	GLOB_RECURSE 
+	LIBRARY_HEADER
+	"include/nusai/*.h"
+	"include/nusai/**/*.h"
+)
+
+install(
+    FILES ${LIBRARY_HEADER}
+    DESTINATION include/nusai
+)

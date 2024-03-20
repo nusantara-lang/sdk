@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nusal/tipe_token.h"
+#include <nusal/tipe_token.h>
 #include <any>
 #include <functional>
 #include <map>
