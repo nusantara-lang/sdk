@@ -20,7 +20,7 @@ uninstall_file() {
 }
 
 # Uninstall process
-echo "**Uninstalling nusap...**"
+echo "**Uninstalling nusantara...**"
 
 # Set IFS to newline to handle spaces in filenames correctly
 IFS=$'\n'
