@@ -4,12 +4,12 @@
 
 #include <string>
 
-namespace nusal {
+namespace Nusal {
 
-  struct tipe_token_data {
-      tipe_token_data();
-      tipe_token_data(const tipe_token& tipe, std::string pola);
-      tipe_token tipe;
+  struct TipeTokenData {
+      TipeTokenData();
+      TipeTokenData(const TipeToken& tipe, std::string pola);
+      TipeToken tipe;
       std::string pola;
   };
 

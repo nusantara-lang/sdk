@@ -6,13 +6,13 @@
 #include <memory>
 #include <vector>
 
-namespace nusal {
+namespace Nusal {
 
-  std::unique_ptr<token> buat_token(
+  std::unique_ptr<Token> buatToken(
       std::string& input, baris& baris, karakter& karakter,
-      const std::string& sumber, const std::vector<tipe_token_data>& datas
+      const std::string& sumber, const std::vector<TipeTokenData>& data
   );
 
-  std::string baca_file(const std::string& file_path);
+  std::string bacaFile(const std::string& filePath);
 
 } // namespace nusal

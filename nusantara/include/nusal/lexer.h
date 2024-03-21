@@ -8,25 +8,25 @@
 #include <string>
 #include <vector>
 
-namespace nusal {
+namespace Nusal {
 
-  class lexer {
+  class Lexer {
     public:
-      explicit lexer(const std::vector<tipe_token_data>& tipe_token_data);
+      explicit Lexer(const std::vector<TipeTokenData>& tipeTokenData);
 
       void input(const std::string& input);
 
       void input(const std::string& sumber, const std::string& input);
 
-      void input_filepath(const std::string& file_path);
+      void inputFilePath(const std::string& filePath);
 
-      std::unique_ptr<token> ambil_token();
+      std::unique_ptr<Token> ambilToken();
 
     private:
-      std::vector<tipe_token_data> tipe_token_data;
+      std::vector<TipeTokenData> tipeTokenData;
       baris baris;
       karakter karakter;
-      std::map<std::string, std::string> sumber_berserta_input = {};
+      std::map<std::string, std::string> sumberBersertaInput = {};
   };
 
-} // namespace nusal
+} // namespace Nusal

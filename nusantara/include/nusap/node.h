@@ -6,16 +6,16 @@
 #include <memory>
 #include <vector>
 
-namespace nusap {
+namespace Nusap {
 
-  struct node {
-      explicit node(const tipe_node& tipe);
-      explicit node(const tipe_node& tipe, std::unique_ptr<nusal::token> token);
-      tipe_node tipe;
-      std::unique_ptr<nusal::token> token;
-      std::vector<std::unique_ptr<node>> children;
+  struct Node {
+      explicit Node(const TipeNode& tipe);
+      explicit Node(const TipeNode& tipe, std::unique_ptr<Nusal::Token> token);
+      TipeNode tipe;
+      std::unique_ptr<Nusal::Token> token;
+      std::vector<std::unique_ptr<Node>> children;
   };
 
-  void cetak_node(const std::unique_ptr<node>& node, const int& level = 0);
+  void cetakNode(const std::unique_ptr<Node>& node, const int& level = 0);
 
 } // namespace nusap

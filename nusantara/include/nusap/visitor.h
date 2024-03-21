@@ -3,14 +3,15 @@
 #include "nusal/token.h"
 #include "nusap/node.h"
 #include <any>
+#include <optional>
 #include <string>
 #include <vector>
 
-namespace nusap {
+namespace Nusap {
 
-    struct token_ctx {
-        explicit token_ctx(const node& node);
-        nusal::token token;
+    struct TokenCtx {
+        explicit okenCtx(const Node& node);
+        Nusal::Token token;
     };
 
     struct nilai_teks_ctx {
@@ -20,12 +21,12 @@ namespace nusap {
 
     struct muat_file_ctx {
         explicit muat_file_ctx(const node& node);
-        std::string lokasiFile;
+        nilai_teks_ctx nilai_teks_ctx;
     };
 
     struct pernyataan_ctx {
         explicit pernyataan_ctx(const node& node);
-        muat_file_ctx muat_file_ctx;
+        std::optional<muat_file_ctx> muat_file_ctx;
     };
 
     struct nusantara_ctx {

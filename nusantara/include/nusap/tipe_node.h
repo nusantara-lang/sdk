@@ -2,9 +2,9 @@
 
 #include <string>
 
-namespace nusap {
+namespace Nusap {
 
-  enum class tipe_node {
+  enum class TipeNode {
     token,
     nusantara,
     muat_file,
@@ -12,6 +12,6 @@ namespace nusap {
     pernyataan
   };
 
-  std::string ubah_ke_string(const tipe_node& node);
+  std::string ubahKeString(const TipeNode& node);
 
 } // namespace nusap

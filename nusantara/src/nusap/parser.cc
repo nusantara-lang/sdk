@@ -43,7 +43,7 @@ void nusap::parser::tokenSelanjutNya() {
   this->token_saat_ini = this->lexer.ambil_token();
 }
 
-bool nusap::parser::tokenSaatIni(const nusal::tipe_token& tipe) {
+bool nusap::parser::tokenSaatIni(const nusal::tipe_token& tipe) {	
   return (this->token_saat_ini != nullptr) && (this->token_saat_ini->tipe == tipe);
 }
 
@@ -58,11 +58,14 @@ bool nusap::parser::mengharapkanToken(
     const std::unique_ptr<node>& aturan, const nusal::tipe_token& tipe,
     const std::function<std::unique_ptr<node>()>& callback
 ) {
-  this->parseSkipToken();
   bool hasil = this->tokenSaatIni(tipe);
   if(hasil) {
-    aturan->children.push_back(callback());
-    this->tokenSelanjutNya();
+		auto node = callback();
+		if(node->tipe == tipe_node::token) {
+			this->tokenSelanjutNya();
+			this->parseSkipToken();
+		}
+    aturan->children.push_back(std::move(node));
   }
   return hasil;
 }
@@ -96,9 +99,8 @@ void nusap::parser::parseSkipToken() {
 
 std::unique_ptr<nusap::node> nusap::parser::parse() {
   std::unique_ptr<nusap::node> nusantara = buatNodeAturan(tipe_node::nusantara);
-  this->parseSkipToken();
   this->tokenSelanjutNya();
-  while(this->token_saat_ini) {
+  while(this->token_saat_ini != nullptr) {
     if(this->tokenSaatIni(nusal::tipe_token::TIDAK_DIKETAHUI)) {
       throw nusap::kesalahan_parser(
           *this->token_saat_ini,
@@ -108,16 +110,20 @@ std::unique_ptr<nusap::node> nusap::parser::parse() {
           )
       );
     }
-    nusantara->children.push_back(this->parse_pernyataan());
-    this->tokenSelanjutNya();
+		nusantara->children.push_back(this->parse_pernyataan());
   }
   return nusantara;
 }
 
 std::unique_ptr<nusap::node> nusap::parser::parse_pernyataan() {
   std::unique_ptr<nusap::node> pernyataan = buatNodeAturan(tipe_node::pernyataan);
-  pernyataan->children.push_back(this->parse_muat_file());
-  return pernyataan;
+	if(this->mengharapkanToken(pernyataan, nusal::tipe_token::MUAT, [&](){return this->parse_muat_file();})) {
+		if(!this->mengharapkanToken(pernyataan, nusal::tipe_token::TITIK_KOMA, [&](){return this->buatNodeToken();})) {
+			throw kesalahan_parser(*this->token_saat_ini, "Jangan lupa titik koma.");
+		}
+  	return pernyataan;
+	}
+	throw kesalahan_parser(*this->token_saat_ini, "Pernyataan tidak valid");
 }
 
 std::unique_ptr<nusap::node> nusap::parser::parse_muat_file() {
@@ -138,6 +144,7 @@ std::unique_ptr<nusap::node> nusap::parser::parse_nilai_teks() {
   }
   while(!tokenSaatIni(nusal::tipe_token::KUTIP_SATU)) {
     nilai_teks->children.push_back(this->buatNodeToken());
+		this->tokenSelanjutNya();
   }
   if(!this->mengharapkanToken(nilai_teks, nusal::tipe_token::KUTIP_SATU, [&]() {return this->buatNodeToken();})) {
     throw kesalahan_parser(*this->token_saat_ini, "Teks harus di akhiri kutip 1.");

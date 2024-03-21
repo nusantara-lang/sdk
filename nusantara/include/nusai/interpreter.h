@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <nusal/tipe_token.h>
 #include <any>
 #include <nusal/lexer.h>
@@ -16,7 +18,8 @@ namespace nusai {
             void input(const std::string& sumber, const std::string& input);
             void input_filepath(const std::string& file_path);
         private:
-            nusap::parser parser;
+						std::map<std::string, nusap::parser> k_parser;
+
             std::any visit_token(const nusap::token_ctx& ctx) override;
             std::any visit_nilai_teks(const nusap::nilai_teks_ctx& ctx) override;
             std::any visit_muat_file(const nusap::muat_file_ctx& ctx) override;

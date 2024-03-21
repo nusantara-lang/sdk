@@ -4,8 +4,8 @@
 
 #include <vector>
 
-namespace nusal {
+namespace Nusal {
 
-  const std::vector<tipe_token_data>& nusal_data_tipe_token();
+  const std::vector<TipeTokenData>& nusalDataTipeToken();
 
 } // namespace nusal

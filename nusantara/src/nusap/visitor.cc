@@ -19,16 +19,14 @@ nusap::nilai_teks_ctx::nilai_teks_ctx(const node& node) {
     }
 }
 
-nusap::muat_file_ctx::muat_file_ctx(const node& node) {
-    size_t childrenSize = node.children.size();
-    std::string lokasiFile;
-    for(size_t index = 1; index < childrenSize; ++index) {
-        lokasiFile += node.children[index]->token->nilai;
-    }
-    this->lokasiFile = lokasiFile;
-}
+nusap::muat_file_ctx::muat_file_ctx(const node& node): nilai_teks_ctx(nusap::nilai_teks_ctx(*node.children[1])) {}
 
-nusap::pernyataan_ctx::pernyataan_ctx(const node& node): muat_file_ctx(*node.children[0]) {}
+nusap::pernyataan_ctx::pernyataan_ctx(const node& node) {
+	const auto& child0 = node.children[0];
+	if(child0->tipe == tipe_node::muat_file) {
+		this->muat_file_ctx = nusap::muat_file_ctx(*child0);
+	}
+}
 
 std::any nusap::visitor::visit(const node& node) {
     if(node.tipe == tipe_node::nusantara) {

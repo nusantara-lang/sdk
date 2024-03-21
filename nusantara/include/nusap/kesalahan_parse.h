@@ -5,11 +5,11 @@
 #include <exception>
 #include <string>
 
-namespace nusap {
+namespace Nusap {
 
-  class kesalahan_parser: public std::exception {
+  class KesalahanParse: public std::exception {
     public:
-      kesalahan_parser(const nusal::token& token, const std::string& pesan);
+      KesalahanParse(const Nusal::Token& token, const std::string& pesan);
 
     private:
       [[nodiscard]] const char* what() const noexcept override;

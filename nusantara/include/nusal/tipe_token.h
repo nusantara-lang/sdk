@@ -2,47 +2,47 @@
 
 #include <string>
 
-namespace nusal {
+namespace Nusal {
 
-  enum class tipe_token {
-    TIDAK_DIKETAHUI,
-    KEMBALI_KE_AWAL_KARAKTER,
-    BARIS_BARU,
-    TAB,
-    SPASI,
-    KOMENTAR_SATU_BARIS,
-    KOMENTAR_BANYAK_BARIS,
-    MUAT,
-    LUAR,
-    BILANGAN,
-    TEKS,
-    DINAMIS,
-    IDENTIFIKASI,
-    ANGKA,
-    TAMBAH,
-    TANDA_HUBUNG,
-    ASTERIS,
-    GARIS_MIRING,
-    PERSEN,
-    SAMA_DENGAN,
-    SERU,
-    DOLAR,
-    GARIS_BAWAH,
-    KOMA,
-    TITIK,
-    TITIK_DUA,
-    TITIK_KOMA,
-    KUTIP_SATU,
-    GARIS_VERTIKAL,
-    KURUNG_BUKA,
-    KURUNG_TUTUP,
-    KURUNG_SIKU_BUKA,
-    KURUNG_SIKU_TUTUP,
-    KURUNG_KURAWAL_BUKA,
-    KURUNG_KURAWAL_TUTUP,
-    KARAKTER
+  enum class TipeToken {
+    tidak_diketahui,
+    kembali_ke_awal_karakter,
+    baris_baru,
+    tab,
+    spasi,
+    komentar_satu_baris,
+    komentar_banyak_baris,
+    muat,
+    luar,
+    bilangan,
+    teks,
+    dinamis,
+    identifikasi,
+    angka,
+    tambah,
+    tanda_hubung,
+    asteris,
+    garis_miring,
+    persen,
+    sama_dengan,
+    seru,
+    dolar,
+    garis_bawah,
+    koma,
+    titik,
+    titik_dua,
+    titik_koma,
+    kutip_satu,
+    garis_vertikal,
+    kurung_buka,
+    kurung_tutup,
+    kurung_siku_buka,
+    kurung_siku_tutup,
+    kurung_kurawal_buka,
+    kurung_kurawal_tutup,
+    karakter
   };
 
-  std::string ubah_ke_string(const tipe_token& tipe_token);
+  std::string ubahKeString(const TipeToken& tipeToken);
 
 } // namespace nusal

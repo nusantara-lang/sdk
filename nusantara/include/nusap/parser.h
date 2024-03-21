@@ -12,35 +12,35 @@
 #include <string>
 #include <vector>
 
-namespace nusap {
+namespace Nusap {
 
-  class parser {
+  class Parser {
     public:
-      parser();
+      Parser();
       void input(const std::string& input);
       void input(const std::string& sumber, const std::string& input);
-      void input_filepath(const std::string& file_path);
-      std::unique_ptr<node> parse();
+      void inputFilePath(const std::string& filePath);
+      std::unique_ptr<Node> parse();
 
     private:
-      nusal::lexer lexer;
-      std::unique_ptr<nusal::token> token_saat_ini;
+      Nusal::Lexer lexer;
+      std::unique_ptr<Nusal::Token> tokenSaatIni;
       std::set<std::string> muatFile;
-      static const std::vector<nusal::tipe_token>& skipTipeToken();
-      bool tokenSaatIni(const nusal::tipe_token& tipe);
-      bool tokenSaatIni(const std::vector<nusal::tipe_token>& tipe);
+      static const std::vector<Nusal::TipeToken>& skipTipeToken();
+      bool tokenSaatIni(const Nusal::TipeToken& tipe);
+      bool tokenSaatIni(const std::vector<Nusal::TipeToken>& tipe);
       void tokenSelanjutNya();
-      bool mengharapkanToken(const std::unique_ptr<node>& aturan, const nusal::tipe_token& tipe, const std::function<std::unique_ptr<node>()>& callback);
-      bool mengharapkanToken(const std::unique_ptr<node>& aturan, const std::vector<nusal::tipe_token>& tipe, const std::function<std::unique_ptr<node>()>& callback);
+      bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe, const std::function<std::unique_ptr<Node>()>& callback);
+      bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const std::vector<Nusal::TipeToken>& tipe, const std::function<std::unique_ptr<Node>()>& callback);
 
-      std::unique_ptr<node> buatNodeAturan(const tipe_node& tipe);
-      std::unique_ptr<node> buatNodeToken();
+      std::unique_ptr<Node> buatNodeAturan(const TipeNode& tipe);
+      std::unique_ptr<Node> buatNodeToken();
       
       // parse
       void parseSkipToken();
-      std::unique_ptr<node> parse_pernyataan();
-      std::unique_ptr<node> parse_muat_file();
-      std::unique_ptr<node> parse_nilai_teks();
+      std::unique_ptr<Node> parsePernyataan();
+      std::unique_ptr<Node> parseMuatFile();
+      std::unique_ptr<Node> parseNilaiTeks();
   };
 
 } // namespace nusap

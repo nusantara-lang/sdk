@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace nusal {
+namespace Nusal {
 
   struct baris {
       baris() = default;
@@ -22,21 +22,21 @@ namespace nusal {
       size_t nilai = 0;
   };
 
-  struct token {
-      token() = default;
+  struct Token {
+      Token() = default;
 
-      token(
-          const tipe_token& tipe, std::string sumber, const baris& baris,
+      Token(
+          const TipeToken& tipe, std::string sumber, const baris& baris,
           const karakter& karakter, std::string nilai
       );
 
-      tipe_token tipe = tipe_token::TIDAK_DIKETAHUI;
+      TipeToken tipe = TipeToken::tidak_diketahui;
       std::string sumber = "tidak diketahui";
       baris baris;
       karakter karakter;
       std::string nilai;
   };
 
-  std::string ubah_ke_string(const token& token);
+  std::string ubahKeString(const Token& token);
 
 } // namespace nusal
