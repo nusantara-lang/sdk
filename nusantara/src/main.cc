@@ -20,20 +20,20 @@ int main(int argc, char* argv[]) {
       return 0;
     }
 		if(argc == 2) {
-	    nusai::interpreter interpreter;
-  	  interpreter.input_filepath(args[1]);
+	    Nusai::Interpreter interpreter;
+  	  interpreter.inputFilePath(args[1]);
 		}else if(argc == 3) {
 			if(std::strcmp(args[1], "-l") == 0) {
-				nusal::lexer lexer(nusal::nusal_data_tipe_token());
-				lexer.input_filepath(args[2]);
-				while (auto token = lexer.ambil_token()) {
-					std::cout << nusal::ubah_ke_string(*token) << "\n";
+				Nusal::Lexer lexer(Nusal::nusalDataTipeToken());
+				lexer.inputFilePath(args[2]);
+				while (auto token = lexer.ambilToken()) {
+					std::cout << Nusal::ubahKeString(*token) << "\n";
 				}
 			} else if(std::strcmp(args[1], "-p") == 0) {
-				nusap::parser parser;
-				parser.input_filepath(args[2]);
+				Nusap::Parser parser;
+				parser.inputFilePath(args[2]);
 				auto root = parser.parse();
-				nusap::cetak_node(root);
+				Nusap::cetakNode(root);
 			}
 		}
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }

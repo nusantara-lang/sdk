@@ -4,52 +4,53 @@
 #include "nusap/node.h"
 #include <any>
 #include <optional>
-#include <string>
 #include <vector>
 
 namespace Nusap {
 
     struct TokenCtx {
-        explicit okenCtx(const Node& node);
+        explicit TokenCtx(const Node& node);
         Nusal::Token token;
     };
 
-    struct nilai_teks_ctx {
-        explicit nilai_teks_ctx(const node& node);
-        std::vector<token_ctx> k_token_ctx;
+    struct NilaiTeksCtx {
+        explicit NilaiTeksCtx(const Node& node);
+        std::vector<TokenCtx> kTokenCtx;
     };
 
-    struct muat_file_ctx {
-        explicit muat_file_ctx(const node& node);
-        nilai_teks_ctx nilai_teks_ctx;
+    struct MuatFileCtx {
+        explicit MuatFileCtx(const Node& node);
+        TokenCtx tokenMuatCtx;
+        NilaiTeksCtx nilaiTeksCtx;
     };
 
-    struct pernyataan_ctx {
-        explicit pernyataan_ctx(const node& node);
-        std::optional<muat_file_ctx> muat_file_ctx;
+    struct PernyataanCtx {
+        explicit PernyataanCtx(const Node& node);
+        std::optional<MuatFileCtx> muatFileCtx;
+        std::optional<TokenCtx> tokenTitikKomaCtx;
     };
 
-    struct nusantara_ctx {
-        explicit nusantara_ctx(const node& node);
-        std::vector<pernyataan_ctx> k_pernyataan_ctx;
+    struct NusantaraCtx {
+        explicit NusantaraCtx(const Node& node);
+        std::vector<PernyataanCtx> kPernyataanCtx;
     };
 
-    class visitor {
+    class Visitor {
         public:
-          visitor() = default;
-          visitor(const visitor&) = default;
-          visitor(visitor&&) = delete;
-          visitor& operator=(const visitor&) = default;
-          visitor& operator=(visitor&&) = delete;
-          virtual ~visitor() = default;
+          Visitor() = default;
+          Visitor(const Visitor&) = default;
+          Visitor(Visitor&&) = delete;
+          Visitor& operator=(const Visitor&) = default;
+          Visitor& operator=(Visitor&&) = delete;
+          virtual ~Visitor() = default;
 
-          std::any visit(const node& node);
+          std::any visit(const Node& node);
 
-          virtual std::any visit_token(const token_ctx& ctx) = 0;
-          virtual std::any visit_nilai_teks(const nilai_teks_ctx& ctx) = 0;
-          virtual std::any visit_muat_file(const muat_file_ctx& ctx) = 0;
-          virtual std::any visit_pernyataan(const pernyataan_ctx& ctx) = 0;
-          virtual std::any visit_nusantara(const nusantara_ctx& ctx) = 0;
+          virtual std::any visitToken(const TokenCtx& ctx) = 0;
+          virtual std::any visitNilaiTeks(const NilaiTeksCtx& ctx) = 0;
+          virtual std::any visitMuatFile(const MuatFileCtx& ctx) = 0;
+          virtual std::any visitPernyataan(const PernyataanCtx& ctx) = 0;
+          virtual std::any visitNusantara(const NusantaraCtx& ctx) = 0;
 
         private:
     };

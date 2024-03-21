@@ -27,8 +27,8 @@ namespace Nusap {
       std::unique_ptr<Nusal::Token> tokenSaatIni;
       std::set<std::string> muatFile;
       static const std::vector<Nusal::TipeToken>& skipTipeToken();
-      bool tokenSaatIni(const Nusal::TipeToken& tipe);
-      bool tokenSaatIni(const std::vector<Nusal::TipeToken>& tipe);
+      bool tokenSaatIniAdalah(const Nusal::TipeToken& tipe);
+      bool tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe);
       void tokenSelanjutNya();
       bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe, const std::function<std::unique_ptr<Node>()>& callback);
       bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const std::vector<Nusal::TipeToken>& tipe, const std::function<std::unique_ptr<Node>()>& callback);

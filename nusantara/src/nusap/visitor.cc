@@ -1,48 +1,45 @@
 #include "nusap/visitor.h"
 #include "nusap/tipe_node.h"
-#include <string>
 
-nusap::nusantara_ctx::nusantara_ctx(const node& node) {
+Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {
     for(const auto& child : node.children) {
-        this->k_pernyataan_ctx.emplace_back(*child);
+        this->kPernyataanCtx.emplace_back(*child);
     }
 }
 
-nusap::token_ctx::token_ctx(const node& node) : token(*node.token) {}
+Nusap::TokenCtx::TokenCtx(const Node& node) : token(*node.token) {}
 
-nusap::nilai_teks_ctx::nilai_teks_ctx(const node& node) {
-    size_t childrenSize = node.children.size();
-    for(size_t index = 0; index < childrenSize; ++index) {
-        if(index > 0 && index < (childrenSize - 1)) {
-            this->k_token_ctx.emplace_back(*node.children[index]);
-        }
+Nusap::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
+    for(const auto& node : node.children) {
+        this->kTokenCtx.emplace_back(*node);
     }
 }
 
-nusap::muat_file_ctx::muat_file_ctx(const node& node): nilai_teks_ctx(nusap::nilai_teks_ctx(*node.children[1])) {}
+Nusap::MuatFileCtx::MuatFileCtx(const Node& node): tokenMuatCtx(Nusap::TokenCtx(*node.children[0])), nilaiTeksCtx(Nusap::NilaiTeksCtx(*node.children[1])) {}
 
-nusap::pernyataan_ctx::pernyataan_ctx(const node& node) {
+Nusap::PernyataanCtx::PernyataanCtx(const Node& node) {
 	const auto& child0 = node.children[0];
-	if(child0->tipe == tipe_node::muat_file) {
-		this->muat_file_ctx = nusap::muat_file_ctx(*child0);
+	if(child0->tipe == TipeNode::muat_file) {
+		this->muatFileCtx = Nusap::MuatFileCtx(*child0);
+        this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
 	}
 }
 
-std::any nusap::visitor::visit(const node& node) {
-    if(node.tipe == tipe_node::nusantara) {
-        return this->visit_nusantara(nusantara_ctx(node));
+std::any Nusap::Visitor::visit(const Node& node) {
+    if(node.tipe == TipeNode::nusantara) {
+        return this->visitNusantara(NusantaraCtx(node));
     }
-    if(node.tipe == tipe_node::token) {
-        return this->visit_token(token_ctx(node));
+    if(node.tipe == TipeNode::token) {
+        return this->visitToken(TokenCtx(node));
     }
-    if(node.tipe == tipe_node::nilai_teks) {
-        return this->visit_nilai_teks(nilai_teks_ctx(node));
+    if(node.tipe == TipeNode::nilai_teks) {
+        return this->visitNilaiTeks(NilaiTeksCtx(node));
     }
-    if(node.tipe == tipe_node::muat_file) {
-        return this->visit_muat_file(muat_file_ctx(node));
+    if(node.tipe == TipeNode::muat_file) {
+        return this->visitMuatFile(MuatFileCtx(node));
     }
-    if(node.tipe == tipe_node::pernyataan) {
-        return this->visit_pernyataan(pernyataan_ctx(node));
+    if(node.tipe == TipeNode::pernyataan) {
+        return this->visitPernyataan(PernyataanCtx(node));
     }
     return {};
 }

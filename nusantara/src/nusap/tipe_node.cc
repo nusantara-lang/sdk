@@ -1,16 +1,16 @@
 #include "nusap/tipe_node.h"
 
-std::string nusap::ubah_ke_string(const tipe_node& node) {
+std::string Nusap::ubahKeString(const TipeNode& node) {
   switch(node) {
-    case tipe_node::token:
+    case TipeNode::token:
       return "token";
-    case tipe_node::nusantara:
+    case TipeNode::nusantara:
       return "nusantara";
-    case tipe_node::muat_file:
+    case TipeNode::muat_file:
       return "muat file";
-    case tipe_node::nilai_teks:
+    case TipeNode::nilai_teks:
       return "nilai teks";
-    case tipe_node::pernyataan:
+    case TipeNode::pernyataan:
       return "pernyataan";
   }
 }

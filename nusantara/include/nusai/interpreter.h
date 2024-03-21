@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include "nusal/token.h"
 #include <map>
 #include <nusal/tipe_token.h>
 #include <any>
@@ -8,23 +8,25 @@
 #include <nusap/parser.h>
 #include <nusap/visitor.h>
 #include <string>
+#include <vector>
 
-namespace nusai {
+namespace Nusai {
 
-    class interpreter: private nusap::visitor {
+    class Interpreter: private Nusap::Visitor {
         public:
-            interpreter();
+            Interpreter();
             void input(const std::string& input);
             void input(const std::string& sumber, const std::string& input);
-            void input_filepath(const std::string& file_path);
+            void inputFilePath(const std::string& filePath);
         private:
-						std::map<std::string, nusap::parser> k_parser;
+			std::map<std::string, Nusap::Parser> kParser;
+            std::vector<Nusal::Token> kToken;
 
-            std::any visit_token(const nusap::token_ctx& ctx) override;
-            std::any visit_nilai_teks(const nusap::nilai_teks_ctx& ctx) override;
-            std::any visit_muat_file(const nusap::muat_file_ctx& ctx) override;
-            std::any visit_pernyataan(const nusap::pernyataan_ctx& ctx) override;
-            std::any visit_nusantara(const nusap::nusantara_ctx& ctx) override;
+            std::any visitToken(const Nusap::TokenCtx& ctx) override;
+            std::any visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) override;
+            std::any visitMuatFile(const Nusap::MuatFileCtx& ctx) override;
+            std::any visitPernyataan(const Nusap::PernyataanCtx& ctx) override;
+            std::any visitNusantara(const Nusap::NusantaraCtx& ctx) override;
     };
 
 }

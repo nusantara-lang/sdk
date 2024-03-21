@@ -5,19 +5,19 @@
 
 #include <iostream>
 
-nusap::node::node(const tipe_node& tipe): tipe(tipe), token(nullptr) {}
+Nusap::Node::Node(const TipeNode& tipe): tipe(tipe), token(nullptr) {}
 
-nusap::node::node(const tipe_node& tipe, std::unique_ptr<nusal::token> token):
+Nusap::Node::Node(const TipeNode& tipe, std::unique_ptr<Nusal::Token> token):
     tipe(tipe), token(std::move(token)) {}
 
-void nusap::cetak_node(const std::unique_ptr<node>& node, const int& level) {
+void Nusap::cetakNode(const std::unique_ptr<Node>& node, const int& level) {
   if(!node) { return; }
   for(int i = 0; i < level; ++i) { std::cout << "  "; }
   if(node->token != nullptr) {
-    std::cout << nusal::ubah_ke_string(node->token->tipe) << ": "
+    std::cout << Nusal::ubahKeString(node->token->tipe) << ": "
               << node->token->nilai << "\n";
   } else {
-    std::cout << nusap::ubah_ke_string(node->tipe) << "\n";
+    std::cout << Nusap::ubahKeString(node->tipe) << "\n";
   }
-  for(const auto& child : node->children) { cetak_node(child, level + 1); }
+  for(const auto& child : node->children) { cetakNode(child, level + 1); }
 }

@@ -1,18 +1,17 @@
 #include "nusai/interpreter.h"
-
+#include "nusai/kesalahan_interpret.h"
 #include "nusal/token.h"
 #include "nusap/parser.h"
 #include <any>
-#include <stdexcept>
 #include <string>
 
-nusai::interpreter::interpreter() = default;
+Nusai::Interpreter::Interpreter() = default;
 
-void nusai::interpreter::input(const std::string& input) {
+void Nusai::Interpreter::input(const std::string& input) {
 		std::string sumber("tidak diketahui");
-		if(this->k_parser.find(sumber) == this->k_parser.end()) {
-			auto& parser = this->k_parser[sumber];
-			parser = nusap::parser();
+		if(this->kParser.find(sumber) == this->kParser.end()) {
+			auto& parser = this->kParser[sumber];
+			parser = Nusap::Parser();
 			parser.input(input);
 			if(const auto node = parser.parse()) {
 				this->visit(*node);
@@ -20,10 +19,10 @@ void nusai::interpreter::input(const std::string& input) {
 		}	
 }
 
-void nusai::interpreter::input(const std::string& sumber, const std::string& input) {
-  if(this->k_parser.find(sumber) == this->k_parser.end()) {
-			auto& parser = this->k_parser[sumber];
-			parser = nusap::parser();
+void Nusai::Interpreter::input(const std::string& sumber, const std::string& input) {
+  if(this->kParser.find(sumber) == this->kParser.end()) {
+			auto& parser = this->kParser[sumber];
+			parser = Nusap::Parser();
 			parser.input(sumber, input);
 			if(const auto node = parser.parse()) {
 				this->visit(*node);
@@ -31,50 +30,63 @@ void nusai::interpreter::input(const std::string& sumber, const std::string& inp
 	} 
 }
 
-void nusai::interpreter::input_filepath(const std::string& file_path) {
-  if(this->k_parser.find(file_path) == this->k_parser.end()) {
-			auto& parser = this->k_parser[file_path];
-			parser = nusap::parser();
-			parser.input_filepath(file_path);
+void Nusai::Interpreter::inputFilePath(const std::string& filePath) {
+  if(this->kParser.find(filePath) == this->kParser.end()) {
+			auto& parser = this->kParser[filePath];
+			parser = Nusap::Parser();
+			parser.inputFilePath(filePath);
 			if(const auto node = parser.parse()) {
 				this->visit(*node);
 			}
 	}
 }
 
-std::any nusai::interpreter::visit_token(const nusap::token_ctx& ctx) {
+std::any Nusai::Interpreter::visitToken(const Nusap::TokenCtx& ctx) {
+	this->kToken.push_back(ctx.token);
     return ctx.token;
 }
 
-std::any nusai::interpreter::visit_nilai_teks(const nusap::nilai_teks_ctx& ctx) {
+std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
 		std::string teks;
-		for(const auto& token_ctx : ctx.k_token_ctx) {
-			std::any tokenAny = this->visit_token(token_ctx);
-			if(const auto* token = std::any_cast<nusal::token>(&tokenAny)) {
-				teks += token->nilai;
+		size_t index = 0;
+		for(const auto& tokenCtx : ctx.kTokenCtx) {
+			std::any tokenAny = this->visitToken(tokenCtx);
+			if(index > 0 && index < (ctx.kTokenCtx.size() - 1)) {
+				if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
+					teks += token->nilai;
+				}
 			}
+			++index;
 		}
     return teks;
 }
 
-std::any nusai::interpreter::visit_muat_file(const nusap::muat_file_ctx& ctx) {
-	std::any nilaiTeksAny = this->visit_nilai_teks(ctx.nilai_teks_ctx);
+std::any Nusai::Interpreter::visitMuatFile(const Nusap::MuatFileCtx& ctx) {
+	this->visitToken(ctx.tokenMuatCtx);
+	std::any nilaiTeksAny = this->visitNilaiTeks(ctx.nilaiTeksCtx);
 	if(const auto* nilaiTeks = std::any_cast<std::string>(&nilaiTeksAny)) {
-		this->input_filepath(*nilaiTeks);
+		this->inputFilePath(*nilaiTeks);
 	}
   return {};
 }
 
-std::any nusai::interpreter::visit_pernyataan(const nusap::pernyataan_ctx& ctx) {
-	if(ctx.muat_file_ctx.has_value()) {
-		return this->visit_muat_file(ctx.muat_file_ctx.value());
+std::any Nusai::Interpreter::visitPernyataan(const Nusap::PernyataanCtx& ctx) {
+	if(ctx.muatFileCtx.has_value()) {
+		std::any hasil = this->visitMuatFile(ctx.muatFileCtx.value());
+		if(ctx.tokenTitikKomaCtx.has_value()) {
+			this->visitToken(ctx.tokenTitikKomaCtx.value());
+		}else{
+			throw Nusai::KesalahanInterpret(this->kToken, "Jangan lupa titik koma.");
+		}
+		return hasil;
 	}
-	throw std::runtime_error("Pernyataan tidak valid.");
+	throw Nusai::KesalahanInterpret(this->kToken, "Pernyataan tidak valid.");
 }
 
-std::any nusai::interpreter::visit_nusantara(const nusap::nusantara_ctx& ctx) {
-		for(const auto& pernyataan_ctx : ctx.k_pernyataan_ctx) {
-			this->visit_pernyataan(pernyataan_ctx);
+std::any Nusai::Interpreter::visitNusantara(const Nusap::NusantaraCtx& ctx) {
+		for(const auto& pernyataanCtx : ctx.kPernyataanCtx) {
+			this->visitPernyataan(pernyataanCtx);
+			this->kToken.clear();
 		}
     return 0;
 }

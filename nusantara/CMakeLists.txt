@@ -32,7 +32,14 @@ file(
 	"src/**/*.cc"
 )
 
-include_directories(include)
+file(
+	GLOB_RECURSE 
+	HEADER_FILES
+	"include/*.h"
+	"include/**/*.h"
+)
+
+include_directories("include")
 
 add_executable(
     nusantara

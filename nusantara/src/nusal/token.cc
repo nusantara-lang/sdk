@@ -4,22 +4,22 @@
 
 #include <format>
 
-nusal::baris::baris(const size_t& nilai): nilai(nilai) {}
+Nusal::baris::baris(const size_t& nilai): nilai(nilai) {}
 
-nusal::karakter::karakter(const size_t& nilai): nilai(nilai) {}
+Nusal::karakter::karakter(const size_t& nilai): nilai(nilai) {}
 
-nusal::token::token(
-    const tipe_token& tipe, std::string sumber, const nusal::baris& baris,
-    const nusal::karakter& karakter, std::string nilai
+Nusal::Token::Token(
+    const TipeToken& tipe, std::string sumber, const Nusal::baris& baris,
+    const Nusal::karakter& karakter, std::string nilai
 ):
     tipe(tipe),
     sumber(std::move(sumber)), baris(baris), karakter(karakter),
     nilai(std::move(nilai)) {}
 
-std::string nusal::ubah_ke_string(const token& token) {
+std::string Nusal::ubahKeString(const Token& token) {
   return std::format(
       "{}:{}:{} {} {}", token.sumber, token.baris.nilai + 1,
-      token.karakter.nilai + 1, ubah_ke_string(token.tipe),
+      token.karakter.nilai + 1, ubahKeString(token.tipe),
       (token.nilai == "\n")   ? "\\n"
       : (token.nilai == "\t") ? "\\t"
       : (token.nilai == "\r") ? "\\r"

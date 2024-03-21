@@ -1,78 +1,78 @@
 #include "nusal/tipe_token.h"
 
-std::string nusal::ubah_ke_string(const tipe_token& tipe_token) {
-  switch(tipe_token) {
-    case tipe_token::TIDAK_DIKETAHUI:
+std::string Nusal::ubahKeString(const TipeToken& tipeToken) {
+  switch(tipeToken) {
+    case TipeToken::tidak_diketahui:
       return "tidak diketahui";
-    case tipe_token::KEMBALI_KE_AWAL_KARAKTER:
+    case TipeToken::kembali_ke_awal_karakter:
       return "kembali ke awal karakter";
-    case tipe_token::BARIS_BARU:
+    case TipeToken::baris_baru:
       return "baris baru";
-    case tipe_token::TAB:
+    case TipeToken::tab:
       return "tab";
-    case tipe_token::SPASI:
+    case TipeToken::spasi:
       return "spasi";
-    case tipe_token::MUAT:
+    case TipeToken::muat:
       return "muat";
-    case tipe_token::LUAR:
+    case TipeToken::luar:
       return "luar";
-    case tipe_token::BILANGAN:
+    case TipeToken::bilangan:
       return "bilangan";
-    case tipe_token::TEKS:
+    case TipeToken::teks:
       return "teks";
-    case tipe_token::DINAMIS:
+    case TipeToken::dinamis:
       return "dinamis";
-    case tipe_token::IDENTIFIKASI:
+    case TipeToken::identifikasi:
       return "identifikasi";
-    case tipe_token::ANGKA:
+    case TipeToken::angka:
       return "angka";
-    case tipe_token::TAMBAH:
+    case TipeToken::tambah:
       return "tambah";
-    case tipe_token::TANDA_HUBUNG:
+    case TipeToken::tanda_hubung:
       return "tanda hubung";
-    case tipe_token::ASTERIS:
+    case TipeToken::asteris:
       return "asteris";
-    case tipe_token::GARIS_MIRING:
+    case TipeToken::garis_miring:
       return "garis miring";
-    case tipe_token::PERSEN:
+    case TipeToken::persen:
       return "persen";
-    case tipe_token::SAMA_DENGAN:
+    case TipeToken::sama_dengan:
       return "sama dengan";
-    case tipe_token::SERU:
+    case TipeToken::seru:
       return "seru";
-    case tipe_token::DOLAR:
+    case TipeToken::dolar:
       return "dolar";
-    case tipe_token::GARIS_BAWAH:
+    case TipeToken::garis_bawah:
       return "garis bawah";
-    case tipe_token::KOMA:
+    case TipeToken::koma:
       return "koma";
-    case tipe_token::TITIK:
+    case TipeToken::titik:
       return "titik";
-    case tipe_token::TITIK_DUA:
+    case TipeToken::titik_dua:
       return "titik dua";
-    case tipe_token::TITIK_KOMA:
+    case TipeToken::titik_koma:
       return "titik koma";
-    case tipe_token::KUTIP_SATU:
+    case TipeToken::kutip_satu:
       return "kutip satu";
-    case tipe_token::GARIS_VERTIKAL:
+    case TipeToken::garis_vertikal:
       return "garis vertikal";
-    case tipe_token::KURUNG_BUKA:
+    case TipeToken::kurung_buka:
       return "kurung buka";
-    case tipe_token::KURUNG_TUTUP:
+    case TipeToken::kurung_tutup:
       return "kurung tutup";
-    case tipe_token::KURUNG_SIKU_BUKA:
+    case TipeToken::kurung_siku_buka:
       return "kurung siku buka";
-    case tipe_token::KURUNG_SIKU_TUTUP:
+    case TipeToken::kurung_siku_tutup:
       return "kurung siku tutup";
-    case tipe_token::KURUNG_KURAWAL_BUKA:
+    case TipeToken::kurung_kurawal_buka:
       return "kurung kurawal buka";
-    case tipe_token::KURUNG_KURAWAL_TUTUP:
+    case TipeToken::kurung_kurawal_tutup:
       return "kurung kurawal tutup";
-    case tipe_token::KARAKTER:
+    case TipeToken::karakter:
       return "karakter";
-    case tipe_token::KOMENTAR_SATU_BARIS:
+    case TipeToken::komentar_satu_baris:
       return "komentar satu baris";
-    case tipe_token::KOMENTAR_BANYAK_BARIS:
+    case TipeToken::komentar_banyak_baris:
       return "komentar banyak baris";
   }
 }
