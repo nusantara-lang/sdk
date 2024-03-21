@@ -155,3 +155,47 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
   }
   return nilaiTeks;
 }
+
+std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
+  std::unique_ptr<Nusap::Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
+  this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::tanda_hubung, [&]() {return this->buatNodeToken();});
+  while(tokenSaatIniAdalah(Nusal::TipeToken::angka)) {
+    nilaiBilangan->children.push_back(this->buatNodeToken());
+		this->tokenSelanjutNya();
+  }
+  if(this->tokenSaatIniAdalah(Nusal::TipeToken::titik)) {
+    throw KesalahanParse(this->tokenSaatIni, "Di indonesia biasa nya bilangan desimal menggunakan koma.");
+  }
+  if(this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::koma, [&]() {return this->buatNodeToken();})) {
+    size_t index = 0;
+    while(tokenSaatIniAdalah(Nusal::TipeToken::angka)) {
+      nilaiBilangan->children.push_back(this->buatNodeToken());
+      this->tokenSelanjutNya();
+      ++index;
+    }
+    if(index <= 0) {
+      throw KesalahanParse(this->tokenSaatIni, "Setelah koma seharus nya ada angka lagi agar menjadi bilangan desimal.");
+    }
+  }
+  return nilaiBilangan;
+}
+
+std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilai() {
+  std::unique_ptr<Nusap::Node> nilai = buatNodeAturan(TipeNode::nilai);
+  if(this->tokenSaatIniAdalah({Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka})) {
+    nilai->children.push_back(this->parseNilaiBilangan());
+    return nilai;
+  }else if(this->tokenSaatIniAdalah(Nusal::TipeToken::kutip_satu)) {
+    nilai->children.push_back(this->parseNilaiTeks());
+    return nilai;
+  }
+  throw KesalahanParse(this->tokenSaatIni, "Nilai tidak valid.");
+}
+
+std::unique_ptr<Nusap::Node> Nusap::Parser::parseEkspresi() {
+  std::unique_ptr<Nusap::Node> ekspresi = buatNodeAturan(TipeNode::ekspresi);
+  if(this->mengharapkanToken(ekspresi, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka, Nusal::TipeToken::kutip_satu}, [&](){return this->parseNilai();})) {
+    return ekspresi;
+  }
+  throw KesalahanParse(this->tokenSaatIni, "Ekspresi tidak valid.");
+}

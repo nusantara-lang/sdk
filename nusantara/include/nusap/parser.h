@@ -41,6 +41,9 @@ namespace Nusap {
       std::unique_ptr<Node> parsePernyataan();
       std::unique_ptr<Node> parseMuatFile();
       std::unique_ptr<Node> parseNilaiTeks();
+      std::unique_ptr<Node> parseNilaiBilangan();
+      std::unique_ptr<Node> parseEkspresi();
+      std::unique_ptr<Node> parseNilai();
   };
 
 } // namespace nusap

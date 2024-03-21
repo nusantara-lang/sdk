@@ -35,6 +35,22 @@ namespace Nusap {
         std::vector<PernyataanCtx> kPernyataanCtx;
     };
 
+    struct NilaiBilanganCtx {
+        explicit NilaiBilanganCtx(const Node& node);
+        std::vector<TokenCtx> kTokenCtx;
+    };
+
+    struct NilaiCtx {
+        explicit NilaiCtx(const Node& node);
+        std::optional<NilaiBilanganCtx> nilaiBilanganCtx;
+        std::optional<NilaiTeksCtx> nilaiTeksCtx;
+    };
+
+    struct EkspresiCtx {
+        explicit EkspresiCtx(const Node& node);
+        std::optional<NilaiCtx> nilaiCtx;
+    };
+
     class Visitor {
         public:
           Visitor() = default;
@@ -51,6 +67,9 @@ namespace Nusap {
           virtual std::any visitMuatFile(const MuatFileCtx& ctx) = 0;
           virtual std::any visitPernyataan(const PernyataanCtx& ctx) = 0;
           virtual std::any visitNusantara(const NusantaraCtx& ctx) = 0;
+          virtual std::any visitNilaiBilangan(const NilaiBilanganCtx& ctx) = 0;
+          virtual std::any visitEkspresi(const EkspresiCtx& ctx) = 0;
+          virtual std::any visitNilai(const NilaiCtx& ctx) = 0;
 
         private:
     };

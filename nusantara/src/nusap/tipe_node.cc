@@ -12,5 +12,11 @@ std::string Nusap::ubahKeString(const TipeNode& node) {
       return "nilai teks";
     case TipeNode::pernyataan:
       return "pernyataan";
+    case TipeNode::nilai_bilangan:
+      return "nilai bilangan";
+    case TipeNode::ekspresi:
+      return "ekspresi";
+    case TipeNode::nilai:
+      return "nilai";
   }
 }

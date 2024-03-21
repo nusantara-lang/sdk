@@ -9,7 +9,10 @@ namespace Nusap {
     nusantara,
     muat_file,
     nilai_teks,
-    pernyataan
+    pernyataan,
+    nilai_bilangan,
+    ekspresi,
+    nilai,
   };
 
   std::string ubahKeString(const TipeNode& node);

@@ -25,6 +25,23 @@ Nusap::PernyataanCtx::PernyataanCtx(const Node& node) {
 	}
 }
 
+Nusap::NilaiBilanganCtx::NilaiBilanganCtx(const Node& node) {
+    for(const auto& node : node.children) {
+        this->kTokenCtx.emplace_back(*node);
+    }
+}
+
+Nusap::EkspresiCtx::EkspresiCtx(const Node& node): nilaiCtx(NilaiCtx(*node.children[0])) {}
+
+Nusap::NilaiCtx::NilaiCtx(const Node& node) {
+    const auto& child0 = *node.children[0];
+    if(child0.tipe == TipeNode::nilai_bilangan) {
+        this->nilaiBilanganCtx = NilaiBilanganCtx(child0);
+    }else if(child0.tipe == TipeNode::nilai_teks) {
+        this->nilaiTeksCtx = NilaiTeksCtx(child0);
+    }
+}
+
 std::any Nusap::Visitor::visit(const Node& node) {
     if(node.tipe == TipeNode::nusantara) {
         return this->visitNusantara(NusantaraCtx(node));
@@ -40,6 +57,15 @@ std::any Nusap::Visitor::visit(const Node& node) {
     }
     if(node.tipe == TipeNode::pernyataan) {
         return this->visitPernyataan(PernyataanCtx(node));
+    }
+    if(node.tipe == TipeNode::nilai_bilangan) {
+        return this->visitNilaiBilangan(NilaiBilanganCtx(node));
+    }
+    if(node.tipe == TipeNode::ekspresi) {
+        return this->visitEkspresi(EkspresiCtx(node));
+    }
+    if(node.tipe == TipeNode::nilai) {
+        return this->visitNilai(NilaiCtx(node));
     }
     return {};
 }

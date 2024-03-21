@@ -5,7 +5,15 @@
 #include <any>
 #include <string>
 
-Nusai::Interpreter::Interpreter() = default;
+Nusai::Interpreter::Interpreter() {
+	this->awal();
+};
+
+void Nusai::Interpreter::awal() {
+	if(kKawasan.empty()) {
+		this->kKawasan.emplace_back();
+	}
+}
 
 void Nusai::Interpreter::input(const std::string& input) {
 		std::string sumber("tidak diketahui");
@@ -40,6 +48,39 @@ void Nusai::Interpreter::inputFilePath(const std::string& filePath) {
 			}
 	}
 }
+
+Nusai::Interpreter::Kawasan& Nusai::Interpreter::ambilKawasanTerakhir() {
+	return this->kKawasan[this->kKawasan.size() - 1];
+}
+
+Nusai::Interpreter::Variabel& Nusai::Interpreter::buatVariabel(const Nusal::TipeToken& tipe, const std::string& nama, const std::any& nilai) {
+	Variabel var;
+	var.tipe = tipe;
+	var.nilai = nilai;
+	Variabel& variabel = this->ambilKawasanTerakhir().kVariabel[nama];
+	variabel = std::move(var);
+	return variabel;
+}
+
+Nusai::Interpreter::Variabel& Nusai::Interpreter::ambilVariabel(const std::string& nama) {
+	return this->ambilKawasanTerakhir().kVariabel[nama];
+}
+
+Nusai::Interpreter::Fungsi& Nusai::Interpreter::buatFungsi(const Nusal::TipeToken& tipe, const std::string& nama, const std::function<std::any(std::map<std::string, Variabel>&)>& definisi) {
+	Fungsi fun;
+	fun.tipe = tipe;
+	fun.definisi = definisi;
+	Fungsi& fungsi = this->ambilKawasanTerakhir().kFungsi[nama];
+	fungsi = std::move(fun);
+	return fungsi;
+}
+
+Nusai::Interpreter::Fungsi& Nusai::Interpreter::ambilFungsi(const std::string& nama) {
+	return this->ambilKawasanTerakhir().kFungsi[nama];
+}
+
+
+// VISIT AREA
 
 std::any Nusai::Interpreter::visitToken(const Nusap::TokenCtx& ctx) {
 	this->kToken.push_back(ctx.token);
