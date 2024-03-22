@@ -21,7 +21,10 @@ Nusap::PernyataanCtx::PernyataanCtx(const Node& node) {
 	const auto& child0 = node.children[0];
 	if(child0->tipe == TipeNode::muat_file) {
 		this->muatFileCtx = Nusap::MuatFileCtx(*child0);
-        this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
+    this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
+	}else if(child0->tipe == TipeNode::ekspresi) {
+		this->ekspresiCtx = Nusap::EkspresiCtx(*child0);
+    this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
 	}
 }
 

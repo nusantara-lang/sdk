@@ -3,6 +3,7 @@
 #include "nusal/token.h"
 #include "nusap/parser.h"
 #include <any>
+#include <iostream>
 #include <string>
 
 Nusai::Interpreter::Interpreter() {
@@ -84,7 +85,7 @@ Nusai::Interpreter::Fungsi& Nusai::Interpreter::ambilFungsi(const std::string& n
 
 std::any Nusai::Interpreter::visitToken(const Nusap::TokenCtx& ctx) {
 	this->kToken.push_back(ctx.token);
-    return ctx.token;
+  return ctx.token;
 }
 
 std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
@@ -114,10 +115,14 @@ std::any Nusai::Interpreter::visitMuatFile(const Nusap::MuatFileCtx& ctx) {
 std::any Nusai::Interpreter::visitPernyataan(const Nusap::PernyataanCtx& ctx) {
 	if(ctx.muatFileCtx.has_value()) {
 		std::any hasil = this->visitMuatFile(ctx.muatFileCtx.value());
-		if(ctx.tokenTitikKomaCtx.has_value()) {
-			this->visitToken(ctx.tokenTitikKomaCtx.value());
-		}else{
-			throw Nusai::KesalahanInterpret(this->kToken, "Jangan lupa titik koma.");
+		this->visitToken(ctx.tokenTitikKomaCtx.value());	
+		return hasil;
+	}
+	if(ctx.ekspresiCtx.has_value()) {
+		std::any hasil = this->visitEkspresi(ctx.ekspresiCtx.value());
+		this->visitToken(ctx.tokenTitikKomaCtx.value());
+		if(const auto* hasilPtr = std::any_cast<std::string>(&hasil)) {
+			std::cout << *hasilPtr << "\n";
 		}
 		return hasil;
 	}
@@ -132,3 +137,25 @@ std::any Nusai::Interpreter::visitNusantara(const Nusap::NusantaraCtx& ctx) {
     return 0;
 }
 
+std::any Nusai::Interpreter::visitNilaiBilangan([[maybe_unused]]const Nusap::NilaiBilanganCtx& ctx) {
+	for(const auto& tokenCtx : ctx.kTokenCtx) {
+		std::any tokenAny = this->visitToken(tokenCtx);
+	}
+	throw KesalahanInterpret(this->kToken, "Nilai bilangan belum dapat di lakukan.");
+}
+
+std::any Nusai::Interpreter::visitEkspresi(const Nusap::EkspresiCtx& ctx) {
+	if(ctx.nilaiCtx.has_value()) {
+		return this->visitNilai(ctx.nilaiCtx.value());
+	}
+	throw KesalahanInterpret(this->kToken, "Ekspresi tidak valid.");
+}
+
+std::any Nusai::Interpreter::visitNilai(const Nusap::NilaiCtx& ctx) {
+	if(ctx.nilaiBilanganCtx.has_value()) {
+		return this->visitNilaiBilangan(ctx.nilaiBilanganCtx.value());
+	}else if(ctx.nilaiTeksCtx.has_value()) {
+		return this->visitNilaiTeks(ctx.nilaiTeksCtx.value());
+	}
+	throw KesalahanInterpret(this->kToken, "Nilai tidak valid.");
+}

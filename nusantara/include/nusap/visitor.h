@@ -24,18 +24,7 @@ namespace Nusap {
         NilaiTeksCtx nilaiTeksCtx;
     };
 
-    struct PernyataanCtx {
-        explicit PernyataanCtx(const Node& node);
-        std::optional<MuatFileCtx> muatFileCtx;
-        std::optional<TokenCtx> tokenTitikKomaCtx;
-    };
-
-    struct NusantaraCtx {
-        explicit NusantaraCtx(const Node& node);
-        std::vector<PernyataanCtx> kPernyataanCtx;
-    };
-
-    struct NilaiBilanganCtx {
+		struct NilaiBilanganCtx {
         explicit NilaiBilanganCtx(const Node& node);
         std::vector<TokenCtx> kTokenCtx;
     };
@@ -51,6 +40,18 @@ namespace Nusap {
         std::optional<NilaiCtx> nilaiCtx;
     };
 
+    struct PernyataanCtx {
+        explicit PernyataanCtx(const Node& node);
+        std::optional<MuatFileCtx> muatFileCtx;
+				std::optional<EkspresiCtx> ekspresiCtx;
+        std::optional<TokenCtx> tokenTitikKomaCtx;
+    };
+
+    struct NusantaraCtx {
+        explicit NusantaraCtx(const Node& node);
+        std::vector<PernyataanCtx> kPernyataanCtx;
+    };
+ 
     class Visitor {
         public:
           Visitor() = default;

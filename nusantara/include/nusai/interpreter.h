@@ -52,6 +52,9 @@ namespace Nusai {
             std::any visitMuatFile(const Nusap::MuatFileCtx& ctx) override;
             std::any visitPernyataan(const Nusap::PernyataanCtx& ctx) override;
             std::any visitNusantara(const Nusap::NusantaraCtx& ctx) override;
+						std::any visitNilaiBilangan(const Nusap::NilaiBilanganCtx& ctx) override;
+          	std::any visitEkspresi(const Nusap::EkspresiCtx& ctx) override;
+          	std::any visitNilai(const Nusap::NilaiCtx& ctx) override;
     };
 
 }

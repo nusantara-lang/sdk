@@ -127,6 +127,12 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
 		}
   	return pernyataan;
 	}
+	if(this->mengharapkanToken(pernyataan, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka, Nusal::TipeToken::kutip_satu}, [&](){return this->parseEkspresi();})) {
+		if(!this->mengharapkanToken(pernyataan, Nusal::TipeToken::titik_koma, [&](){return this->buatNodeToken();})) {
+			throw KesalahanParse(this->tokenSaatIni, "Jangan lupa titik koma.");
+		}
+  	return pernyataan;
+	}
 	throw KesalahanParse(this->tokenSaatIni, "Pernyataan tidak valid");
 }
 

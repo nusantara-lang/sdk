@@ -1,5 +1,5 @@
 muat 'lib/inti.nusa';
 
-10;
-10,2;
-"Halo Dunia!";
+// 10;
+// 10,2;
+'Halo Dunia!';
