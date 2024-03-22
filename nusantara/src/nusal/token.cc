@@ -23,6 +23,7 @@ std::string Nusal::ubahKeString(const Token& token) {
       (token.nilai == "\n")   ? "\\n"
       : (token.nilai == "\t") ? "\\t"
       : (token.nilai == "\r") ? "\\r"
+      : (token.nilai[0] == '\0') ? "\\0"
                               : token.nilai
   );
 }

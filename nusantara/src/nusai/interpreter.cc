@@ -98,37 +98,43 @@ std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
     if(index <= 0 || index >= (ctx.kTokenCtx.size() - 1)) { continue; }
     std::any tokenAny = this->visitToken(ctx.kTokenCtx[index]);
     if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
-      // if(token->tipe == Nusal::TipeToken::garis_miring_terbalik) {
-      //   ++index;
-      //   std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
-      //   if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
-      //     teks += token2->nilai;
-      //     continue;
-      //   }
-      // }else if(token->tipe == Nusal::TipeToken::dolar) {
-      //   ++index;
-      //   std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
-      //   if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
-      //     if(token2->tipe == Nusal::TipeToken::identifikasi) {
-      //       throw Nusai::KesalahanInterpret(this->kToken, std::format("Nusantara belum mendukung nama variabel sebagai teks interpolasi."));
-      //     }else if(token2->tipe == Nusal::TipeToken::kurung_kurawal_buka) {
-      //       if(ctx.kEkspresiCtx.empty()) {
-      //         throw Nusai::KesalahanInterpret(this->kToken, "Ekspresi pada teks interpolasi tidak ada.");
-      //       }
-      //       std::any ekspresiAny = this->visitEkspresi(ctx.kEkspresiCtx[indexEkspresi]);
-      //       if(const auto* ekspresi = std::any_cast<std::string>(&ekspresiAny)) {
-      //         teks += *ekspresi;
-      //       }else{
-      //         throw Nusai::KesalahanInterpret(this->kToken, std::format("Nusantara belum mendukung tipe '{}' sebagai ekspresi dari teks interpolasi.", ekspresiAny.type().name()));  
-      //       }
-      //       ++indexEkspresi;
-      //       ++index;
-      //       continue;
-      //     }else{
-      //       throw Nusai::KesalahanInterpret(this->kToken, "Teks interpolasi harus berisi nama variabel atau sebuah ekspresi di dalam kurung kurawal.");
-      //     }
-      //   }
-      // }
+      if(token->tipe == Nusal::TipeToken::garis_miring_terbalik) {
+        ++index;
+        std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
+        if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
+          std::string& nilai = token2->nilai;
+          if(nilai.starts_with('n')) {
+            nilai.replace(nilai.find('n'), 1, "\n");
+          }else if(nilai.starts_with('t')) {
+            nilai.replace(nilai.find('t'), 1, "\t");
+          }
+          teks += nilai;
+          continue;
+        }
+      }else if(token->tipe == Nusal::TipeToken::dolar) {
+        ++index;
+        std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
+        if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
+          if(token2->tipe == Nusal::TipeToken::identifikasi) {
+            throw Nusai::KesalahanInterpret(this->kToken, std::format("Nusantara belum mendukung nama variabel sebagai teks interpolasi."));
+          }else if(token2->tipe == Nusal::TipeToken::kurung_kurawal_buka) {
+            if(ctx.kEkspresiCtx.empty()) {
+              throw Nusai::KesalahanInterpret(this->kToken, "Tidak ada ekspresi pada teks interpolasi.");
+            }
+            std::any ekspresiAny = this->visitEkspresi(ctx.kEkspresiCtx[indexEkspresi]);
+            if(const auto* ekspresi = std::any_cast<std::string>(&ekspresiAny)) {
+              teks += *ekspresi;
+            }else{
+              throw Nusai::KesalahanInterpret(this->kToken, std::format("Nusantara belum mendukung tipe '{}' sebagai ekspresi dari teks interpolasi.", ekspresiAny.type().name()));  
+            }
+            ++indexEkspresi;
+            ++index;
+            continue;
+          }else{
+            throw Nusai::KesalahanInterpret(this->kToken, "Teks interpolasi harus berisi nama variabel atau sebuah ekspresi di dalam kurung kurawal.");
+          }
+        }
+      }
       teks += token->nilai;
     }
   }

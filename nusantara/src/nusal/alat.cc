@@ -1,25 +1,24 @@
 #include "nusal/alat.h"
-#include "nusal/tipe_token.h"
+#include "nusal/token.h"
 
 #include <format>
 #include <fstream>
+#include <memory>
 #include <regex>
 #include <sstream>
 
-Nusal::Token Nusal::buatToken(
+std::unique_ptr<Nusal::Token> Nusal::buatToken(
     std::string& input, baris& baris, karakter& karakter,
     const std::string& sumber, const std::vector<TipeTokenData>& data
 ) {
+  if(input.empty()) {
+    return nullptr;
+  }
   Token tkn;
   tkn.sumber = sumber;
   tkn.baris = baris;
   size_t karakterTemp = karakter.nilai;
   tkn.karakter.nilai = karakterTemp;
-  if(input.empty()) { 
-    tkn.nilai = "\\0";
-    tkn.tipe = TipeToken::akhir_dari_file;
-    return tkn; 
-  }
   for(const auto& data : data) {
     std::regex pola("^" + data.pola);
     std::smatch matches;
@@ -36,12 +35,12 @@ Nusal::Token Nusal::buatToken(
         }
       }
       input.replace(0, tkn.nilai.length(), "");
-      return tkn;
+      return std::make_unique<Token>(tkn);
     }
   }
   tkn.nilai = input[0];
   input.replace(0, tkn.nilai.length(), "");
-  return tkn;
+  return std::make_unique<Token>(tkn);
 }
 
 std::string Nusal::bacaFile(const std::string& filePath) {

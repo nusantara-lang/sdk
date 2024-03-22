@@ -4,7 +4,6 @@
 #include "nusal/tipe_token.h"
 #include "nusal/token.h"
 #include "nusap/tipe_node.h"
-#include <stdexcept>
 
 Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {
   for(const auto& child : node.children) {
@@ -15,31 +14,12 @@ Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {
 Nusap::TokenCtx::TokenCtx(const Node& node): token(*node.token) {}
 
 Nusap::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
-  for(size_t index = 0; index < node.children.size(); ++index) {
-    if(node.children[index] == nullptr) {
-      continue;
+  for(const auto & childNode : node.children) {
+    if(childNode->tipe == TipeNode::token) {
+      this->kTokenCtx.emplace_back(*childNode);
     }
-    if(node.children[index]->tipe == TipeNode::token) {
-      // const auto& token = node.children[index]->token;
-      // if(token->tipe == Nusal::TipeToken::garis_miring_terbalik) {
-      //   this->kTokenCtx.emplace_back(*node.children[index]);
-      //   ++index;
-      //   if(token->tipe == Nusal::TipeToken::dolar) {
-      //     this->kTokenCtx.emplace_back(*node.children[index]);
-      //     continue;
-      //   }
-      // }
-      // if(token->tipe == Nusal::TipeToken::dolar) {
-      //   this->kTokenCtx.emplace_back(*node.children[index]);
-      //   ++index;
-      //   if(token->tipe == Nusal::TipeToken::kurung_kurawal_buka) {
-      //     this->kTokenCtx.emplace_back(*node.children[index]);
-      //     ++index;
-      //     this->kEkspresiCtx.emplace_back(*node.children[index]);
-      //     continue;
-      //   }
-      // }
-      this->kTokenCtx.emplace_back(*node.children[index]); 
+    if(childNode->tipe == TipeNode::ekspresi) {
+      this->kEkspresiCtx.emplace_back(*childNode);
     }
   }
 }

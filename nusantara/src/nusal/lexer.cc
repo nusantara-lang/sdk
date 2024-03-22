@@ -41,22 +41,28 @@ void Nusal::Lexer::inputFilePath(const std::string& filePath) {
 }
 
 Nusal::Token Nusal::Lexer::ambilToken() {
+  Token token;
+  token.tipe = TipeToken::akhir_dari_file;
+  token.nilai = '\0';
   for(auto& data : this->sumberBersertaInput) {
-    Token token;
     const std::string& sumber = data.first;
     std::string& input = data.second;
-    token = buatToken(
-        input, this->baris, this->karakter, sumber, this->tipeTokenData
-    );
     if(input.empty()) {
       this->sumberBersertaInput.erase(sumber);
-      this->baris.nilai = 0;
-      this->karakter.nilai = 0;
-      if(!this->sumberBersertaInput.empty()) {
+      token.sumber = sumber;
+      token.baris = this->baris;
+      token.karakter = this->karakter;
+      if(this->sumberBersertaInput.empty()) {
         break;
       }
+      this->baris.nilai = 0;
+      this->karakter.nilai = 0;
+      continue;
+    }
+    if(const auto& tokenPtr = buatToken(input, this->baris, this->karakter, sumber, this->tipeTokenData)) {
+      token = *tokenPtr;
     }
     return token;
   }
-  return this->ambilToken();
+  return this->sumberBersertaInput.empty() ? token : this->ambilToken();
 }
