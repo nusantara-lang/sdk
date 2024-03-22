@@ -4,7 +4,6 @@
 #include "nusal/token.h"
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -20,7 +19,7 @@ namespace Nusal {
 
       void inputFilePath(const std::string& filePath);
 
-      std::unique_ptr<Token> ambilToken();
+      Token ambilToken();
 
     private:
       std::vector<TipeTokenData> tipeTokenData;

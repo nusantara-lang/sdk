@@ -1,6 +1,9 @@
 #include "nusal/lexer.h"
 
+#include "nusad/nusad.h"
 #include "nusal/alat.h"
+#include "nusal/tipe_token.h"
+#include "nusal/token.h"
 
 #include <filesystem>
 #include <string>
@@ -37,20 +40,23 @@ void Nusal::Lexer::inputFilePath(const std::string& filePath) {
   }
 }
 
-std::unique_ptr<Nusal::Token> Nusal::Lexer::ambilToken() {
+Nusal::Token Nusal::Lexer::ambilToken() {
   for(auto& data : this->sumberBersertaInput) {
+    Token token;
     const std::string& sumber = data.first;
     std::string& input = data.second;
-    if(input.empty()) {
-      this->sumberBersertaInput.erase(sumber);
-      if(this->sumberBersertaInput.empty()) { break; }
-      this->baris.nilai = 0;
-      this->karakter.nilai = 0;
-      continue;
-    }
-    return buatToken(
+    token = buatToken(
         input, this->baris, this->karakter, sumber, this->tipeTokenData
     );
+    if(input.empty()) {
+      this->sumberBersertaInput.erase(sumber);
+      this->baris.nilai = 0;
+      this->karakter.nilai = 0;
+      if(!this->sumberBersertaInput.empty()) {
+        break;
+      }
+    }
+    return token;
   }
-  return nullptr;
+  return this->ambilToken();
 }

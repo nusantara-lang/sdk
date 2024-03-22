@@ -18,7 +18,9 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
       if(data.baris == token.baris.nilai && data.sumber == token.sumber) {
         data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
       } else {
-        if(!awal) { kData.push_back(data); }
+        if(!awal) {
+          kData.push_back(data); 
+        }
         awal = false;
         data.sumber = token.sumber;
         data.baris = token.baris.nilai;
@@ -26,6 +28,7 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
         data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
       }
     }
+    kData.push_back(data);
     std::ostringstream ostream;
     for(const auto& data : kData) {
       std::vector<std::string> kKontenPerBaris;
@@ -44,10 +47,10 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
                 << std::string(data.indexKarakterAkhir, '^') << "\n";
       }
     }
-    ostream << pesan;
+    ostream << "[I] " << pesan;
     this->pesan = ostream.str();
   } else {
-    this->pesan = pesan;
+    this->pesan = "[I] " + pesan;
   }
 }
 

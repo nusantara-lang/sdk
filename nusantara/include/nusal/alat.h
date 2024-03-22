@@ -2,13 +2,11 @@
 
 #include "nusal/tipe_token_data.h"
 #include "nusal/token.h"
-
-#include <memory>
 #include <vector>
 
 namespace Nusal {
 
-  std::unique_ptr<Token> buatToken(
+  Token buatToken(
       std::string& input, baris& baris, karakter& karakter,
       const std::string& sumber, const std::vector<TipeTokenData>& data
   );

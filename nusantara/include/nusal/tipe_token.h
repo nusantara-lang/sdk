@@ -5,6 +5,7 @@
 namespace Nusal {
 
   enum class TipeToken {
+    akhir_dari_file,
     tidak_diketahui,
     kembali_ke_awal_karakter,
     baris_baru,

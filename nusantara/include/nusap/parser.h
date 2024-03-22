@@ -24,7 +24,7 @@ namespace Nusap {
 
     private:
       Nusal::Lexer lexer;
-      std::unique_ptr<Nusal::Token> tokenSaatIni;
+      Nusal::Token tokenSaatIni;
       std::set<std::string> muatFile;
       static const std::vector<Nusal::TipeToken>& skipTipeToken();
       bool tokenSaatIniAdalah(const Nusal::TipeToken& tipe);

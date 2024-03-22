@@ -14,8 +14,11 @@ namespace Nusap {
       Nusal::Token token;
   };
 
+  struct EkspresiCtx;
+
   struct NilaiTeksCtx {
       explicit NilaiTeksCtx(const Node& node);
+      std::vector<EkspresiCtx> kEkspresiCtx;
       std::vector<TokenCtx> kTokenCtx;
   };
 

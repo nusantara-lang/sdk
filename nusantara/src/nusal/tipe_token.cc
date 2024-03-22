@@ -2,6 +2,8 @@
 
 std::string Nusal::ubahKeString(const TipeToken& tipeToken) {
   switch(tipeToken) {
+    case TipeToken::akhir_dari_file:
+      return "akhir dari file";
     case TipeToken::tidak_diketahui:
       return "tidak diketahui";
     case TipeToken::kembali_ke_awal_karakter:

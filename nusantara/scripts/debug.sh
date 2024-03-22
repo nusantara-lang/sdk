@@ -1,3 +1,3 @@
 #!/bin/bash
 
-lldb-17 build/bin/nusantara -o "run $@"
+lldb build/bin/nusantara.exe -o "run $@"

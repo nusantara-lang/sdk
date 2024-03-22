@@ -13,7 +13,7 @@
 #include <memory>
 
 Nusap::Parser::Parser():
-    lexer(Nusal::nusalDataTipeToken()), tokenSaatIni(nullptr) {}
+    lexer(Nusal::nusalDataTipeToken()) {}
 
 void Nusap::Parser::input(const std::string& input) {
   this->lexer.input(input);
@@ -44,7 +44,7 @@ void Nusap::Parser::tokenSelanjutNya() {
 }
 
 bool Nusap::Parser::tokenSaatIniAdalah(const Nusal::TipeToken& tipe) {
-  return (this->tokenSaatIni != nullptr) && (this->tokenSaatIni->tipe == tipe);
+  return this->tokenSaatIni.tipe == tipe;
 }
 
 bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe
@@ -88,7 +88,7 @@ Nusap::Parser::buatNodeAturan(const Nusap::TipeNode& tipe) {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::buatNodeToken() {
   return std::make_unique<Node>(
-      TipeNode::token, std::make_unique<Nusal::Token>(*this->tokenSaatIni)
+      TipeNode::token, std::make_unique<Nusal::Token>(this->tokenSaatIni)
   );
 }
 
@@ -104,13 +104,13 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parse() {
   std::unique_ptr<Nusap::Node> nusantara = buatNodeAturan(TipeNode::nusantara);
   this->tokenSelanjutNya();
   this->parseSkipToken();
-  while(this->tokenSaatIni != nullptr) {
+  while(this->tokenSaatIni.tipe == Nusal::TipeToken::akhir_dari_file) {
     if(this->tokenSaatIniAdalah(Nusal::TipeToken::tidak_diketahui)) {
       throw Nusap::KesalahanParse(
           this->tokenSaatIni,
           std::format(
               "Nusantara tidak dapat mengenali karakter '{}'.",
-              this->tokenSaatIni->nilai
+              this->tokenSaatIni.nilai
           )
       );
     }
@@ -176,6 +176,36 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
     throw KesalahanParse(this->tokenSaatIni, "Teks harus di awali kutip 1.");
   }
   while(!tokenSaatIniAdalah(Nusal::TipeToken::kutip_satu)) {
+    // if(tokenSaatIniAdalah(Nusal::TipeToken::garis_miring_terbalik)) {
+    //   nilaiTeks->children.push_back(this->buatNodeToken());
+    //   this->tokenSelanjutNya();
+    //   if(tokenSaatIniAdalah(Nusal::TipeToken::dolar)) {
+    //     nilaiTeks->children.push_back(this->buatNodeToken());
+    //     this->tokenSelanjutNya();
+    //     continue;
+    //   }
+    // }else if(tokenSaatIniAdalah(Nusal::TipeToken::dolar)) {
+    //   nilaiTeks->children.push_back(this->buatNodeToken());
+    //   this->tokenSelanjutNya();
+    //   if(tokenSaatIniAdalah(Nusal::TipeToken::identifikasi)) {
+    //     nilaiTeks->children.push_back(this->buatNodeToken());
+    //     this->tokenSelanjutNya();
+    //     continue;
+    //   }else if(tokenSaatIniAdalah(Nusal::TipeToken::kurung_kurawal_buka)) {
+    //     nilaiTeks->children.push_back(this->buatNodeToken());
+    //     this->tokenSelanjutNya();
+    //     nilaiTeks->children.push_back(this->parseEkspresi());
+    //     if(tokenSaatIniAdalah(Nusal::TipeToken::kurung_kurawal_tutup)) {
+    //       nilaiTeks->children.push_back(this->buatNodeToken());
+    //       this->tokenSelanjutNya();
+    //     }else{
+    //       throw KesalahanParse(this->tokenSaatIni, "Setelah kurung kurawal buka harusnya kurung kurawal tutup.");
+    //     }
+    //     continue;
+    //   }else{
+    //     throw KesalahanParse(this->tokenSaatIni, "Teks interpolasi harus berisi nama variabel atau sebuah ekspresi di dalam kurung kurawal.");
+    //   }
+    // }
     nilaiTeks->children.push_back(this->buatNodeToken());
     this->tokenSelanjutNya();
   }
