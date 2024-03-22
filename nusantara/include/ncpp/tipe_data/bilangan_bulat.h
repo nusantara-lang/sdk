@@ -73,7 +73,7 @@ namespace Ncpp {
       BilanganBulat& operator|=(const BilanganBulat& nilai);
       BilanganBulat& operator<<=(const BilanganBulat& nilai);
       BilanganBulat& operator>>=(const BilanganBulat& nilai);
-      [[nodiscard]] mpz_t& ambil() const;
+      [[nodiscard]] const mpz_t& ambil() const;
     private:
     protected:
   };

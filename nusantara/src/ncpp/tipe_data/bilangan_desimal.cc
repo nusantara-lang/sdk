@@ -11,38 +11,38 @@
 
 // Constructors
 Ncpp::BilanganDesimal::BilanganDesimal() {
-	mpfr_init_set_str(this->ambil(), "0.0", BilanganDesimal::basis, BilanganDesimal::pembulatan);
+	mpfr_init_set_str(this->nilai, "0.0", BilanganDesimal::basis, BilanganDesimal::pembulatan);
 }
 Ncpp::BilanganDesimal:: BilanganDesimal(const std::string& nilai) {
 	std::string nilai_dengan_titik(nilai);
 	std::replace(nilai_dengan_titik.begin(), nilai_dengan_titik.end(), ',', '.');	
-	mpfr_init_set_str(this->ambil(), nilai_dengan_titik.c_str(), BilanganDesimal::basis, BilanganDesimal::pembulatan);
+	mpfr_init_set_str(this->nilai, nilai_dengan_titik.c_str(), BilanganDesimal::basis, BilanganDesimal::pembulatan);
 }
 // Destructor
 Ncpp::BilanganDesimal::~BilanganDesimal() {
-	mpfr_clear(this->ambil());
+	mpfr_clear(this->nilai);
 }
 // Copy constructor
 Ncpp::BilanganDesimal::BilanganDesimal(const BilanganDesimal& other) {
-	mpfr_init_set(this->ambil(), other.ambil(), BilanganDesimal::pembulatan);
+	mpfr_init_set(this->nilai, other.nilai, BilanganDesimal::pembulatan);
 }
 // Copy assignment operator
 Ncpp::BilanganDesimal& Ncpp::BilanganDesimal::operator=(const BilanganDesimal& other) {
 	if (this != &other) {
-    mpfr_set(this->ambil(), other.ambil(), BilanganDesimal::pembulatan);
+    mpfr_set(this->nilai, other.nilai, BilanganDesimal::pembulatan);
   }
   return *this;
 } 
 // Move constructor
 Ncpp::BilanganDesimal::BilanganDesimal(BilanganDesimal&& other) noexcept {
-  mpfr_init_set_str(this->ambil(), "0.0", BilanganDesimal::basis, BilanganDesimal::pembulatan);
-  mpfr_swap(this->ambil(), other.ambil());
+  mpfr_init_set_str(this->nilai, "0.0", BilanganDesimal::basis, BilanganDesimal::pembulatan);
+  mpfr_swap(this->nilai, other.nilai);
   
 }
 // Move assignment operator
 Ncpp::BilanganDesimal& Ncpp::BilanganDesimal::operator=(BilanganDesimal&& other) noexcept {
 	if (this != &other) {
-    mpfr_swap(this->ambil(), other.ambil());
+    mpfr_swap(this->nilai, other.nilai);
   }
   return *this;
 }
@@ -58,16 +58,14 @@ std::regex Ncpp::BilanganDesimal::pattern() {
 std::string Ncpp::BilanganDesimal::ubahKeString() const {
 	return Ncpp::ubahKeStringPresisi(this->ambil(), BilanganDesimal::presisiStringBawaan, true);
 }
-std::string Ncpp::BilanganDesimal::ubahKeStringTetap(const BilanganBulat& presisi) const {
-	// TODO : HARUS DI RUBAH
-	// return Ncpp::ubahKeStringTetap(this->ambil(), presisi, true);
+std::string Ncpp::BilanganDesimal::ubahKeStringTetap(const long& presisi) const {
+	return Ncpp::ubahKeStringTetap(this->ambil(), presisi, true);
 }
-std::string Ncpp::BilanganDesimal::ubahKeStringPresisi(const BilanganBulat& presisi) const {
-	// TODO : HARUS DI RUBAH
-	// return Ncpp::ubahKeStringPresisi(this->ambil(), presisi, true);
+std::string Ncpp::BilanganDesimal::ubahKeStringPresisi(const long& presisi) const {
+	return Ncpp::ubahKeStringPresisi(this->ambil(), presisi, true);
 }
-mpfr_t& Ncpp::BilanganDesimal::ambil() const {
-    return ITipeData::ambil();
+const mpfr_t& Ncpp::BilanganDesimal::ambil() const {
+    return this->nilai;
 }
 
 Ncpp::BilanganDesimal Ncpp::BilanganDesimal::ubah(const BilanganBulat& nilai) {

@@ -23,9 +23,9 @@ namespace Ncpp {
       explicit BilanganDesimal(const long double& nilai);
       explicit BilanganDesimal(const std::string& nilai);
       [[nodiscard]] std::string ubahKeString() const override;
-      [[nodiscard]] std::string ubahKeStringTetap(const BilanganBulat& presisi
+      [[nodiscard]] std::string ubahKeStringTetap(const long& presisi
       ) const;
-      [[nodiscard]] std::string ubahKeStringPresisi(const BilanganBulat& presisi
+      [[nodiscard]] std::string ubahKeStringPresisi(const long& presisi
       ) const;
       static std::regex pattern();
       static BilanganDesimal ubah(const BilanganBulat& nilai);
@@ -70,10 +70,8 @@ namespace Ncpp {
       BilanganDesimal& operator/=(const BilanganDesimal& nilai);
       BilanganDesimal& operator%=(const BilanganBulat& nilai);
       BilanganDesimal& operator%=(const BilanganDesimal& nilai);
-      [[nodiscard]] mpfr_t& ambil() const;
-
+      [[nodiscard]] const mpfr_t& ambil() const;
     private:
-
     protected:
   };
 

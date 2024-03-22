@@ -9,35 +9,35 @@
 
 // Constructors
 Ncpp::BilanganBulat::BilanganBulat(): ITipeData<mpz_t>() {
-	mpz_init(this->ambil());
+	mpz_init(this->nilai);
 }
 Ncpp::BilanganBulat::BilanganBulat(const std::string& nilai) {	
-	mpz_init_set_str(this->ambil(), nilai.c_str(), BilanganBulat::basis);
+	mpz_init_set_str(this->nilai, nilai.c_str(), BilanganBulat::basis);
 }
 // Destructor
 Ncpp::BilanganBulat::~BilanganBulat() {
- mpz_clear(this->ambil());
+ mpz_clear(this->nilai);
 }
 // Copy constructor
 Ncpp::BilanganBulat::BilanganBulat(const BilanganBulat& other) {
-	mpz_init_set(this->ambil(), other.ambil());
+	mpz_init_set(this->nilai, other.nilai);
 }
 // Copy assignment operator
 Ncpp::BilanganBulat& Ncpp::BilanganBulat::operator=(const BilanganBulat& other) {
 	if(this != &other) {
-		mpz_set(this->ambil(), other.ambil());
+		mpz_set(this->nilai, other.nilai);
 	}
 	return *this;
 }
 // Move constructor
 Ncpp::BilanganBulat::BilanganBulat(BilanganBulat&& other) noexcept {
-	mpz_init(this->ambil());
-	mpz_swap(this->ambil(), other.ambil());
+	mpz_init(this->nilai);
+	mpz_swap(this->nilai, other.nilai);
 }
 // Move assignment operator
 Ncpp::BilanganBulat& Ncpp::BilanganBulat::operator=(BilanganBulat&& other) noexcept {
 	if(this != &other) {
-		mpz_swap(this->ambil(), other.ambil());
+		mpz_swap(this->nilai, other.nilai);
 	}
 	return *this;
 }
@@ -52,8 +52,8 @@ std::string Ncpp::BilanganBulat::ubahKeString() const {
 	return Ncpp::ubahKeString(this->ambil(), BilanganBulat::basis);
 }
 
-mpz_t& Ncpp::BilanganBulat::ambil() const {
-    return ITipeData::ambil();
+const mpz_t& Ncpp::BilanganBulat::ambil() const {
+    return this->nilai;
 }
 
 Ncpp::BilanganBulat Ncpp::BilanganBulat::ubah(const BilanganDesimal &nilai) {

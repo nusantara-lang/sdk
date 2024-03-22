@@ -52,11 +52,9 @@ namespace Ncpp {
       Bilangan& operator|=(const Bilangan& nilai);
       Bilangan& operator<<=(const Bilangan& nilai);
       Bilangan& operator>>=(const Bilangan& nilai);
-
     private:
-
     protected:
-      [[nodiscard]] BilanganBulat& ambilNilaiBulat() const;
-      [[nodiscard]] BilanganDesimal& ambilNilaiDesimal() const;
+      [[nodiscard]] const BilanganBulat& ambilNilaiBulat() const;
+      [[nodiscard]] const BilanganDesimal& ambilNilaiDesimal() const;
   };
 } // namespace Ncpp
