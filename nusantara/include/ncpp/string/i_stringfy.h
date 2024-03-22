@@ -5,12 +5,13 @@
 namespace Ncpp {
     class IStringfy {
         public:
+          IStringfy() = default;
           IStringfy(const IStringfy&) = default;
           IStringfy(IStringfy&&) = delete;
           IStringfy& operator=(const IStringfy&) = default;
           IStringfy& operator=(IStringfy&&) = delete;
           virtual ~IStringfy() = default;
-          virtual std::string ubahKeString();
+          [[nodiscard]] virtual std::string ubahKeString() const;
         private:
     };
 }

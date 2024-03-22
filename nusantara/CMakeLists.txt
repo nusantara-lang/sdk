@@ -46,6 +46,13 @@ add_executable(
     ${SOURCE_FILES}
 )
 
+target_link_libraries(
+    nusantara
+    PRIVATE
+    gmp
+    mpfr
+)
+
 set_target_properties(nusantara PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 if(${UNIT_TEST} STREQUAL "ON")
