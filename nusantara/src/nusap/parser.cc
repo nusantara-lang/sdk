@@ -13,8 +13,7 @@
 #include <format>
 #include <memory>
 
-Nusap::Parser::Parser():
-    lexer(Nusal::nusalDataTipeToken()) {}
+Nusap::Parser::Parser(): lexer(Nusal::nusalDataTipeToken()) {}
 
 void Nusap::Parser::input(const std::string& input) {
   this->lexer.input(input);
@@ -57,16 +56,15 @@ bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe
 
 bool Nusap::Parser::mengharapkanToken(
     const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe,
-    const std::function<std::unique_ptr<Node>()>& callback,
-    const bool& skip
+    const std::function<std::unique_ptr<Node>()>& callback, const bool& skip
 ) {
-  if(skip) {this->parseSkipToken();}
+  if(skip) { this->parseSkipToken(); }
   bool hasil = this->tokenSaatIniAdalah(tipe);
   if(hasil) {
     auto node = callback();
     if(node->tipe == TipeNode::token) {
       this->tokenSelanjutNya();
-      if(skip) {this->parseSkipToken();}
+      if(skip) { this->parseSkipToken(); }
     }
     aturan->children.push_back(std::move(node));
   }
@@ -76,8 +74,7 @@ bool Nusap::Parser::mengharapkanToken(
 bool Nusap::Parser::mengharapkanToken(
     const std::unique_ptr<Node>& aturan,
     const std::vector<Nusal::TipeToken>& tipe,
-    const std::function<std::unique_ptr<Node>()>& callback,
-    const bool& skip
+    const std::function<std::unique_ptr<Node>()>& callback, const bool& skip
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
     return this->mengharapkanToken(aturan, element, callback, skip);
@@ -179,23 +176,54 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
     throw KesalahanParse(this->tokenSaatIni, "Teks harus di awali kutip 1.");
   }
   while(!tokenSaatIniAdalah(Nusal::TipeToken::kutip_satu)) {
-    if(mengharapkanToken(nilaiTeks, Nusal::TipeToken::garis_miring_terbalik, [&](){return this->buatNodeToken();}, false)) {
-      if(mengharapkanToken(nilaiTeks, Nusal::TipeToken::dolar, [&](){return this->buatNodeToken();}, false)) {
+    if(mengharapkanToken(
+           nilaiTeks, Nusal::TipeToken::garis_miring_terbalik,
+           [&]() { return this->buatNodeToken(); }, false
+       )) {
+      if(mengharapkanToken(
+             nilaiTeks, Nusal::TipeToken::dolar,
+             [&]() { return this->buatNodeToken(); }, false
+         )) {
         continue;
       }
-    }else if(mengharapkanToken(nilaiTeks, Nusal::TipeToken::dolar, [&](){return this->buatNodeToken();}, false)) {
-      if(mengharapkanToken(nilaiTeks, Nusal::TipeToken::identifikasi, [&](){return this->buatNodeToken();}, false)) {
+    } else if(mengharapkanToken(
+                  nilaiTeks, Nusal::TipeToken::dolar,
+                  [&]() { return this->buatNodeToken(); }, false
+              )) {
+      if(mengharapkanToken(
+             nilaiTeks, Nusal::TipeToken::identifikasi,
+             [&]() { return this->buatNodeToken(); }, false
+         )) {
         continue;
-      }else if(mengharapkanToken(nilaiTeks, Nusal::TipeToken::kurung_kurawal_buka, [&](){return this->buatNodeToken();}, false)) {
-        if(!this->mengharapkanToken(nilaiTeks, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka, Nusal::TipeToken::kutip_satu}, [&]() {return this->parseEkspresi();})) {
-          throw KesalahanParse(this->tokenSaatIni, "Ekspresi pada teks interpolasi tidak valid.");
+      } else if(mengharapkanToken(
+                    nilaiTeks, Nusal::TipeToken::kurung_kurawal_buka,
+                    [&]() { return this->buatNodeToken(); }, false
+                )) {
+        if(!this->mengharapkanToken(
+               nilaiTeks,
+               {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka,
+                Nusal::TipeToken::kutip_satu},
+               [&]() { return this->parseEkspresi(); }
+           )) {
+          throw KesalahanParse(
+              this->tokenSaatIni, "Ekspresi pada teks interpolasi tidak valid."
+          );
         }
-        if(!mengharapkanToken(nilaiTeks, Nusal::TipeToken::kurung_kurawal_tutup, [&](){return this->buatNodeToken();}, false)) {
-          throw KesalahanParse(this->tokenSaatIni, "Setelah kurung kurawal buka harusnya kurung kurawal tutup.");
+        if(!mengharapkanToken(
+               nilaiTeks, Nusal::TipeToken::kurung_kurawal_tutup,
+               [&]() { return this->buatNodeToken(); }, false
+           )) {
+          throw KesalahanParse(
+              this->tokenSaatIni,
+              "Setelah kurung kurawal buka harusnya kurung kurawal tutup."
+          );
         }
         continue;
-      }else{
-          throw KesalahanParse(this->tokenSaatIni, "Teks interpolasi harus berisi nama variabel atau sebuah ekspresi di dalam kurung kurawal.");
+      } else {
+        throw KesalahanParse(
+            this->tokenSaatIni, "Teks interpolasi harus berisi nama variabel "
+                                "atau sebuah ekspresi di dalam kurung kurawal."
+        );
       }
     }
     nilaiTeks->children.push_back(this->buatNodeToken());
@@ -215,7 +243,9 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
   this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::tanda_hubung, [&]() {
     return this->buatNodeToken();
   });
-  while(mengharapkanToken(nilaiBilangan, Nusal::TipeToken::angka, [&](){return this->buatNodeToken();})) {}
+  while(mengharapkanToken(nilaiBilangan, Nusal::TipeToken::angka, [&]() {
+    return this->buatNodeToken();
+  })) {}
   if(this->tokenSaatIniAdalah(Nusal::TipeToken::titik)) {
     throw KesalahanParse(
         this->tokenSaatIni,
@@ -226,7 +256,9 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
        return this->buatNodeToken();
      })) {
     size_t index = 0;
-    while(mengharapkanToken(nilaiBilangan, Nusal::TipeToken::angka, [&](){return this->buatNodeToken();})) {
+    while(mengharapkanToken(nilaiBilangan, Nusal::TipeToken::angka, [&]() {
+      return this->buatNodeToken();
+    })) {
       ++index;
     }
     if(index <= 0) {
@@ -241,9 +273,14 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilai() {
   std::unique_ptr<Nusap::Node> nilai = buatNodeAturan(TipeNode::nilai);
-  if(this->mengharapkanToken(nilai, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka}, [&](){return this->parseNilaiBilangan();})) {
+  if(this->mengharapkanToken(
+         nilai, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka},
+         [&]() { return this->parseNilaiBilangan(); }
+     )) {
     return nilai;
-  } else if(this->mengharapkanToken(nilai, Nusal::TipeToken::kutip_satu, [&](){return this->parseNilaiTeks();})) {
+  } else if(this->mengharapkanToken(nilai, Nusal::TipeToken::kutip_satu, [&]() {
+              return this->parseNilaiTeks();
+            })) {
     return nilai;
   }
   throw KesalahanParse(this->tokenSaatIni, "Nilai tidak valid.");

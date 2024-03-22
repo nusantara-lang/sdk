@@ -9,9 +9,7 @@ namespace Nusap {
 
   class KesalahanParse: public std::exception {
     public:
-      KesalahanParse(
-          const Nusal::Token& token, const std::string& pesan
-      );
+      KesalahanParse(const Nusal::Token& token, const std::string& pesan);
 
     private:
       [[nodiscard]] const char* what() const noexcept override;

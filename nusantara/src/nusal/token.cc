@@ -20,10 +20,10 @@ std::string Nusal::ubahKeString(const Token& token) {
   return std::format(
       "{}:{}:{} {} {}", token.sumber, token.baris.nilai + 1,
       token.karakter.nilai + 1, ubahKeString(token.tipe),
-      (token.nilai == "\n")   ? "\\n"
-      : (token.nilai == "\t") ? "\\t"
-      : (token.nilai == "\r") ? "\\r"
+      (token.nilai == "\n")      ? "\\n"
+      : (token.nilai == "\t")    ? "\\t"
+      : (token.nilai == "\r")    ? "\\r"
       : (token.nilai[0] == '\0') ? "\\0"
-                              : token.nilai
+                                 : token.nilai
   );
 }

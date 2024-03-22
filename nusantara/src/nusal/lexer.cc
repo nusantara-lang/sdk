@@ -52,14 +52,14 @@ Nusal::Token Nusal::Lexer::ambilToken() {
       token.sumber = sumber;
       token.baris = this->baris;
       token.karakter = this->karakter;
-      if(this->sumberBersertaInput.empty()) {
-        break;
-      }
+      if(this->sumberBersertaInput.empty()) { break; }
       this->baris.nilai = 0;
       this->karakter.nilai = 0;
       continue;
     }
-    if(const auto& tokenPtr = buatToken(input, this->baris, this->karakter, sumber, this->tipeTokenData)) {
+    if(const auto& tokenPtr = buatToken(
+           input, this->baris, this->karakter, sumber, this->tipeTokenData
+       )) {
       token = *tokenPtr;
     }
     return token;

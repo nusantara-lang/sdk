@@ -1,4 +1,5 @@
 #include "nusal/alat.h"
+
 #include "nusal/token.h"
 
 #include <format>
@@ -11,9 +12,7 @@ std::unique_ptr<Nusal::Token> Nusal::buatToken(
     std::string& input, baris& baris, karakter& karakter,
     const std::string& sumber, const std::vector<TipeTokenData>& data
 ) {
-  if(input.empty()) {
-    return nullptr;
-  }
+  if(input.empty()) { return nullptr; }
   Token tkn;
   tkn.sumber = sumber;
   tkn.baris = baris;

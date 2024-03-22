@@ -18,9 +18,7 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
       if(data.baris == token.baris.nilai && data.sumber == token.sumber) {
         data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
       } else {
-        if(!awal) {
-          kData.push_back(data); 
-        }
+        if(!awal) { kData.push_back(data); }
         awal = false;
         data.sumber = token.sumber;
         data.baris = token.baris.nilai;

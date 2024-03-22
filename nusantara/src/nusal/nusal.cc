@@ -9,7 +9,7 @@ const std::vector<Nusal::TipeTokenData>& Nusal::nusalDataTipeToken() {
       {TipeToken::tab,                      "[\t]"                  },
       {TipeToken::spasi,                    "[ ]"                   },
       {TipeToken::komentar_satu_baris,      "//[^\n]*"              },
-      {TipeToken::komentar_banyak_baris,    "/\\*[^(/*)]*\\*/"      },
+      {TipeToken::komentar_banyak_baris,    "/\\*[^/*]*\\*/"        },
       {TipeToken::muat,                     "muat"                  },
       {TipeToken::luar,                     "luar"                  },
       {TipeToken::bilangan,                 "bilangan"              },

@@ -7,3 +7,9 @@ muat 'lib/inti.nusa';
     "kelas": 11
 }';
 'Halo Dunia!';
+
+/*
+ulang bilangan i = 0; i < 10; ++i {
+    cetak(i);
+}
+*/

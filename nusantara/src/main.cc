@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         }
         Nusal::Token token;
         while(true) {
-          if(token.tipe == Nusal::TipeToken::akhir_dari_file) {break;}
+          if(token.tipe == Nusal::TipeToken::akhir_dari_file) { break; }
           token = lexer.ambilToken();
           std::cout << Nusal::ubahKeString(token) << "\n";
         }

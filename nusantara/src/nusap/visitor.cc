@@ -14,7 +14,7 @@ Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {
 Nusap::TokenCtx::TokenCtx(const Node& node): token(*node.token) {}
 
 Nusap::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
-  for(const auto & childNode : node.children) {
+  for(const auto& childNode : node.children) {
     if(childNode->tipe == TipeNode::token) {
       this->kTokenCtx.emplace_back(*childNode);
     }
