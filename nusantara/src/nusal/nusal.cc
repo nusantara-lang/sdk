@@ -38,6 +38,7 @@ const std::vector<Nusal::TipeTokenData>& Nusal::nusalDataTipeToken() {
       {TipeToken::kurung_siku_tutup,        R"(\])"                 },
       {TipeToken::kurung_kurawal_buka,      R"(\{)"                 },
       {TipeToken::kurung_kurawal_tutup,     R"(\})"                 },
+      {TipeToken::garis_miring_terbalik,    R"(\\)"                 },
       {TipeToken::karakter,                 "."                     },
   };
   return output;

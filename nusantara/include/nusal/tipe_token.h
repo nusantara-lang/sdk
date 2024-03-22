@@ -40,6 +40,7 @@ namespace Nusal {
     kurung_siku_tutup,
     kurung_kurawal_buka,
     kurung_kurawal_tutup,
+    garis_miring_terbalik,
     karakter
   };
 

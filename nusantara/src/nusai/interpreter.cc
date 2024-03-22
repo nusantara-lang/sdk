@@ -1,6 +1,7 @@
 #include "nusai/interpreter.h"
 
 #include "nusai/kesalahan_interpret.h"
+#include "nusal/tipe_token.h"
 #include "nusal/token.h"
 #include "nusap/parser.h"
 
@@ -90,15 +91,25 @@ std::any Nusai::Interpreter::visitToken(const Nusap::TokenCtx& ctx) {
 
 std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
   std::string teks;
-  size_t index = 0;
-  for(const auto& tokenCtx : ctx.kTokenCtx) {
-    std::any tokenAny = this->visitToken(tokenCtx);
-    if(index > 0 && index < (ctx.kTokenCtx.size() - 1)) {
-      if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
-        teks += token->nilai;
+  for(size_t index = 0; index < ctx.kTokenCtx.size(); ++index) {
+    if(index <= 0 || index >= (ctx.kTokenCtx.size() - 1)) { continue; }
+    std::any tokenAny = this->visitToken(ctx.kTokenCtx[index]);
+    if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
+      if(token->tipe == Nusal::TipeToken::garis_miring_terbalik) {
+        ++index;
+        std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
+        if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
+          if(token2->nilai.starts_with('n')) {
+            token2->nilai[0] = '\n';
+          } else if(token2->nilai.starts_with('t')) {
+            token2->nilai[0] = '\t';
+          }
+          teks += token2->nilai;
+        }
+        continue;
       }
+      teks += token->nilai;
     }
-    ++index;
   }
   return teks;
 }

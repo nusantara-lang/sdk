@@ -74,5 +74,7 @@ std::string Nusal::ubahKeString(const TipeToken& tipeToken) {
       return "komentar satu baris";
     case TipeToken::komentar_banyak_baris:
       return "komentar banyak baris";
+    case TipeToken::garis_miring_terbalik:
+      return "garis miring terbalik";
   }
 }
