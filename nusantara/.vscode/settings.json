@@ -1,3 +1,5 @@
 {
-    "cmake.configureOnEdit": false
+    "cmake.configureOnEdit": false,
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnOpen": false
 }
