@@ -8,7 +8,6 @@
 
 namespace Nusai {
 
-
   class KesalahanInterpret: public std::exception {
     public:
       KesalahanInterpret(
@@ -16,10 +15,10 @@ namespace Nusai {
       );
 
       struct Data {
-        std::string sumber;
-        size_t baris = 0;
-        size_t indexKarakterAwal = 0;
-        size_t indexKarakterAkhir = 0;
+          std::string sumber;
+          size_t baris = 0;
+          size_t indexKarakterAwal = 0;
+          size_t indexKarakterAkhir = 0;
       };
 
     private:

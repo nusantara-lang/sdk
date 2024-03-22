@@ -10,10 +10,13 @@ namespace Nusap {
 
   class KesalahanParse: public std::exception {
     public:
-      KesalahanParse(const std::unique_ptr<Nusal::Token>& token, const std::string& pesan);
+      KesalahanParse(
+          const std::unique_ptr<Nusal::Token>& token, const std::string& pesan
+      );
+
     private:
       [[nodiscard]] const char* what() const noexcept override;
       std::string pesan;
   };
 
-} // namespace nusap
+} // namespace Nusap

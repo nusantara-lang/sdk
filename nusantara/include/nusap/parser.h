@@ -30,12 +30,19 @@ namespace Nusap {
       bool tokenSaatIniAdalah(const Nusal::TipeToken& tipe);
       bool tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe);
       void tokenSelanjutNya();
-      bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe, const std::function<std::unique_ptr<Node>()>& callback);
-      bool mengharapkanToken(const std::unique_ptr<Node>& aturan, const std::vector<Nusal::TipeToken>& tipe, const std::function<std::unique_ptr<Node>()>& callback);
+      bool mengharapkanToken(
+          const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe,
+          const std::function<std::unique_ptr<Node>()>& callback
+      );
+      bool mengharapkanToken(
+          const std::unique_ptr<Node>& aturan,
+          const std::vector<Nusal::TipeToken>& tipe,
+          const std::function<std::unique_ptr<Node>()>& callback
+      );
 
       std::unique_ptr<Node> buatNodeAturan(const TipeNode& tipe);
       std::unique_ptr<Node> buatNodeToken();
-      
+
       // parse
       void parseSkipToken();
       std::unique_ptr<Node> parsePernyataan();
@@ -46,4 +53,4 @@ namespace Nusap {
       std::unique_ptr<Node> parseNilai();
   };
 
-} // namespace nusap
+} // namespace Nusap

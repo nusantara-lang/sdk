@@ -8,20 +8,18 @@
 #include <vector>
 
 Nusap::KesalahanParse::KesalahanParse(
-   const std::unique_ptr<Nusal::Token>& token, const std::string& pesan
+    const std::unique_ptr<Nusal::Token>& token, const std::string& pesan
 ) {
   if(token != nullptr) {
     std::vector<std::string> kKontenPerBaris;
     try {
       kKontenPerBaris = Nusal::bacaFilePerLine(token->sumber);
-    } catch (const std::exception& error) {
-      kKontenPerBaris = {};
-    }
+    } catch(const std::exception& error) { kKontenPerBaris = {}; }
     std::ostringstream ostream;
     ostream << std::format(
-                  "{}:{}:{}", token->sumber, token->baris.nilai + 1,
-                  token->karakter.nilai + 1
-              )
+                   "{}:{}:{}", token->sumber, token->baris.nilai + 1,
+                   token->karakter.nilai + 1
+               )
             << "\n\n";
     std::string prefix = std::format("{}| ", token->baris.nilai + 1);
     if(kKontenPerBaris.size() > token->baris.nilai) {
@@ -31,7 +29,7 @@ Nusap::KesalahanParse::KesalahanParse(
     }
     ostream << pesan;
     this->pesan = ostream.str();
-  }else{
+  } else {
     this->pesan = pesan;
   }
 }

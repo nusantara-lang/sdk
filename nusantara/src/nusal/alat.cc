@@ -6,9 +6,9 @@
 #include <sstream>
 
 std::unique_ptr<Nusal::Token> Nusal::buatToken(
-      std::string& input, baris& baris, karakter& karakter,
-      const std::string& sumber, const std::vector<TipeTokenData>& data
-  ) {
+    std::string& input, baris& baris, karakter& karakter,
+    const std::string& sumber, const std::vector<TipeTokenData>& data
+) {
   if(input.empty()) { return nullptr; }
   Token tkn;
   tkn.sumber = sumber;

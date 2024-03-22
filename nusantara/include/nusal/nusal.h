@@ -8,4 +8,4 @@ namespace Nusal {
 
   const std::vector<TipeTokenData>& nusalDataTipeToken();
 
-} // namespace nusal
+} // namespace Nusal

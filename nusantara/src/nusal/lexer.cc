@@ -27,15 +27,13 @@ void Nusal::Lexer::input(const std::string& sumber, const std::string& input) {
 }
 
 void Nusal::Lexer::inputFilePath(const std::string& filePath) {
-  std::string filePathAbsolute =
-      std::filesystem::absolute(filePath).string();
+  std::string filePathAbsolute = std::filesystem::absolute(filePath).string();
   if(this->sumberBersertaInput.contains(filePathAbsolute)) {
     this->sumberBersertaInput[filePathAbsolute] =
         this->sumberBersertaInput[filePathAbsolute] +
         bacaFile(filePathAbsolute);
   } else {
-    this->sumberBersertaInput[filePathAbsolute] =
-        bacaFile(filePathAbsolute);
+    this->sumberBersertaInput[filePathAbsolute] = bacaFile(filePathAbsolute);
   }
 }
 

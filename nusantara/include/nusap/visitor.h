@@ -2,77 +2,78 @@
 
 #include "nusal/token.h"
 #include "nusap/node.h"
+
 #include <any>
 #include <optional>
 #include <vector>
 
 namespace Nusap {
 
-    struct TokenCtx {
-        explicit TokenCtx(const Node& node);
-        Nusal::Token token;
-    };
+  struct TokenCtx {
+      explicit TokenCtx(const Node& node);
+      Nusal::Token token;
+  };
 
-    struct NilaiTeksCtx {
-        explicit NilaiTeksCtx(const Node& node);
-        std::vector<TokenCtx> kTokenCtx;
-    };
+  struct NilaiTeksCtx {
+      explicit NilaiTeksCtx(const Node& node);
+      std::vector<TokenCtx> kTokenCtx;
+  };
 
-    struct MuatFileCtx {
-        explicit MuatFileCtx(const Node& node);
-        TokenCtx tokenMuatCtx;
-        NilaiTeksCtx nilaiTeksCtx;
-    };
+  struct MuatFileCtx {
+      explicit MuatFileCtx(const Node& node);
+      TokenCtx tokenMuatCtx;
+      NilaiTeksCtx nilaiTeksCtx;
+  };
 
-		struct NilaiBilanganCtx {
-        explicit NilaiBilanganCtx(const Node& node);
-        std::vector<TokenCtx> kTokenCtx;
-    };
+  struct NilaiBilanganCtx {
+      explicit NilaiBilanganCtx(const Node& node);
+      std::vector<TokenCtx> kTokenCtx;
+  };
 
-    struct NilaiCtx {
-        explicit NilaiCtx(const Node& node);
-        std::optional<NilaiBilanganCtx> nilaiBilanganCtx;
-        std::optional<NilaiTeksCtx> nilaiTeksCtx;
-    };
+  struct NilaiCtx {
+      explicit NilaiCtx(const Node& node);
+      std::optional<NilaiBilanganCtx> nilaiBilanganCtx;
+      std::optional<NilaiTeksCtx> nilaiTeksCtx;
+  };
 
-    struct EkspresiCtx {
-        explicit EkspresiCtx(const Node& node);
-        std::optional<NilaiCtx> nilaiCtx;
-    };
+  struct EkspresiCtx {
+      explicit EkspresiCtx(const Node& node);
+      std::optional<NilaiCtx> nilaiCtx;
+  };
 
-    struct PernyataanCtx {
-        explicit PernyataanCtx(const Node& node);
-        std::optional<MuatFileCtx> muatFileCtx;
-				std::optional<EkspresiCtx> ekspresiCtx;
-        std::optional<TokenCtx> tokenTitikKomaCtx;
-    };
+  struct PernyataanCtx {
+      explicit PernyataanCtx(const Node& node);
+      std::optional<MuatFileCtx> muatFileCtx;
+      std::optional<EkspresiCtx> ekspresiCtx;
+      std::optional<TokenCtx> tokenTitikKomaCtx;
+  };
 
-    struct NusantaraCtx {
-        explicit NusantaraCtx(const Node& node);
-        std::vector<PernyataanCtx> kPernyataanCtx;
-    };
- 
-    class Visitor {
-        public:
-          Visitor() = default;
-          Visitor(const Visitor&) = default;
-          Visitor(Visitor&&) = delete;
-          Visitor& operator=(const Visitor&) = default;
-          Visitor& operator=(Visitor&&) = delete;
-          virtual ~Visitor() = default;
+  struct NusantaraCtx {
+      explicit NusantaraCtx(const Node& node);
+      std::vector<PernyataanCtx> kPernyataanCtx;
+  };
 
-          std::any visit(const Node& node);
+  class Visitor {
+    public:
+      Visitor() = default;
+      Visitor(const Visitor&) = default;
+      Visitor(Visitor&&) = delete;
+      Visitor& operator=(const Visitor&) = default;
+      Visitor& operator=(Visitor&&) = delete;
+      virtual ~Visitor() = default;
 
-          virtual std::any visitToken(const TokenCtx& ctx) = 0;
-          virtual std::any visitNilaiTeks(const NilaiTeksCtx& ctx) = 0;
-          virtual std::any visitMuatFile(const MuatFileCtx& ctx) = 0;
-          virtual std::any visitPernyataan(const PernyataanCtx& ctx) = 0;
-          virtual std::any visitNusantara(const NusantaraCtx& ctx) = 0;
-          virtual std::any visitNilaiBilangan(const NilaiBilanganCtx& ctx) = 0;
-          virtual std::any visitEkspresi(const EkspresiCtx& ctx) = 0;
-          virtual std::any visitNilai(const NilaiCtx& ctx) = 0;
+      std::any visit(const Node& node);
 
-        private:
-    };
+      virtual std::any visitToken(const TokenCtx& ctx) = 0;
+      virtual std::any visitNilaiTeks(const NilaiTeksCtx& ctx) = 0;
+      virtual std::any visitMuatFile(const MuatFileCtx& ctx) = 0;
+      virtual std::any visitPernyataan(const PernyataanCtx& ctx) = 0;
+      virtual std::any visitNusantara(const NusantaraCtx& ctx) = 0;
+      virtual std::any visitNilaiBilangan(const NilaiBilanganCtx& ctx) = 0;
+      virtual std::any visitEkspresi(const EkspresiCtx& ctx) = 0;
+      virtual std::any visitNilai(const NilaiCtx& ctx) = 0;
 
-}
+    private:
+  };
+
+} // namespace Nusap
