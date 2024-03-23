@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Nusap {
+namespace Parser {
 
   enum class TipeNode {
     token,
@@ -17,4 +17,4 @@ namespace Nusap {
 
   std::string ubahKeString(const TipeNode& node);
 
-} // namespace Nusap
+} // namespace Parser

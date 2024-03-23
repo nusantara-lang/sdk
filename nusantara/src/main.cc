@@ -2,8 +2,8 @@
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
-#include "nusap/node.h"
-#include "nusap/parser.h"
+#include "parser/node.h"
+#include "parser/parser.h"
 
 #include <cstring>
 #include <exception>
@@ -36,12 +36,12 @@ int main(int argc, char* argv[]) {
           std::cout << Lexer::ubahKeString(token) << "\n";
         }
       } else if(std::strcmp(args[1], "-p") == 0) {
-        Nusap::Parser parser;
+        Parser::Parser parser;
         for(size_t index = 2; index < static_cast<size_t>(argc); ++index) {
           parser.inputFilePath(args[index]);
         }
         auto root = parser.parse();
-        Nusap::cetakNode(root);
+        Parser::cetakNode(root);
       }
     }
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }

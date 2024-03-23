@@ -7,15 +7,15 @@
 #include <map>
 #include <lexer/lexer.h>
 #include <lexer/tipe_token.h>
-#include <nusap/parser.h>
-#include <nusap/visitor.h>
+#include <parser/parser.h>
+#include <parser/visitor.h>
 #include <optional>
 #include <string>
 #include <vector>
 
 namespace Nusai {
 
-  class Interpreter: private Nusap::Visitor {
+  class Interpreter: private Parser::Visitor {
     public:
       Interpreter();
       void input(const std::string& input);
@@ -38,7 +38,7 @@ namespace Nusai {
       };
 
     private:
-      std::map<std::string, Nusap::Parser> kParser;
+      std::map<std::string, Parser::Parser> kParser;
       std::vector<Kawasan> kKawasan;
       std::vector<Lexer::Token> kToken;
 
@@ -59,14 +59,14 @@ namespace Nusai {
       );
       Fungsi& ambilFungsi(const std::string& nama);
 
-      std::any visitToken(const Nusap::TokenCtx& ctx) override;
-      std::any visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) override;
-      std::any visitMuatFile(const Nusap::MuatFileCtx& ctx) override;
-      std::any visitPernyataan(const Nusap::PernyataanCtx& ctx) override;
-      std::any visitNusantara(const Nusap::NusantaraCtx& ctx) override;
-      std::any visitNilaiBilangan(const Nusap::NilaiBilanganCtx& ctx) override;
-      std::any visitEkspresi(const Nusap::EkspresiCtx& ctx) override;
-      std::any visitNilai(const Nusap::NilaiCtx& ctx) override;
+      std::any visitToken(const Parser::TokenCtx& ctx) override;
+      std::any visitNilaiTeks(const Parser::NilaiTeksCtx& ctx) override;
+      std::any visitMuatFile(const Parser::MuatFileCtx& ctx) override;
+      std::any visitPernyataan(const Parser::PernyataanCtx& ctx) override;
+      std::any visitNusantara(const Parser::NusantaraCtx& ctx) override;
+      std::any visitNilaiBilangan(const Parser::NilaiBilanganCtx& ctx) override;
+      std::any visitEkspresi(const Parser::EkspresiCtx& ctx) override;
+      std::any visitNilai(const Parser::NilaiCtx& ctx) override;
   };
 
 } // namespace Nusai

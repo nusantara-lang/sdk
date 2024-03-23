@@ -1,4 +1,4 @@
-#include "nusap/kesalahan_parse.h"
+#include "parser/kesalahan_parse.h"
 
 #include "lexer/alat.h"
 
@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-Nusap::KesalahanParse::KesalahanParse(
+Parser::KesalahanParse::KesalahanParse(
     const Lexer::Token& token, const std::string& pesan
 ) {
   std::vector<std::string> kKontenPerBaris;
@@ -30,6 +30,6 @@ Nusap::KesalahanParse::KesalahanParse(
   this->pesan = ostream.str();
 }
 
-const char* Nusap::KesalahanParse::what() const noexcept {
+const char* Parser::KesalahanParse::what() const noexcept {
   return this->pesan.c_str();
 }

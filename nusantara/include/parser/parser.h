@@ -3,8 +3,8 @@
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
-#include "nusap/node.h"
-#include "nusap/tipe_node.h"
+#include "parser/node.h"
+#include "parser/tipe_node.h"
 
 #include <functional>
 #include <memory>
@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace Nusap {
+namespace Parser {
 
   class Parser {
     public:
@@ -56,4 +56,4 @@ namespace Nusap {
       std::unique_ptr<Node> parseNilai();
   };
 
-} // namespace Nusap
+} // namespace Parser

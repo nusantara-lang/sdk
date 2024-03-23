@@ -1,17 +1,17 @@
-#include "nusap/visitor.h"
+#include "parser/visitor.h"
 
 #include "lexer/token.h"
-#include "nusap/tipe_node.h"
+#include "parser/tipe_node.h"
 
-Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {
+Parser::NusantaraCtx::NusantaraCtx(const Node& node) {
   for(const auto& child : node.children) {
     this->kPernyataanCtx.emplace_back(*child);
   }
 }
 
-Nusap::TokenCtx::TokenCtx(const Node& node): token(*node.token) {}
+Parser::TokenCtx::TokenCtx(const Node& node): token(*node.token) {}
 
-Nusap::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
+Parser::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
   for(const auto& childNode : node.children) {
     if(childNode->tipe == TipeNode::token) {
       this->kTokenCtx.emplace_back(*childNode);
@@ -22,29 +22,29 @@ Nusap::NilaiTeksCtx::NilaiTeksCtx(const Node& node) {
   }
 }
 
-Nusap::MuatFileCtx::MuatFileCtx(const Node& node):
-    tokenMuatCtx(Nusap::TokenCtx(*node.children[0])),
-    nilaiTeksCtx(Nusap::NilaiTeksCtx(*node.children[1])) {}
+Parser::MuatFileCtx::MuatFileCtx(const Node& node):
+    tokenMuatCtx(Parser::TokenCtx(*node.children[0])),
+    nilaiTeksCtx(Parser::NilaiTeksCtx(*node.children[1])) {}
 
-Nusap::PernyataanCtx::PernyataanCtx(const Node& node) {
+Parser::PernyataanCtx::PernyataanCtx(const Node& node) {
   const auto& child0 = node.children[0];
   if(child0->tipe == TipeNode::muat_file) {
-    this->muatFileCtx = Nusap::MuatFileCtx(*child0);
-    this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
+    this->muatFileCtx = Parser::MuatFileCtx(*child0);
+    this->tokenTitikKomaCtx = Parser::TokenCtx(*node.children[1]);
   } else if(child0->tipe == TipeNode::ekspresi) {
-    this->ekspresiCtx = Nusap::EkspresiCtx(*child0);
-    this->tokenTitikKomaCtx = Nusap::TokenCtx(*node.children[1]);
+    this->ekspresiCtx = Parser::EkspresiCtx(*child0);
+    this->tokenTitikKomaCtx = Parser::TokenCtx(*node.children[1]);
   }
 }
 
-Nusap::NilaiBilanganCtx::NilaiBilanganCtx(const Node& node) {
+Parser::NilaiBilanganCtx::NilaiBilanganCtx(const Node& node) {
   for(const auto& node : node.children) { this->kTokenCtx.emplace_back(*node); }
 }
 
-Nusap::EkspresiCtx::EkspresiCtx(const Node& node):
+Parser::EkspresiCtx::EkspresiCtx(const Node& node):
     nilaiCtx(NilaiCtx(*node.children[0])) {}
 
-Nusap::NilaiCtx::NilaiCtx(const Node& node) {
+Parser::NilaiCtx::NilaiCtx(const Node& node) {
   const auto& child0 = *node.children[0];
   if(child0.tipe == TipeNode::nilai_bilangan) {
     this->nilaiBilanganCtx = NilaiBilanganCtx(child0);
@@ -53,7 +53,7 @@ Nusap::NilaiCtx::NilaiCtx(const Node& node) {
   }
 }
 
-std::any Nusap::Visitor::visit(const Node& node) {
+std::any Parser::Visitor::visit(const Node& node) {
   if(node.tipe == TipeNode::nusantara) {
     return this->visitNusantara(NusantaraCtx(node));
   }

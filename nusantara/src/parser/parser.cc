@@ -1,32 +1,31 @@
-#include "nusap/parser.h"
+#include "parser/parser.h"
 
-#include "lexer/lexer.h"
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
-#include "nusap/kesalahan_parse.h"
-#include "nusap/node.h"
-#include "nusap/tipe_node.h"
+#include "parser/kesalahan_parse.h"
+#include "parser/node.h"
+#include "parser/tipe_node.h"
 
 #include <algorithm>
 #include <format>
 #include <memory>
 
-Nusap::Parser::Parser(): lexer(Lexer::nusantaraDataTipeToken()) {}
+Parser::Parser::Parser(): lexer(Lexer::nusantaraDataTipeToken()) {}
 
-void Nusap::Parser::input(const std::string& input) {
+void Parser::Parser::input(const std::string& input) {
   this->lexer.input(input);
 }
 
-void Nusap::Parser::input(const std::string& sumber, const std::string& input) {
+void Parser::Parser::input(const std::string& sumber, const std::string& input) {
   this->lexer.input(sumber, input);
 }
 
-void Nusap::Parser::inputFilePath(const std::string& filePath) {
+void Parser::Parser::inputFilePath(const std::string& filePath) {
   this->lexer.inputFilePath(filePath);
 }
 
-const std::vector<Lexer::TipeToken>& Nusap::Parser::skipTipeToken() {
+const std::vector<Lexer::TipeToken>& Parser::Parser::skipTipeToken() {
   static std::vector<Lexer::TipeToken> hasil = {
       Lexer::TipeToken::kembali_ke_awal_karakter,
       Lexer::TipeToken::baris_baru,
@@ -38,22 +37,22 @@ const std::vector<Lexer::TipeToken>& Nusap::Parser::skipTipeToken() {
   return hasil;
 }
 
-void Nusap::Parser::tokenSelanjutNya() {
+void Parser::Parser::tokenSelanjutNya() {
   this->tokenSaatIni = this->lexer.ambilToken();
 }
 
-bool Nusap::Parser::tokenSaatIniAdalah(const Lexer::TipeToken& tipe) {
+bool Parser::Parser::tokenSaatIniAdalah(const Lexer::TipeToken& tipe) {
   return this->tokenSaatIni.tipe == tipe;
 }
 
-bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Lexer::TipeToken>& tipe
+bool Parser::Parser::tokenSaatIniAdalah(const std::vector<Lexer::TipeToken>& tipe
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
     return this->tokenSaatIniAdalah(element);
   });
 }
 
-bool Nusap::Parser::mengharapkanToken(
+bool Parser::Parser::mengharapkanToken(
     const std::unique_ptr<Node>& aturan, const Lexer::TipeToken& tipe,
     const std::function<std::unique_ptr<Node>()>& callback, const bool& skip,
     const std::string& pesanKesalahan
@@ -78,7 +77,7 @@ bool Nusap::Parser::mengharapkanToken(
   return hasil;
 }
 
-bool Nusap::Parser::mengharapkanToken(
+bool Parser::Parser::mengharapkanToken(
     const std::unique_ptr<Node>& aturan,
     const std::vector<Lexer::TipeToken>& tipe,
     const std::function<std::unique_ptr<Node>()>& callback, const bool& skip
@@ -88,18 +87,18 @@ bool Nusap::Parser::mengharapkanToken(
   });
 }
 
-std::unique_ptr<Nusap::Node>
-Nusap::Parser::buatNodeAturan(const Nusap::TipeNode& tipe) {
+std::unique_ptr<Parser::Node>
+Parser::Parser::buatNodeAturan(const TipeNode& tipe) {
   return std::make_unique<Node>(tipe);
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::buatNodeToken() {
+std::unique_ptr<Parser::Node> Parser::Parser::buatNodeToken() {
   return std::make_unique<Node>(
       TipeNode::token, std::make_unique<Lexer::Token>(this->tokenSaatIni)
   );
 }
 
-void Nusap::Parser::parseSkipToken() {
+void Parser::Parser::parseSkipToken() {
   while(this->tokenSaatIniAdalah(this->skipTipeToken())) {
     this->tokenSelanjutNya();
   }
@@ -107,13 +106,13 @@ void Nusap::Parser::parseSkipToken() {
 
 // PARSE AREA
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parse() {
-  std::unique_ptr<Nusap::Node> nusantara = buatNodeAturan(TipeNode::nusantara);
+std::unique_ptr<Parser::Node> Parser::Parser::parse() {
+  std::unique_ptr<Node> nusantara = buatNodeAturan(TipeNode::nusantara);
   this->tokenSelanjutNya();
   this->parseSkipToken();
   while(this->tokenSaatIni.tipe != Lexer::TipeToken::akhir_dari_file) {
     if(this->tokenSaatIniAdalah(Lexer::TipeToken::tidak_diketahui)) {
-      throw Nusap::KesalahanParse(
+      throw KesalahanParse(
           this->tokenSaatIni,
           std::format(
               "Nusantara tidak dapat mengenali karakter '{}'.",
@@ -126,8 +125,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parse() {
   return nusantara;
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
-  std::unique_ptr<Nusap::Node> pernyataan =
+std::unique_ptr<Parser::Node> Parser::Parser::parsePernyataan() {
+  std::unique_ptr<Node> pernyataan =
       buatNodeAturan(TipeNode::pernyataan);
   if(this->mengharapkanToken(pernyataan, Lexer::TipeToken::muat, [&]() {
        return this->parseMuatFile();
@@ -157,8 +156,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
   throw KesalahanParse(this->tokenSaatIni, "Pernyataan tidak valid");
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parseMuatFile() {
-  std::unique_ptr<Nusap::Node> muatFile = buatNodeAturan(TipeNode::muat_file);
+std::unique_ptr<Parser::Node> Parser::Parser::parseMuatFile() {
+  std::unique_ptr<Node> muatFile = buatNodeAturan(TipeNode::muat_file);
   if(!this->mengharapkanToken(muatFile, Lexer::TipeToken::muat, [&]() {
        return this->buatNodeToken();
      })) {
@@ -175,8 +174,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseMuatFile() {
   return muatFile;
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
-  std::unique_ptr<Nusap::Node> nilaiTeks = buatNodeAturan(TipeNode::nilai_teks);
+std::unique_ptr<Parser::Node> Parser::Parser::parseNilaiTeks() {
+  std::unique_ptr<Node> nilaiTeks = buatNodeAturan(TipeNode::nilai_teks);
   if(!this->mengharapkanToken(nilaiTeks, Lexer::TipeToken::kutip_satu, [&]() {
        return this->buatNodeToken();
      })) {
@@ -244,8 +243,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
   return nilaiTeks;
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
-  std::unique_ptr<Nusap::Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
+std::unique_ptr<Parser::Node> Parser::Parser::parseNilaiBilangan() {
+  std::unique_ptr<Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
   this->mengharapkanToken(nilaiBilangan, Lexer::TipeToken::tanda_hubung, [&]() {
     return this->buatNodeToken();
   }, false);
@@ -279,8 +278,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
   return nilaiBilangan;
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilai() {
-  std::unique_ptr<Nusap::Node> nilai = buatNodeAturan(TipeNode::nilai);
+std::unique_ptr<Parser::Node> Parser::Parser::parseNilai() {
+  std::unique_ptr<Node> nilai = buatNodeAturan(TipeNode::nilai);
   if(this->mengharapkanToken(
          nilai, {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka},
          [&]() { return this->parseNilaiBilangan(); }
@@ -294,8 +293,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilai() {
   throw KesalahanParse(this->tokenSaatIni, "Nilai tidak valid.");
 }
 
-std::unique_ptr<Nusap::Node> Nusap::Parser::parseEkspresi() {
-  std::unique_ptr<Nusap::Node> ekspresi = buatNodeAturan(TipeNode::ekspresi);
+std::unique_ptr<Parser::Node> Parser::Parser::parseEkspresi() {
+  std::unique_ptr<Node> ekspresi = buatNodeAturan(TipeNode::ekspresi);
   if(this->mengharapkanToken(
          ekspresi,
          {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka,

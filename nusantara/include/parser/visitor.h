@@ -1,13 +1,13 @@
 #pragma once
 
 #include "lexer/token.h"
-#include "nusap/node.h"
+#include "parser/node.h"
 
 #include <any>
 #include <optional>
 #include <vector>
 
-namespace Nusap {
+namespace Parser {
 
   struct TokenCtx {
       explicit TokenCtx(const Node& node);
@@ -79,4 +79,4 @@ namespace Nusap {
     private:
   };
 
-} // namespace Nusap
+} // namespace Parser

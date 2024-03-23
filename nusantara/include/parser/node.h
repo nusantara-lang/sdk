@@ -1,12 +1,12 @@
 #pragma once
 
 #include "lexer/token.h"
-#include "nusap/tipe_node.h"
+#include "parser/tipe_node.h"
 
 #include <memory>
 #include <vector>
 
-namespace Nusap {
+namespace Parser {
 
   struct Node {
       explicit Node(const TipeNode& tipe);
@@ -18,4 +18,4 @@ namespace Nusap {
 
   void cetakNode(const std::unique_ptr<Node>& node, const int& level = 0);
 
-} // namespace Nusap
+} // namespace Parser

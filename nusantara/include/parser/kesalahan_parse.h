@@ -5,7 +5,7 @@
 #include <exception>
 #include <string>
 
-namespace Nusap {
+namespace Parser {
 
   class KesalahanParse: public std::exception {
     public:
@@ -16,4 +16,4 @@ namespace Nusap {
       std::string pesan;
   };
 
-} // namespace Nusap
+} // namespace Parser

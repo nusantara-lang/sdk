@@ -1,6 +1,6 @@
-#include "nusap/tipe_node.h"
+#include "parser/tipe_node.h"
 
-std::string Nusap::ubahKeString(const TipeNode& node) {
+std::string Parser::ubahKeString(const TipeNode& node) {
   switch(node) {
     case TipeNode::token:
       return "token";

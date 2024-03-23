@@ -4,7 +4,7 @@
 #include "nusai/kesalahan_interpret.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
-#include "nusap/parser.h"
+#include "parser/parser.h"
 
 #include <any>
 #include <format>
@@ -21,7 +21,7 @@ void Nusai::Interpreter::input(const std::string& input) {
   std::string sumber("tidak diketahui");
   if(this->kParser.find(sumber) == this->kParser.end()) {
     auto& parser = this->kParser[sumber];
-    parser = Nusap::Parser();
+    parser = Parser::Parser();
     parser.input(input);
     if(const auto node = parser.parse()) { this->visit(*node); }
   }
@@ -32,7 +32,7 @@ void Nusai::Interpreter::input(
 ) {
   if(this->kParser.find(sumber) == this->kParser.end()) {
     auto& parser = this->kParser[sumber];
-    parser = Nusap::Parser();
+    parser = Parser::Parser();
     parser.input(sumber, input);
     if(const auto node = parser.parse()) { this->visit(*node); }
   }
@@ -41,7 +41,7 @@ void Nusai::Interpreter::input(
 void Nusai::Interpreter::inputFilePath(const std::string& filePath) {
   if(this->kParser.find(filePath) == this->kParser.end()) {
     auto& parser = this->kParser[filePath];
-    parser = Nusap::Parser();
+    parser = Parser::Parser();
     parser.inputFilePath(filePath);
     if(const auto node = parser.parse()) { this->visit(*node); }
   }
@@ -86,12 +86,12 @@ Nusai::Interpreter::ambilFungsi(const std::string& nama) {
 
 // VISIT AREA
 
-std::any Nusai::Interpreter::visitToken(const Nusap::TokenCtx& ctx) {
+std::any Nusai::Interpreter::visitToken(const Parser::TokenCtx& ctx) {
   this->kToken.push_back(ctx.token);
   return ctx.token;
 }
 
-std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
+std::any Nusai::Interpreter::visitNilaiTeks(const Parser::NilaiTeksCtx& ctx) {
   std::string teks;
   size_t indexEkspresi = 0;
   for(size_t index = 0; index < ctx.kTokenCtx.size(); ++index) {
@@ -160,7 +160,7 @@ std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
   return teks;
 }
 
-std::any Nusai::Interpreter::visitMuatFile(const Nusap::MuatFileCtx& ctx) {
+std::any Nusai::Interpreter::visitMuatFile(const Parser::MuatFileCtx& ctx) {
   this->visitToken(ctx.tokenMuatCtx);
   std::any nilaiTeksAny = this->visitNilaiTeks(ctx.nilaiTeksCtx);
   if(const auto* nilaiTeks = std::any_cast<std::string>(&nilaiTeksAny)) {
@@ -169,7 +169,7 @@ std::any Nusai::Interpreter::visitMuatFile(const Nusap::MuatFileCtx& ctx) {
   return {};
 }
 
-std::any Nusai::Interpreter::visitPernyataan(const Nusap::PernyataanCtx& ctx) {
+std::any Nusai::Interpreter::visitPernyataan(const Parser::PernyataanCtx& ctx) {
   if(ctx.muatFileCtx.has_value()) {
     std::any hasil = this->visitMuatFile(ctx.muatFileCtx.value());
     this->visitToken(ctx.tokenTitikKomaCtx.value());
@@ -188,7 +188,7 @@ std::any Nusai::Interpreter::visitPernyataan(const Nusap::PernyataanCtx& ctx) {
   throw Nusai::KesalahanInterpret(this->kToken, "Pernyataan tidak valid.");
 }
 
-std::any Nusai::Interpreter::visitNusantara(const Nusap::NusantaraCtx& ctx) {
+std::any Nusai::Interpreter::visitNusantara(const Parser::NusantaraCtx& ctx) {
   for(const auto& pernyataanCtx : ctx.kPernyataanCtx) {
     this->visitPernyataan(pernyataanCtx);
     this->kToken.clear();
@@ -197,7 +197,7 @@ std::any Nusai::Interpreter::visitNusantara(const Nusap::NusantaraCtx& ctx) {
 }
 
 std::any Nusai::Interpreter::visitNilaiBilangan(
-    [[maybe_unused]] const Nusap::NilaiBilanganCtx& ctx
+    [[maybe_unused]] const Parser::NilaiBilanganCtx& ctx
 ) {
   std::string bilangan;
   for(const auto& tokenCtx : ctx.kTokenCtx) {
@@ -209,14 +209,14 @@ std::any Nusai::Interpreter::visitNilaiBilangan(
   return Ncpp::Bilangan(bilangan);
 }
 
-std::any Nusai::Interpreter::visitEkspresi(const Nusap::EkspresiCtx& ctx) {
+std::any Nusai::Interpreter::visitEkspresi(const Parser::EkspresiCtx& ctx) {
   if(ctx.nilaiCtx.has_value()) {
     return this->visitNilai(ctx.nilaiCtx.value());
   }
   throw KesalahanInterpret(this->kToken, "Ekspresi tidak valid.");
 }
 
-std::any Nusai::Interpreter::visitNilai(const Nusap::NilaiCtx& ctx) {
+std::any Nusai::Interpreter::visitNilai(const Parser::NilaiCtx& ctx) {
   if(ctx.nilaiBilanganCtx.has_value()) {
     return this->visitNilaiBilangan(ctx.nilaiBilanganCtx.value());
   } else if(ctx.nilaiTeksCtx.has_value()) {
