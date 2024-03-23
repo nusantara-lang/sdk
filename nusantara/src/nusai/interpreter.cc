@@ -1,7 +1,6 @@
 #include "nusai/interpreter.h"
 
 #include "ncpp/tipe_data/bilangan.h"
-#include "nusad/nusad.h"
 #include "nusai/kesalahan_interpret.h"
 #include "nusal/tipe_token.h"
 #include "nusal/token.h"

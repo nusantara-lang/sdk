@@ -3,7 +3,7 @@
 #include "ncpp/string/i_stringfy.h"
 
 namespace Ncpp {
-    class IStreamable: public IStringfy {
+    class IStreamable: virtual public IStringfy {
         public:
             [[nodiscard]] std::string ubahKeString() const override {return IStringfy::ubahKeString();}
         private:

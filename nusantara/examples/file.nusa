@@ -1,10 +1,10 @@
 muat 'lib/inti.nusa';
+muat 'lib/inti2.nusa';
 
-12, 5;
-102;
+12,5;
 '{
     "nama": "${'Aerell'}",
-    "kelas": ${10 }
+    "kelas": ${10}
 }';
 'Halo Dunia! ';
 

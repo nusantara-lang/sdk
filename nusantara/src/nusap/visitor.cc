@@ -1,7 +1,5 @@
 #include "nusap/visitor.h"
 
-#include "nusad/nusad.h"
-#include "nusal/tipe_token.h"
 #include "nusal/token.h"
 #include "nusap/tipe_node.h"
 

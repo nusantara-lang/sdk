@@ -1,6 +1,5 @@
 #include "nusal/lexer.h"
 
-#include "nusad/nusad.h"
 #include "nusal/alat.h"
 #include "nusal/tipe_token.h"
 #include "nusal/token.h"

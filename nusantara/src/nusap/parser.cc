@@ -1,6 +1,5 @@
 #include "nusap/parser.h"
 
-#include "nusad/nusad.h"
 #include "nusal/lexer.h"
 #include "nusal/nusal.h"
 #include "nusal/tipe_token.h"
@@ -246,11 +245,10 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
 }
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
-  std::unique_ptr<Nusap::Node> nilaiBilangan =
-      buatNodeAturan(TipeNode::nilai_bilangan);
+  std::unique_ptr<Nusap::Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
   this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::tanda_hubung, [&]() {
     return this->buatNodeToken();
-  });
+  }, false);
   while(mengharapkanToken(
       nilaiBilangan, Nusal::TipeToken::angka,
       [&]() { return this->buatNodeToken(); }, false
@@ -263,7 +261,7 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
   }
   if(this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::koma, [&]() {
        return this->buatNodeToken();
-     })) {
+     }, false)) {
     size_t index = 0;
     while(mengharapkanToken(
         nilaiBilangan, Nusal::TipeToken::angka,
