@@ -4,12 +4,12 @@
 
 #include <any>
 #include <functional>
-#include <map>
 #include <lexer/lexer.h>
 #include <lexer/tipe_token.h>
+#include <map>
+#include <optional>
 #include <parser/parser.h>
 #include <parser/visitor.h>
-#include <optional>
 #include <string>
 #include <vector>
 

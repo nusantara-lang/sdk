@@ -1,4 +1,5 @@
 #include "lexer/alat.h"
+
 #include "lexer/token.h"
 
 #include <format>

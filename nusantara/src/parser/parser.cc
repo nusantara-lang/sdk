@@ -17,7 +17,9 @@ void Parser::Parser::input(const std::string& input) {
   this->lexer.input(input);
 }
 
-void Parser::Parser::input(const std::string& sumber, const std::string& input) {
+void Parser::Parser::input(
+    const std::string& sumber, const std::string& input
+) {
   this->lexer.input(sumber, input);
 }
 
@@ -45,7 +47,8 @@ bool Parser::Parser::tokenSaatIniAdalah(const Lexer::TipeToken& tipe) {
   return this->tokenSaatIni.tipe == tipe;
 }
 
-bool Parser::Parser::tokenSaatIniAdalah(const std::vector<Lexer::TipeToken>& tipe
+bool Parser::Parser::tokenSaatIniAdalah(
+    const std::vector<Lexer::TipeToken>& tipe
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
     return this->tokenSaatIniAdalah(element);
@@ -66,12 +69,9 @@ bool Parser::Parser::mengharapkanToken(
       if(skip) { this->parseSkipToken(); }
     }
     aturan->children.push_back(std::move(node));
-  }else{
+  } else {
     if(!pesanKesalahan.empty()) {
-      throw KesalahanParse(
-        this->tokenSaatIni, 
-        pesanKesalahan
-      );
+      throw KesalahanParse(this->tokenSaatIni, pesanKesalahan);
     }
   }
   return hasil;
@@ -126,8 +126,7 @@ std::unique_ptr<Parser::Node> Parser::Parser::parse() {
 }
 
 std::unique_ptr<Parser::Node> Parser::Parser::parsePernyataan() {
-  std::unique_ptr<Node> pernyataan =
-      buatNodeAturan(TipeNode::pernyataan);
+  std::unique_ptr<Node> pernyataan = buatNodeAturan(TipeNode::pernyataan);
   if(this->mengharapkanToken(pernyataan, Lexer::TipeToken::muat, [&]() {
        return this->parseMuatFile();
      })) {
@@ -244,10 +243,12 @@ std::unique_ptr<Parser::Node> Parser::Parser::parseNilaiTeks() {
 }
 
 std::unique_ptr<Parser::Node> Parser::Parser::parseNilaiBilangan() {
-  std::unique_ptr<Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
-  this->mengharapkanToken(nilaiBilangan, Lexer::TipeToken::tanda_hubung, [&]() {
-    return this->buatNodeToken();
-  }, false);
+  std::unique_ptr<Node> nilaiBilangan =
+      buatNodeAturan(TipeNode::nilai_bilangan);
+  this->mengharapkanToken(
+      nilaiBilangan, Lexer::TipeToken::tanda_hubung,
+      [&]() { return this->buatNodeToken(); }, false
+  );
   while(mengharapkanToken(
       nilaiBilangan, Lexer::TipeToken::angka,
       [&]() { return this->buatNodeToken(); }, false
@@ -258,9 +259,10 @@ std::unique_ptr<Parser::Node> Parser::Parser::parseNilaiBilangan() {
         "Di indonesia biasa nya bilangan desimal menggunakan koma."
     );
   }
-  if(this->mengharapkanToken(nilaiBilangan, Lexer::TipeToken::koma, [&]() {
-       return this->buatNodeToken();
-     }, false)) {
+  if(this->mengharapkanToken(
+         nilaiBilangan, Lexer::TipeToken::koma,
+         [&]() { return this->buatNodeToken(); }, false
+     )) {
     size_t index = 0;
     while(mengharapkanToken(
         nilaiBilangan, Lexer::TipeToken::angka,

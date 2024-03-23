@@ -1,9 +1,9 @@
 #include "interpreter/interpreter.h"
 
-#include "ncpp/tipe_data/bilangan.h"
 #include "interpreter/kesalahan_interpret.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
+#include "ncpp/tipe_data/bilangan.h"
 #include "parser/parser.h"
 
 #include <any>
@@ -47,7 +47,8 @@ void Interpreter::Interpreter::inputFilePath(const std::string& filePath) {
   }
 }
 
-Interpreter::Interpreter::Kawasan& Interpreter::Interpreter::ambilKawasanTerakhir() {
+Interpreter::Interpreter::Kawasan&
+Interpreter::Interpreter::ambilKawasanTerakhir() {
   return this->kKawasan[this->kKawasan.size() - 1];
 }
 
@@ -91,7 +92,8 @@ std::any Interpreter::Interpreter::visitToken(const Parser::TokenCtx& ctx) {
   return ctx.token;
 }
 
-std::any Interpreter::Interpreter::visitNilaiTeks(const Parser::NilaiTeksCtx& ctx) {
+std::any
+Interpreter::Interpreter::visitNilaiTeks(const Parser::NilaiTeksCtx& ctx) {
   std::string teks;
   size_t indexEkspresi = 0;
   for(size_t index = 0; index < ctx.kTokenCtx.size(); ++index) {
@@ -131,8 +133,7 @@ std::any Interpreter::Interpreter::visitNilaiTeks(const Parser::NilaiTeksCtx& ct
             if(const auto* ekspresi =
                    std::any_cast<std::string>(&ekspresiAny)) {
               teks += *ekspresi;
-            } else if(const auto* ekspresi =
-                   std::any_cast<Ncpp::Bilangan>(&ekspresiAny)) {
+            } else if(const auto* ekspresi = std::any_cast<Ncpp::Bilangan>(&ekspresiAny)) {
               teks += ekspresi->ubahKeString();
             } else {
               throw KesalahanInterpret(
@@ -160,7 +161,8 @@ std::any Interpreter::Interpreter::visitNilaiTeks(const Parser::NilaiTeksCtx& ct
   return teks;
 }
 
-std::any Interpreter::Interpreter::visitMuatFile(const Parser::MuatFileCtx& ctx) {
+std::any Interpreter::Interpreter::visitMuatFile(const Parser::MuatFileCtx& ctx
+) {
   this->visitToken(ctx.tokenMuatCtx);
   std::any nilaiTeksAny = this->visitNilaiTeks(ctx.nilaiTeksCtx);
   if(const auto* nilaiTeks = std::any_cast<std::string>(&nilaiTeksAny)) {
@@ -169,7 +171,8 @@ std::any Interpreter::Interpreter::visitMuatFile(const Parser::MuatFileCtx& ctx)
   return {};
 }
 
-std::any Interpreter::Interpreter::visitPernyataan(const Parser::PernyataanCtx& ctx) {
+std::any
+Interpreter::Interpreter::visitPernyataan(const Parser::PernyataanCtx& ctx) {
   if(ctx.muatFileCtx.has_value()) {
     std::any hasil = this->visitMuatFile(ctx.muatFileCtx.value());
     this->visitToken(ctx.tokenTitikKomaCtx.value());
@@ -180,7 +183,7 @@ std::any Interpreter::Interpreter::visitPernyataan(const Parser::PernyataanCtx& 
     this->visitToken(ctx.tokenTitikKomaCtx.value());
     if(const auto* hasilPtr = std::any_cast<std::string>(&hasil)) {
       std::cout << *hasilPtr << "\n";
-    }else if(const auto* hasilPtr = std::any_cast<Ncpp::Bilangan>(&hasil)) {
+    } else if(const auto* hasilPtr = std::any_cast<Ncpp::Bilangan>(&hasil)) {
       std::cout << *hasilPtr << "\n";
     }
     return hasil;
@@ -188,7 +191,8 @@ std::any Interpreter::Interpreter::visitPernyataan(const Parser::PernyataanCtx& 
   throw KesalahanInterpret(this->kToken, "Pernyataan tidak valid.");
 }
 
-std::any Interpreter::Interpreter::visitNusantara(const Parser::NusantaraCtx& ctx) {
+std::any
+Interpreter::Interpreter::visitNusantara(const Parser::NusantaraCtx& ctx) {
   for(const auto& pernyataanCtx : ctx.kPernyataanCtx) {
     this->visitPernyataan(pernyataanCtx);
     this->kToken.clear();
@@ -209,7 +213,8 @@ std::any Interpreter::Interpreter::visitNilaiBilangan(
   return Ncpp::Bilangan(bilangan);
 }
 
-std::any Interpreter::Interpreter::visitEkspresi(const Parser::EkspresiCtx& ctx) {
+std::any Interpreter::Interpreter::visitEkspresi(const Parser::EkspresiCtx& ctx
+) {
   if(ctx.nilaiCtx.has_value()) {
     return this->visitNilai(ctx.nilaiCtx.value());
   }

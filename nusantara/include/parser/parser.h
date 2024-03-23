@@ -33,8 +33,7 @@ namespace Parser {
       bool mengharapkanToken(
           const std::unique_ptr<Node>& aturan, const Lexer::TipeToken& tipe,
           const std::function<std::unique_ptr<Node>()>& callback,
-          const bool& skip = true,
-          const std::string& pesanKesalahan = ""
+          const bool& skip = true, const std::string& pesanKesalahan = ""
       );
       bool mengharapkanToken(
           const std::unique_ptr<Node>& aturan,
