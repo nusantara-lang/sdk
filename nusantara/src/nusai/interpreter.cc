@@ -1,5 +1,6 @@
 #include "nusai/interpreter.h"
 
+#include "ncpp/tipe_data/bilangan.h"
 #include "nusad/nusad.h"
 #include "nusai/kesalahan_interpret.h"
 #include "nusal/tipe_token.h"
@@ -131,6 +132,9 @@ std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
             if(const auto* ekspresi =
                    std::any_cast<std::string>(&ekspresiAny)) {
               teks += *ekspresi;
+            } else if(const auto* ekspresi =
+                   std::any_cast<Ncpp::Bilangan>(&ekspresiAny)) {
+              teks += ekspresi->ubahKeString();
             } else {
               throw Nusai::KesalahanInterpret(
                   this->kToken, std::format(
@@ -177,6 +181,8 @@ std::any Nusai::Interpreter::visitPernyataan(const Nusap::PernyataanCtx& ctx) {
     this->visitToken(ctx.tokenTitikKomaCtx.value());
     if(const auto* hasilPtr = std::any_cast<std::string>(&hasil)) {
       std::cout << *hasilPtr << "\n";
+    }else if(const auto* hasilPtr = std::any_cast<Ncpp::Bilangan>(&hasil)) {
+      std::cout << *hasilPtr << "\n";
     }
     return hasil;
   }
@@ -194,12 +200,14 @@ std::any Nusai::Interpreter::visitNusantara(const Nusap::NusantaraCtx& ctx) {
 std::any Nusai::Interpreter::visitNilaiBilangan(
     [[maybe_unused]] const Nusap::NilaiBilanganCtx& ctx
 ) {
+  std::string bilangan;
   for(const auto& tokenCtx : ctx.kTokenCtx) {
     std::any tokenAny = this->visitToken(tokenCtx);
+    if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
+      bilangan += token->nilai;
+    }
   }
-  throw KesalahanInterpret(
-      this->kToken, "Nilai bilangan belum dapat di lakukan."
-  );
+  return Ncpp::Bilangan(bilangan);
 }
 
 std::any Nusai::Interpreter::visitEkspresi(const Nusap::EkspresiCtx& ctx) {

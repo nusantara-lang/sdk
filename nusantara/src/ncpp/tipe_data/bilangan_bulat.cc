@@ -5,14 +5,10 @@
 #include "ncpp/tipe_data/bilangan_bulat.h"
 #include "ncpp/tipe_data/bilangan_desimal.h"
 #include "ncpp/alat/string.h"
-#include "ncpp/tipe_data/i_tipe_data.h"
 
 // Constructors
-Ncpp::BilanganBulat::BilanganBulat(): ITipeData<mpz_t>() {
+Ncpp::BilanganBulat::BilanganBulat() {
 	mpz_init(this->nilai);
-}
-Ncpp::BilanganBulat::BilanganBulat(const std::string& nilai) {	
-	mpz_init_set_str(this->nilai, nilai.c_str(), BilanganBulat::basis);
 }
 // Destructor
 Ncpp::BilanganBulat::~BilanganBulat() {
@@ -40,6 +36,10 @@ Ncpp::BilanganBulat& Ncpp::BilanganBulat::operator=(BilanganBulat&& other) noexc
 		mpz_swap(this->nilai, other.nilai);
 	}
 	return *this;
+}
+
+Ncpp::BilanganBulat::BilanganBulat(const std::string& nilai) {	
+	mpz_init_set_str(this->nilai, nilai.c_str(), BilanganBulat::basis);
 }
 
 const int Ncpp::BilanganBulat::basis = 10;

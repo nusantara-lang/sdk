@@ -18,9 +18,6 @@ namespace Ncpp {
       BilanganDesimal& operator=(const BilanganDesimal& other);
       BilanganDesimal(BilanganDesimal&& other) noexcept;
       BilanganDesimal& operator=(BilanganDesimal&& other) noexcept;
-      explicit BilanganDesimal(const short& nilai);
-      explicit BilanganDesimal(const double& nilai);
-      explicit BilanganDesimal(const long double& nilai);
       explicit BilanganDesimal(const std::string& nilai);
       [[nodiscard]] std::string ubahKeString() const override;
       [[nodiscard]] std::string ubahKeStringTetap(const long& presisi

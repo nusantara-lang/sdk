@@ -12,12 +12,12 @@ namespace Ncpp {
   class Bilangan: public ITipeData<std::unique_ptr<INilaiBilangan>> {
     public:
       Bilangan();
-      explicit Bilangan(const std::string& nilai);
       ~Bilangan() override;
       Bilangan(const Bilangan& other);
       Bilangan& operator=(const Bilangan& other);
       Bilangan(Bilangan&& other) noexcept;
       Bilangan& operator=(Bilangan&& other) noexcept;
+      explicit Bilangan(const std::string& nilai);
       [[nodiscard]] bool iniBulat() const;
       [[nodiscard]] bool iniDesimal() const;
       [[nodiscard]] std::string ubahKeString() const override;

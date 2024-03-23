@@ -18,14 +18,6 @@ namespace Ncpp {
       BilanganBulat& operator=(const BilanganBulat& other);
       BilanganBulat(BilanganBulat&& other) noexcept;
       BilanganBulat& operator=(BilanganBulat&& other) noexcept;
-      explicit BilanganBulat(const short& nilai);
-      explicit BilanganBulat(const int& nilai);
-      explicit BilanganBulat(const long& nilai);
-      explicit BilanganBulat(const long long& nilai);
-      explicit BilanganBulat(const unsigned& nilai);
-      explicit BilanganBulat(const unsigned short& nilai);
-      explicit BilanganBulat(const unsigned long& nilai);
-      explicit BilanganBulat(const unsigned long long& nilai);
       explicit BilanganBulat(const std::string& nilai);
       [[nodiscard]] std::string ubahKeString() const override;
       static std::regex pattern();

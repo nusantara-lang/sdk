@@ -62,7 +62,8 @@ if(${UNIT_TEST} STREQUAL "ON")
     file(
         GLOB_RECURSE
         TEST_FILES
-        "test/*.cc"
+        "test/**/*.cc"
+        "src/**/*.cc"
     )
     add_executable(
         nusantara_test
@@ -71,7 +72,6 @@ if(${UNIT_TEST} STREQUAL "ON")
     set_target_properties(nusantara_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     target_link_libraries(
         nusantara_test
-        ${LIBRARY_NAME}
         GTest::gtest_main
     )
     include(GoogleTest)

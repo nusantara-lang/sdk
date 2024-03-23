@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ncpp/string/i_stringfy.h"
+#include "ncpp/stream/i_streamable.h"
 
 namespace Ncpp {
-  template<typename Nilai> class ITipeData: public IStringfy {
+  template<typename Nilai> class ITipeData: public IStreamable {
     public:
       ITipeData() = default;
       ~ITipeData() override = default;
@@ -12,7 +12,7 @@ namespace Ncpp {
       ITipeData& operator=(const ITipeData&) = default;
       ITipeData& operator=(ITipeData&&) noexcept = default;
       [[nodiscard]] std::string ubahKeString() const override {
-        return IStringfy::ubahKeString();
+        return IStreamable::ubahKeString();
       }
     private:
     protected:

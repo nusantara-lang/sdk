@@ -13,11 +13,6 @@
 Ncpp::BilanganDesimal::BilanganDesimal() {
 	mpfr_init_set_str(this->nilai, "0.0", BilanganDesimal::basis, BilanganDesimal::pembulatan);
 }
-Ncpp::BilanganDesimal:: BilanganDesimal(const std::string& nilai) {
-	std::string nilai_dengan_titik(nilai);
-	std::replace(nilai_dengan_titik.begin(), nilai_dengan_titik.end(), ',', '.');	
-	mpfr_init_set_str(this->nilai, nilai_dengan_titik.c_str(), BilanganDesimal::basis, BilanganDesimal::pembulatan);
-}
 // Destructor
 Ncpp::BilanganDesimal::~BilanganDesimal() {
 	mpfr_clear(this->nilai);
@@ -45,6 +40,12 @@ Ncpp::BilanganDesimal& Ncpp::BilanganDesimal::operator=(BilanganDesimal&& other)
     mpfr_swap(this->nilai, other.nilai);
   }
   return *this;
+}
+
+Ncpp::BilanganDesimal::BilanganDesimal(const std::string& nilai) {
+	std::string nilai_dengan_titik(nilai);
+	std::replace(nilai_dengan_titik.begin(), nilai_dengan_titik.end(), ',', '.');	
+	mpfr_init_set_str(this->nilai, nilai_dengan_titik.c_str(), BilanganDesimal::basis, BilanganDesimal::pembulatan);
 }
 
 const short Ncpp::BilanganDesimal::basis = 10;

@@ -33,7 +33,8 @@ namespace Nusap {
       bool mengharapkanToken(
           const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe,
           const std::function<std::unique_ptr<Node>()>& callback,
-          const bool& skip = true
+          const bool& skip = true,
+          const std::string& pesanKesalahan = ""
       );
       bool mengharapkanToken(
           const std::unique_ptr<Node>& aturan,

@@ -14,15 +14,6 @@ Ncpp::Bilangan::Bilangan() {
 
 Ncpp::Bilangan::~Bilangan() = default;
 
-Ncpp::Bilangan::Bilangan(const std::string& nilai) {
-	if(std::regex_match(nilai, BilanganDesimal::pattern())) {
-		this->nilai = std::make_unique<BilanganDesimal>(nilai);
-	}else if(std::regex_match(nilai, BilanganBulat::pattern())) {
-		this->nilai = std::make_unique<BilanganBulat>(nilai);
-	}else{
-		throw std::runtime_error(std::format("'{}' bukanlah sebuah Bilangan.", nilai));
-	}
-}
 // Copy constructor
 Ncpp::Bilangan::Bilangan(const Bilangan& other) {
     if(other.iniBulat()) {
@@ -54,6 +45,17 @@ Ncpp::Bilangan& Ncpp::Bilangan::operator=(Bilangan&& other) noexcept {
     this->nilai = std::move(other.nilai);
     return *this;
 }
+
+Ncpp::Bilangan::Bilangan(const std::string& nilai) {
+	if(std::regex_match(nilai, BilanganDesimal::pattern())) {
+		this->nilai = std::make_unique<BilanganDesimal>(nilai);
+	}else if(std::regex_match(nilai, BilanganBulat::pattern())) {
+		this->nilai = std::make_unique<BilanganBulat>(nilai);
+	}else{
+		throw std::runtime_error(std::format("'{}' bukanlah sebuah Bilangan.", nilai));
+	}
+}
+
 bool Ncpp::Bilangan::iniBulat() const {
     if(const auto* ptr = dynamic_cast<BilanganBulat*>(this->nilai.get())) {
         return true;
