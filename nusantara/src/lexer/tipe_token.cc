@@ -1,6 +1,6 @@
-#include "nusal/tipe_token.h"
+#include "lexer/tipe_token.h"
 
-std::string Nusal::ubahKeString(const TipeToken& tipeToken) {
+std::string Lexer::ubahKeString(const TipeToken& tipeToken) {
   switch(tipeToken) {
     case TipeToken::akhir_dari_file:
       return "akhir dari file";

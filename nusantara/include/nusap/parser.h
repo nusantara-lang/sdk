@@ -1,8 +1,8 @@
 #pragma once
 
-#include "nusal/lexer.h"
-#include "nusal/tipe_token.h"
-#include "nusal/token.h"
+#include "lexer/lexer.h"
+#include "lexer/tipe_token.h"
+#include "lexer/token.h"
 #include "nusap/node.h"
 #include "nusap/tipe_node.h"
 
@@ -23,22 +23,22 @@ namespace Nusap {
       std::unique_ptr<Node> parse();
 
     private:
-      Nusal::Lexer lexer;
-      Nusal::Token tokenSaatIni;
+      Lexer::Lexer lexer;
+      Lexer::Token tokenSaatIni;
       std::set<std::string> muatFile;
-      static const std::vector<Nusal::TipeToken>& skipTipeToken();
-      bool tokenSaatIniAdalah(const Nusal::TipeToken& tipe);
-      bool tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe);
+      static const std::vector<Lexer::TipeToken>& skipTipeToken();
+      bool tokenSaatIniAdalah(const Lexer::TipeToken& tipe);
+      bool tokenSaatIniAdalah(const std::vector<Lexer::TipeToken>& tipe);
       void tokenSelanjutNya();
       bool mengharapkanToken(
-          const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe,
+          const std::unique_ptr<Node>& aturan, const Lexer::TipeToken& tipe,
           const std::function<std::unique_ptr<Node>()>& callback,
           const bool& skip = true,
           const std::string& pesanKesalahan = ""
       );
       bool mengharapkanToken(
           const std::unique_ptr<Node>& aturan,
-          const std::vector<Nusal::TipeToken>& tipe,
+          const std::vector<Lexer::TipeToken>& tipe,
           const std::function<std::unique_ptr<Node>()>& callback,
           const bool& skip = true
       );

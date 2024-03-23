@@ -1,6 +1,5 @@
-#include "nusal/alat.h"
-
-#include "nusal/token.h"
+#include "lexer/alat.h"
+#include "lexer/token.h"
 
 #include <format>
 #include <fstream>
@@ -8,7 +7,7 @@
 #include <regex>
 #include <sstream>
 
-std::unique_ptr<Nusal::Token> Nusal::buatToken(
+std::unique_ptr<Lexer::Token> Lexer::buatToken(
     std::string& input, baris& baris, karakter& karakter,
     const std::string& sumber, const std::vector<TipeTokenData>& data
 ) {
@@ -42,7 +41,7 @@ std::unique_ptr<Nusal::Token> Nusal::buatToken(
   return std::make_unique<Token>(tkn);
 }
 
-std::string Nusal::bacaFile(const std::string& filePath) {
+std::string Lexer::bacaFile(const std::string& filePath) {
   // Buka file untuk dibaca dalam mode binary
   std::ifstream file(filePath, std::ios::binary);
   // Pastikan file terbuka dengan sukses
@@ -72,8 +71,8 @@ std::string Nusal::bacaFile(const std::string& filePath) {
   return content.str();
 }
 
-std::vector<std::string> Nusal::bacaFilePerLine(const std::string& filePath) {
-  std::string konten = Nusal::bacaFile(filePath);
+std::vector<std::string> Lexer::bacaFilePerLine(const std::string& filePath) {
+  std::string konten = Lexer::bacaFile(filePath);
   std::vector<std::string> kKontenPerBaris;
   std::stringstream stream(konten);
   std::string kontenPerbaris;

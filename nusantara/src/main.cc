@@ -1,8 +1,7 @@
 #include "nusai/interpreter.h"
-#include "nusal/lexer.h"
-#include "nusal/nusal.h"
-#include "nusal/tipe_token.h"
-#include "nusal/token.h"
+#include "lexer/lexer.h"
+#include "lexer/tipe_token.h"
+#include "lexer/token.h"
 #include "nusap/node.h"
 #include "nusap/parser.h"
 
@@ -26,15 +25,15 @@ int main(int argc, char* argv[]) {
       interpreter.inputFilePath(args[1]);
     } else if(argc >= 3) {
       if(std::strcmp(args[1], "-l") == 0) {
-        Nusal::Lexer lexer(Nusal::nusalDataTipeToken());
+        Lexer::Lexer lexer(Lexer::nusantaraDataTipeToken());
         for(size_t index = 2; index < static_cast<size_t>(argc); ++index) {
           lexer.inputFilePath(args[index]);
         }
-        Nusal::Token token;
+        Lexer::Token token;
         while(true) {
-          if(token.tipe == Nusal::TipeToken::akhir_dari_file) { break; }
+          if(token.tipe == Lexer::TipeToken::akhir_dari_file) { break; }
           token = lexer.ambilToken();
-          std::cout << Nusal::ubahKeString(token) << "\n";
+          std::cout << Lexer::ubahKeString(token) << "\n";
         }
       } else if(std::strcmp(args[1], "-p") == 0) {
         Nusap::Parser parser;

@@ -1,22 +1,22 @@
-#include "nusal/token.h"
+#include "lexer/token.h"
 
-#include "nusal/tipe_token.h"
+#include "lexer/tipe_token.h"
 
 #include <format>
 
-Nusal::baris::baris(const size_t& nilai): nilai(nilai) {}
+Lexer::baris::baris(const size_t& nilai): nilai(nilai) {}
 
-Nusal::karakter::karakter(const size_t& nilai): nilai(nilai) {}
+Lexer::karakter::karakter(const size_t& nilai): nilai(nilai) {}
 
-Nusal::Token::Token(
-    const TipeToken& tipe, std::string sumber, const Nusal::baris& baris,
-    const Nusal::karakter& karakter, std::string nilai
+Lexer::Token::Token(
+    const TipeToken& tipe, std::string sumber, const Lexer::baris& baris,
+    const Lexer::karakter& karakter, std::string nilai
 ):
     tipe(tipe),
     sumber(std::move(sumber)), baris(baris), karakter(karakter),
     nilai(std::move(nilai)) {}
 
-std::string Nusal::ubahKeString(const Token& token) {
+std::string Lexer::ubahKeString(const Token& token) {
   return std::format(
       "{}:{}:{} {} {}", token.sumber, token.baris.nilai + 1,
       token.karakter.nilai + 1, ubahKeString(token.tipe),

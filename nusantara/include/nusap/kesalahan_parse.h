@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nusal/token.h"
+#include "lexer/token.h"
 
 #include <exception>
 #include <string>
@@ -9,7 +9,7 @@ namespace Nusap {
 
   class KesalahanParse: public std::exception {
     public:
-      KesalahanParse(const Nusal::Token& token, const std::string& pesan);
+      KesalahanParse(const Lexer::Token& token, const std::string& pesan);
 
     private:
       [[nodiscard]] const char* what() const noexcept override;

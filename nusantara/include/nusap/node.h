@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nusal/token.h"
+#include "lexer/token.h"
 #include "nusap/tipe_node.h"
 
 #include <memory>
@@ -10,9 +10,9 @@ namespace Nusap {
 
   struct Node {
       explicit Node(const TipeNode& tipe);
-      explicit Node(const TipeNode& tipe, std::unique_ptr<Nusal::Token> token);
+      explicit Node(const TipeNode& tipe, std::unique_ptr<Lexer::Token> token);
       TipeNode tipe;
-      std::unique_ptr<Nusal::Token> token;
+      std::unique_ptr<Lexer::Token> token;
       std::vector<std::unique_ptr<Node>> children;
   };
 

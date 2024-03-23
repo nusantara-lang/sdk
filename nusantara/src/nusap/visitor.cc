@@ -1,6 +1,6 @@
 #include "nusap/visitor.h"
 
-#include "nusal/token.h"
+#include "lexer/token.h"
 #include "nusap/tipe_node.h"
 
 Nusap::NusantaraCtx::NusantaraCtx(const Node& node) {

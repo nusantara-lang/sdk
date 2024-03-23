@@ -1,13 +1,15 @@
 #pragma once
 
-#include "nusal/tipe_token_data.h"
-#include "nusal/token.h"
+#include "lexer/tipe_token_data.h"
+#include "lexer/token.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
-namespace Nusal {
+namespace Lexer {
+
+  const std::vector<TipeTokenData>& nusantaraDataTipeToken();
 
   class Lexer {
     public:
@@ -28,4 +30,4 @@ namespace Nusal {
       std::map<std::string, std::string> sumberBersertaInput = {};
   };
 
-} // namespace Nusal
+} // namespace Lexer

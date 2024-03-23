@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nusal/token.h"
+#include "lexer/token.h"
 #include "nusap/node.h"
 
 #include <any>
@@ -11,7 +11,7 @@ namespace Nusap {
 
   struct TokenCtx {
       explicit TokenCtx(const Node& node);
-      Nusal::Token token;
+      Lexer::Token token;
   };
 
   struct EkspresiCtx;

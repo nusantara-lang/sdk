@@ -2,8 +2,8 @@
 
 #include "ncpp/tipe_data/bilangan.h"
 #include "nusai/kesalahan_interpret.h"
-#include "nusal/tipe_token.h"
-#include "nusal/token.h"
+#include "lexer/tipe_token.h"
+#include "lexer/token.h"
 #include "nusap/parser.h"
 
 #include <any>
@@ -52,7 +52,7 @@ Nusai::Interpreter::Kawasan& Nusai::Interpreter::ambilKawasanTerakhir() {
 }
 
 Nusai::Interpreter::Variabel& Nusai::Interpreter::buatVariabel(
-    const Nusal::TipeToken& tipe, const std::string& nama, const std::any& nilai
+    const Lexer::TipeToken& tipe, const std::string& nama, const std::any& nilai
 ) {
   Variabel var;
   var.tipe = tipe;
@@ -68,7 +68,7 @@ Nusai::Interpreter::ambilVariabel(const std::string& nama) {
 }
 
 Nusai::Interpreter::Fungsi& Nusai::Interpreter::buatFungsi(
-    const Nusal::TipeToken& tipe, const std::string& nama,
+    const Lexer::TipeToken& tipe, const std::string& nama,
     const std::function<std::any(std::map<std::string, Variabel>&)>& definisi
 ) {
   Fungsi fun;
@@ -97,11 +97,11 @@ std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
   for(size_t index = 0; index < ctx.kTokenCtx.size(); ++index) {
     if(index <= 0 || index >= (ctx.kTokenCtx.size() - 1)) { continue; }
     std::any tokenAny = this->visitToken(ctx.kTokenCtx[index]);
-    if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
-      if(token->tipe == Nusal::TipeToken::garis_miring_terbalik) {
+    if(const auto* token = std::any_cast<Lexer::Token>(&tokenAny)) {
+      if(token->tipe == Lexer::TipeToken::garis_miring_terbalik) {
         ++index;
         std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
-        if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
+        if(auto* token2 = std::any_cast<Lexer::Token>(&tokenAny2)) {
           std::string& nilai = token2->nilai;
           if(nilai.starts_with('n')) {
             nilai.replace(nilai.find('n'), 1, "\n");
@@ -111,16 +111,16 @@ std::any Nusai::Interpreter::visitNilaiTeks(const Nusap::NilaiTeksCtx& ctx) {
           teks += nilai;
           continue;
         }
-      } else if(token->tipe == Nusal::TipeToken::dolar) {
+      } else if(token->tipe == Lexer::TipeToken::dolar) {
         ++index;
         std::any tokenAny2 = this->visitToken(ctx.kTokenCtx[index]);
-        if(auto* token2 = std::any_cast<Nusal::Token>(&tokenAny2)) {
-          if(token2->tipe == Nusal::TipeToken::identifikasi) {
+        if(auto* token2 = std::any_cast<Lexer::Token>(&tokenAny2)) {
+          if(token2->tipe == Lexer::TipeToken::identifikasi) {
             throw Nusai::KesalahanInterpret(
                 this->kToken, std::format("Nusantara belum mendukung nama "
                                           "variabel sebagai teks interpolasi.")
             );
-          } else if(token2->tipe == Nusal::TipeToken::kurung_kurawal_buka) {
+          } else if(token2->tipe == Lexer::TipeToken::kurung_kurawal_buka) {
             if(ctx.kEkspresiCtx.empty()) {
               throw Nusai::KesalahanInterpret(
                   this->kToken, "Tidak ada ekspresi pada teks interpolasi."
@@ -202,7 +202,7 @@ std::any Nusai::Interpreter::visitNilaiBilangan(
   std::string bilangan;
   for(const auto& tokenCtx : ctx.kTokenCtx) {
     std::any tokenAny = this->visitToken(tokenCtx);
-    if(const auto* token = std::any_cast<Nusal::Token>(&tokenAny)) {
+    if(const auto* token = std::any_cast<Lexer::Token>(&tokenAny)) {
       bilangan += token->nilai;
     }
   }

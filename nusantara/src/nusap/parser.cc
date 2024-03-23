@@ -1,9 +1,9 @@
 #include "nusap/parser.h"
 
-#include "nusal/lexer.h"
-#include "nusal/nusal.h"
-#include "nusal/tipe_token.h"
-#include "nusal/token.h"
+#include "lexer/lexer.h"
+#include "lexer/lexer.h"
+#include "lexer/tipe_token.h"
+#include "lexer/token.h"
 #include "nusap/kesalahan_parse.h"
 #include "nusap/node.h"
 #include "nusap/tipe_node.h"
@@ -12,7 +12,7 @@
 #include <format>
 #include <memory>
 
-Nusap::Parser::Parser(): lexer(Nusal::nusalDataTipeToken()) {}
+Nusap::Parser::Parser(): lexer(Lexer::nusantaraDataTipeToken()) {}
 
 void Nusap::Parser::input(const std::string& input) {
   this->lexer.input(input);
@@ -26,14 +26,14 @@ void Nusap::Parser::inputFilePath(const std::string& filePath) {
   this->lexer.inputFilePath(filePath);
 }
 
-const std::vector<Nusal::TipeToken>& Nusap::Parser::skipTipeToken() {
-  static std::vector<Nusal::TipeToken> hasil = {
-      Nusal::TipeToken::kembali_ke_awal_karakter,
-      Nusal::TipeToken::baris_baru,
-      Nusal::TipeToken::tab,
-      Nusal::TipeToken::spasi,
-      Nusal::TipeToken::komentar_satu_baris,
-      Nusal::TipeToken::komentar_banyak_baris
+const std::vector<Lexer::TipeToken>& Nusap::Parser::skipTipeToken() {
+  static std::vector<Lexer::TipeToken> hasil = {
+      Lexer::TipeToken::kembali_ke_awal_karakter,
+      Lexer::TipeToken::baris_baru,
+      Lexer::TipeToken::tab,
+      Lexer::TipeToken::spasi,
+      Lexer::TipeToken::komentar_satu_baris,
+      Lexer::TipeToken::komentar_banyak_baris
   };
   return hasil;
 }
@@ -42,11 +42,11 @@ void Nusap::Parser::tokenSelanjutNya() {
   this->tokenSaatIni = this->lexer.ambilToken();
 }
 
-bool Nusap::Parser::tokenSaatIniAdalah(const Nusal::TipeToken& tipe) {
+bool Nusap::Parser::tokenSaatIniAdalah(const Lexer::TipeToken& tipe) {
   return this->tokenSaatIni.tipe == tipe;
 }
 
-bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe
+bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Lexer::TipeToken>& tipe
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
     return this->tokenSaatIniAdalah(element);
@@ -54,7 +54,7 @@ bool Nusap::Parser::tokenSaatIniAdalah(const std::vector<Nusal::TipeToken>& tipe
 }
 
 bool Nusap::Parser::mengharapkanToken(
-    const std::unique_ptr<Node>& aturan, const Nusal::TipeToken& tipe,
+    const std::unique_ptr<Node>& aturan, const Lexer::TipeToken& tipe,
     const std::function<std::unique_ptr<Node>()>& callback, const bool& skip,
     const std::string& pesanKesalahan
 ) {
@@ -80,7 +80,7 @@ bool Nusap::Parser::mengharapkanToken(
 
 bool Nusap::Parser::mengharapkanToken(
     const std::unique_ptr<Node>& aturan,
-    const std::vector<Nusal::TipeToken>& tipe,
+    const std::vector<Lexer::TipeToken>& tipe,
     const std::function<std::unique_ptr<Node>()>& callback, const bool& skip
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
@@ -95,7 +95,7 @@ Nusap::Parser::buatNodeAturan(const Nusap::TipeNode& tipe) {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::buatNodeToken() {
   return std::make_unique<Node>(
-      TipeNode::token, std::make_unique<Nusal::Token>(this->tokenSaatIni)
+      TipeNode::token, std::make_unique<Lexer::Token>(this->tokenSaatIni)
   );
 }
 
@@ -111,8 +111,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parse() {
   std::unique_ptr<Nusap::Node> nusantara = buatNodeAturan(TipeNode::nusantara);
   this->tokenSelanjutNya();
   this->parseSkipToken();
-  while(this->tokenSaatIni.tipe != Nusal::TipeToken::akhir_dari_file) {
-    if(this->tokenSaatIniAdalah(Nusal::TipeToken::tidak_diketahui)) {
+  while(this->tokenSaatIni.tipe != Lexer::TipeToken::akhir_dari_file) {
+    if(this->tokenSaatIniAdalah(Lexer::TipeToken::tidak_diketahui)) {
       throw Nusap::KesalahanParse(
           this->tokenSaatIni,
           std::format(
@@ -129,11 +129,11 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parse() {
 std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
   std::unique_ptr<Nusap::Node> pernyataan =
       buatNodeAturan(TipeNode::pernyataan);
-  if(this->mengharapkanToken(pernyataan, Nusal::TipeToken::muat, [&]() {
+  if(this->mengharapkanToken(pernyataan, Lexer::TipeToken::muat, [&]() {
        return this->parseMuatFile();
      })) {
     if(!this->mengharapkanToken(
-           pernyataan, Nusal::TipeToken::titik_koma,
+           pernyataan, Lexer::TipeToken::titik_koma,
            [&]() { return this->buatNodeToken(); }
        )) {
       throw KesalahanParse(this->tokenSaatIni, "Jangan lupa titik koma.");
@@ -142,12 +142,12 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
   }
   if(this->mengharapkanToken(
          pernyataan,
-         {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka,
-          Nusal::TipeToken::kutip_satu},
+         {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka,
+          Lexer::TipeToken::kutip_satu},
          [&]() { return this->parseEkspresi(); }
      )) {
     if(!this->mengharapkanToken(
-           pernyataan, Nusal::TipeToken::titik_koma,
+           pernyataan, Lexer::TipeToken::titik_koma,
            [&]() { return this->buatNodeToken(); }
        )) {
       throw KesalahanParse(this->tokenSaatIni, "Jangan lupa titik koma.");
@@ -159,7 +159,7 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parsePernyataan() {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseMuatFile() {
   std::unique_ptr<Nusap::Node> muatFile = buatNodeAturan(TipeNode::muat_file);
-  if(!this->mengharapkanToken(muatFile, Nusal::TipeToken::muat, [&]() {
+  if(!this->mengharapkanToken(muatFile, Lexer::TipeToken::muat, [&]() {
        return this->buatNodeToken();
      })) {
     throw KesalahanParse(
@@ -167,7 +167,7 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseMuatFile() {
         "Untuk memuat file harus di awali dengan kata kunci 'muat'."
     );
   }
-  if(!this->mengharapkanToken(muatFile, Nusal::TipeToken::kutip_satu, [&]() {
+  if(!this->mengharapkanToken(muatFile, Lexer::TipeToken::kutip_satu, [&]() {
        return this->parseNilaiTeks();
      })) {
     throw KesalahanParse(this->tokenSaatIni, "Lokasi file tidak valid.");
@@ -177,39 +177,39 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseMuatFile() {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
   std::unique_ptr<Nusap::Node> nilaiTeks = buatNodeAturan(TipeNode::nilai_teks);
-  if(!this->mengharapkanToken(nilaiTeks, Nusal::TipeToken::kutip_satu, [&]() {
+  if(!this->mengharapkanToken(nilaiTeks, Lexer::TipeToken::kutip_satu, [&]() {
        return this->buatNodeToken();
      })) {
     throw KesalahanParse(this->tokenSaatIni, "Teks harus di awali kutip 1.");
   }
-  while(!tokenSaatIniAdalah(Nusal::TipeToken::kutip_satu)) {
+  while(!tokenSaatIniAdalah(Lexer::TipeToken::kutip_satu)) {
     if(mengharapkanToken(
-           nilaiTeks, Nusal::TipeToken::garis_miring_terbalik,
+           nilaiTeks, Lexer::TipeToken::garis_miring_terbalik,
            [&]() { return this->buatNodeToken(); }, false
        )) {
       if(mengharapkanToken(
-             nilaiTeks, Nusal::TipeToken::dolar,
+             nilaiTeks, Lexer::TipeToken::dolar,
              [&]() { return this->buatNodeToken(); }, false
          )) {
         continue;
       }
     } else if(mengharapkanToken(
-                  nilaiTeks, Nusal::TipeToken::dolar,
+                  nilaiTeks, Lexer::TipeToken::dolar,
                   [&]() { return this->buatNodeToken(); }, false
               )) {
       if(mengharapkanToken(
-             nilaiTeks, Nusal::TipeToken::identifikasi,
+             nilaiTeks, Lexer::TipeToken::identifikasi,
              [&]() { return this->buatNodeToken(); }, false
          )) {
         continue;
       } else if(mengharapkanToken(
-                    nilaiTeks, Nusal::TipeToken::kurung_kurawal_buka,
+                    nilaiTeks, Lexer::TipeToken::kurung_kurawal_buka,
                     [&]() { return this->buatNodeToken(); }, false
                 )) {
         if(!this->mengharapkanToken(
                nilaiTeks,
-               {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka,
-                Nusal::TipeToken::kutip_satu},
+               {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka,
+                Lexer::TipeToken::kutip_satu},
                [&]() { return this->parseEkspresi(); }
            )) {
           throw KesalahanParse(
@@ -217,7 +217,7 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
           );
         }
         if(!mengharapkanToken(
-               nilaiTeks, Nusal::TipeToken::kurung_kurawal_tutup,
+               nilaiTeks, Lexer::TipeToken::kurung_kurawal_tutup,
                [&]() { return this->buatNodeToken(); }, false
            )) {
           throw KesalahanParse(
@@ -236,7 +236,7 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
     nilaiTeks->children.push_back(this->buatNodeToken());
     this->tokenSelanjutNya();
   }
-  if(!this->mengharapkanToken(nilaiTeks, Nusal::TipeToken::kutip_satu, [&]() {
+  if(!this->mengharapkanToken(nilaiTeks, Lexer::TipeToken::kutip_satu, [&]() {
        return this->buatNodeToken();
      })) {
     throw KesalahanParse(this->tokenSaatIni, "Teks harus di akhiri kutip 1.");
@@ -246,25 +246,25 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiTeks() {
 
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
   std::unique_ptr<Nusap::Node> nilaiBilangan = buatNodeAturan(TipeNode::nilai_bilangan);
-  this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::tanda_hubung, [&]() {
+  this->mengharapkanToken(nilaiBilangan, Lexer::TipeToken::tanda_hubung, [&]() {
     return this->buatNodeToken();
   }, false);
   while(mengharapkanToken(
-      nilaiBilangan, Nusal::TipeToken::angka,
+      nilaiBilangan, Lexer::TipeToken::angka,
       [&]() { return this->buatNodeToken(); }, false
   )) {}
-  if(this->tokenSaatIniAdalah(Nusal::TipeToken::titik)) {
+  if(this->tokenSaatIniAdalah(Lexer::TipeToken::titik)) {
     throw KesalahanParse(
         this->tokenSaatIni,
         "Di indonesia biasa nya bilangan desimal menggunakan koma."
     );
   }
-  if(this->mengharapkanToken(nilaiBilangan, Nusal::TipeToken::koma, [&]() {
+  if(this->mengharapkanToken(nilaiBilangan, Lexer::TipeToken::koma, [&]() {
        return this->buatNodeToken();
      }, false)) {
     size_t index = 0;
     while(mengharapkanToken(
-        nilaiBilangan, Nusal::TipeToken::angka,
+        nilaiBilangan, Lexer::TipeToken::angka,
         [&]() { return this->buatNodeToken(); }, false
     )) {
       ++index;
@@ -282,11 +282,11 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilaiBilangan() {
 std::unique_ptr<Nusap::Node> Nusap::Parser::parseNilai() {
   std::unique_ptr<Nusap::Node> nilai = buatNodeAturan(TipeNode::nilai);
   if(this->mengharapkanToken(
-         nilai, {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka},
+         nilai, {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka},
          [&]() { return this->parseNilaiBilangan(); }
      )) {
     return nilai;
-  } else if(this->mengharapkanToken(nilai, Nusal::TipeToken::kutip_satu, [&]() {
+  } else if(this->mengharapkanToken(nilai, Lexer::TipeToken::kutip_satu, [&]() {
               return this->parseNilaiTeks();
             })) {
     return nilai;
@@ -298,8 +298,8 @@ std::unique_ptr<Nusap::Node> Nusap::Parser::parseEkspresi() {
   std::unique_ptr<Nusap::Node> ekspresi = buatNodeAturan(TipeNode::ekspresi);
   if(this->mengharapkanToken(
          ekspresi,
-         {Nusal::TipeToken::tanda_hubung, Nusal::TipeToken::angka,
-          Nusal::TipeToken::kutip_satu},
+         {Lexer::TipeToken::tanda_hubung, Lexer::TipeToken::angka,
+          Lexer::TipeToken::kutip_satu},
          [&]() { return this->parseNilai(); }
      )) {
     return ekspresi;

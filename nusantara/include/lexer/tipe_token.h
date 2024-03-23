@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Nusal {
+namespace Lexer {
 
   enum class TipeToken {
     akhir_dari_file,
@@ -47,4 +47,4 @@ namespace Nusal {
 
   std::string ubahKeString(const TipeToken& tipeToken);
 
-} // namespace Nusal
+} // namespace Lexer

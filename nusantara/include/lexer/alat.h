@@ -1,12 +1,12 @@
 #pragma once
 
-#include "nusal/tipe_token_data.h"
-#include "nusal/token.h"
+#include "lexer/tipe_token_data.h"
+#include "lexer/token.h"
 
 #include <memory>
 #include <vector>
 
-namespace Nusal {
+namespace Lexer {
 
   std::unique_ptr<Token> buatToken(
       std::string& input, baris& baris, karakter& karakter,
@@ -17,4 +17,4 @@ namespace Nusal {
 
   std::vector<std::string> bacaFilePerLine(const std::string& filePath);
 
-} // namespace Nusal
+} // namespace Lexer

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "nusal/token.h"
+#include "lexer/token.h"
 
 #include <any>
 #include <functional>
 #include <map>
-#include <nusal/lexer.h>
-#include <nusal/tipe_token.h>
+#include <lexer/lexer.h>
+#include <lexer/tipe_token.h>
 #include <nusap/parser.h>
 #include <nusap/visitor.h>
 #include <optional>
@@ -23,12 +23,12 @@ namespace Nusai {
       void inputFilePath(const std::string& filePath);
 
       struct Variabel {
-          Nusal::TipeToken tipe;
+          Lexer::TipeToken tipe;
           std::any nilai;
       };
 
       struct Fungsi {
-          std::optional<Nusal::TipeToken> tipe;
+          std::optional<Lexer::TipeToken> tipe;
           std::function<std::any(std::map<std::string, Variabel>&)> definisi;
       };
 
@@ -40,20 +40,20 @@ namespace Nusai {
     private:
       std::map<std::string, Nusap::Parser> kParser;
       std::vector<Kawasan> kKawasan;
-      std::vector<Nusal::Token> kToken;
+      std::vector<Lexer::Token> kToken;
 
       void awal();
 
       Kawasan& ambilKawasanTerakhir();
 
       Variabel& buatVariabel(
-          const Nusal::TipeToken& tipe, const std::string& nama,
+          const Lexer::TipeToken& tipe, const std::string& nama,
           const std::any& nilai
       );
       Variabel& ambilVariabel(const std::string& nama);
 
       Fungsi& buatFungsi(
-          const Nusal::TipeToken& tipe, const std::string& nama,
+          const Lexer::TipeToken& tipe, const std::string& nama,
           const std::function<std::any(std::map<std::string, Variabel>&)>&
               definisi
       );

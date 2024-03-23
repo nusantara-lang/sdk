@@ -1,10 +1,10 @@
 #pragma once
 
-#include "nusal/tipe_token.h"
+#include "lexer/tipe_token.h"
 
 #include <string>
 
-namespace Nusal {
+namespace Lexer {
 
   struct baris {
       baris() = default;
@@ -39,4 +39,4 @@ namespace Nusal {
 
   std::string ubahKeString(const Token& token);
 
-} // namespace Nusal
+} // namespace Lexer

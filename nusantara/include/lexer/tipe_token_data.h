@@ -1,10 +1,10 @@
 #pragma once
 
-#include "nusal/tipe_token.h"
+#include "lexer/tipe_token.h"
 
 #include <string>
 
-namespace Nusal {
+namespace Lexer {
 
   struct TipeTokenData {
       TipeTokenData();
@@ -13,4 +13,4 @@ namespace Nusal {
       std::string pola;
   };
 
-} // namespace Nusal
+} // namespace Lexer

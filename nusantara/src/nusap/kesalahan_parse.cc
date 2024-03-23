@@ -1,6 +1,6 @@
 #include "nusap/kesalahan_parse.h"
 
-#include "nusal/alat.h"
+#include "lexer/alat.h"
 
 #include <format>
 #include <sstream>
@@ -8,11 +8,11 @@
 #include <vector>
 
 Nusap::KesalahanParse::KesalahanParse(
-    const Nusal::Token& token, const std::string& pesan
+    const Lexer::Token& token, const std::string& pesan
 ) {
   std::vector<std::string> kKontenPerBaris;
   try {
-    kKontenPerBaris = Nusal::bacaFilePerLine(token.sumber);
+    kKontenPerBaris = Lexer::bacaFilePerLine(token.sumber);
   } catch(const std::exception& error) { kKontenPerBaris = {}; }
   std::ostringstream ostream;
   ostream << std::format(

@@ -1,14 +1,14 @@
 #include "nusai/kesalahan_interpret.h"
 
-#include "nusal/alat.h"
-#include "nusal/token.h"
+#include "lexer/alat.h"
+#include "lexer/token.h"
 
 #include <format>
 #include <sstream>
 #include <vector>
 
 Nusai::KesalahanInterpret::KesalahanInterpret(
-    const std::vector<Nusal::Token>& kToken, const std::string& pesan
+    const std::vector<Lexer::Token>& kToken, const std::string& pesan
 ) {
   if(!kToken.empty()) {
     std::vector<Nusai::KesalahanInterpret::Data> kData;
@@ -31,7 +31,7 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
     for(const auto& data : kData) {
       std::vector<std::string> kKontenPerBaris;
       try {
-        kKontenPerBaris = Nusal::bacaFilePerLine(data.sumber);
+        kKontenPerBaris = Lexer::bacaFilePerLine(data.sumber);
       } catch(const std::exception& error) { kKontenPerBaris = {}; }
       ostream << std::format(
                      "{}:{}:{}", data.sumber, data.baris + 1,
