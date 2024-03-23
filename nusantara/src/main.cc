@@ -1,4 +1,4 @@
-#include "nusai/interpreter.h"
+#include "interpreter/interpreter.h"
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
@@ -16,12 +16,12 @@ int main(int argc, char* argv[]) {
     if(!(argc > 1)) {
       std::cout << "Nusantara Interpreter"
                 << "\n\n";
-      std::cout << "Penggunaan: nusai <nusa-file>*"
+      std::cout << "Penggunaan: interpreter <nusa-file>*"
                 << "\n";
       return 0;
     }
     if(argc == 2) {
-      Nusai::Interpreter interpreter;
+      Interpreter::Interpreter interpreter;
       interpreter.inputFilePath(args[1]);
     } else if(argc >= 3) {
       if(std::strcmp(args[1], "-l") == 0) {

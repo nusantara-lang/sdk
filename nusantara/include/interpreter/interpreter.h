@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-namespace Nusai {
+namespace Interpreter {
 
   class Interpreter: private Parser::Visitor {
     public:
@@ -69,4 +69,4 @@ namespace Nusai {
       std::any visitNilai(const Parser::NilaiCtx& ctx) override;
   };
 
-} // namespace Nusai
+} // namespace Interpreter

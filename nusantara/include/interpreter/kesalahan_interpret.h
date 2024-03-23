@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace Nusai {
+namespace Interpreter {
 
   class KesalahanInterpret: public std::exception {
     public:
@@ -26,4 +26,4 @@ namespace Nusai {
       std::string pesan;
   };
 
-} // namespace Nusai
+} // namespace Interpreter

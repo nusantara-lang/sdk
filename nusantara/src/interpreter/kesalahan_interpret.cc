@@ -1,4 +1,4 @@
-#include "nusai/kesalahan_interpret.h"
+#include "interpreter/kesalahan_interpret.h"
 
 #include "lexer/alat.h"
 #include "lexer/token.h"
@@ -7,13 +7,13 @@
 #include <sstream>
 #include <vector>
 
-Nusai::KesalahanInterpret::KesalahanInterpret(
+Interpreter::KesalahanInterpret::KesalahanInterpret(
     const std::vector<Lexer::Token>& kToken, const std::string& pesan
 ) {
   if(!kToken.empty()) {
-    std::vector<Nusai::KesalahanInterpret::Data> kData;
+    std::vector<Interpreter::KesalahanInterpret::Data> kData;
     bool awal = true;
-    Nusai::KesalahanInterpret::Data data;
+    Interpreter::KesalahanInterpret::Data data;
     for(const auto& token : kToken) {
       if(data.baris == token.baris.nilai && data.sumber == token.sumber) {
         data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
@@ -52,6 +52,6 @@ Nusai::KesalahanInterpret::KesalahanInterpret(
   }
 }
 
-const char* Nusai::KesalahanInterpret::what() const noexcept {
+const char* Interpreter::KesalahanInterpret::what() const noexcept {
   return this->pesan.c_str();
 }
