@@ -1,46 +1,8 @@
 #include "lexer/alat.h"
 
-#include "lexer/token.h"
-
 #include <format>
 #include <fstream>
-#include <memory>
-#include <regex>
 #include <sstream>
-
-std::unique_ptr<Lexer::Token> Lexer::buatToken(
-    std::string& input, baris& baris, karakter& karakter,
-    const std::string& sumber, const std::vector<TipeTokenData>& data
-) {
-  if(input.empty()) { return nullptr; }
-  Token tkn;
-  tkn.sumber = sumber;
-  tkn.baris = baris;
-  size_t karakterTemp = karakter.nilai;
-  tkn.karakter.nilai = karakterTemp;
-  for(const auto& data : data) {
-    std::regex pola("^" + data.pola);
-    std::smatch matches;
-    if(std::regex_search(
-           input, matches, pola, std::regex_constants::match_continuous
-       )) {
-      tkn.tipe = data.tipe;
-      tkn.nilai = matches.str();
-      for(const char& character : tkn.nilai) {
-        karakter.nilai++;
-        if(character == '\n') {
-          baris.nilai++;
-          karakter.nilai = 0;
-        }
-      }
-      input.replace(0, tkn.nilai.length(), "");
-      return std::make_unique<Token>(tkn);
-    }
-  }
-  tkn.nilai = input[0];
-  input.replace(0, tkn.nilai.length(), "");
-  return std::make_unique<Token>(tkn);
-}
 
 std::string Lexer::bacaFile(const std::string& filePath) {
   // Buka file untuk dibaca dalam mode binary

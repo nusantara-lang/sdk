@@ -1,14 +1,19 @@
-#include "interpreter/interpreter.h"
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
-#include "parser/node.h"
-#include "parser/parser.h"
-
+#include "lexer/token_stream.h"
 #include <cstring>
 #include <exception>
 #include <iostream>
 #include <span>
+#include <vector>
+
+#define SPASI_PUTIH "spasi putih"
+#define ANGKA "angka"
+#define HURUF "huruf"
+#define SIMBOL "simbol"
+#define AKHIR_DARI_FILE "akhir dari file"
+#define TIDAK_DIKETAHUI "tidak diketahui"
 
 int main(int argc, char* argv[]) {
   auto args = std::span(argv, size_t(argc));
@@ -20,28 +25,29 @@ int main(int argc, char* argv[]) {
                 << "\n";
       return 0;
     }
-    if(argc == 2) {
-      Interpreter::Interpreter interpreter;
-      interpreter.inputFilePath(args[1]);
-    } else if(argc >= 3) {
-      if(std::strcmp(args[1], "-l") == 0) {
-        Lexer::Lexer lexer(Lexer::nusantaraDataTipeToken());
-        for(size_t index = 2; index < static_cast<size_t>(argc); ++index) {
-          lexer.inputFilePath(args[index]);
+    std::vector<Lexer::TipeToken> tipeTokens(
+      {
+        {Lexer::TipeToken::Nama(SPASI_PUTIH), Lexer::TipeToken::Pola("[ \n\t\r\f]+"), true},
+        {Lexer::TipeToken::Nama(ANGKA), Lexer::TipeToken::Pola("[0-9]+"), false},
+        {Lexer::TipeToken::Nama(HURUF), Lexer::TipeToken::Pola("[a-zA-Z]"), false},
+        {Lexer::TipeToken::Nama(SIMBOL), Lexer::TipeToken::Pola(R"([`!@#$%^&\*()_+-={}|\[\]\\:";'<>?,\./'])"), false},
+        {Lexer::TipeToken::Nama(AKHIR_DARI_FILE), Lexer::TipeToken::Pola("\\0"), false},
+        {Lexer::TipeToken::Nama(TIDAK_DIKETAHUI), Lexer::TipeToken::Pola(""), false}
+      }
+    );
+    Lexer::Lexer lexer(tipeTokens, tipeTokens.size() - 1, tipeTokens.size() - 2);
+    if(argc > 1) {
+      for(size_t index = 1; index < static_cast<size_t>(argc); ++index) {
+        lexer.inputFilePath(args[index]);
+      }
+      Lexer::TokenStream tokenStream(lexer);
+      Lexer::Token token;
+      while (true) {
+        if(token.getTipe().getNama() == AKHIR_DARI_FILE) {
+          break;
         }
-        Lexer::Token token;
-        while(true) {
-          if(token.tipe == Lexer::TipeToken::akhir_dari_file) { break; }
-          token = lexer.ambilToken();
-          std::cout << Lexer::ubahKeString(token) << "\n";
-        }
-      } else if(std::strcmp(args[1], "-p") == 0) {
-        Parser::Parser parser;
-        for(size_t index = 2; index < static_cast<size_t>(argc); ++index) {
-          parser.inputFilePath(args[index]);
-        }
-        auto root = parser.parse();
-        Parser::cetakNode(root);
+        token = tokenStream.tokenSelanjutNya();
+        std::cout << token << "\n";
       }
     }
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }

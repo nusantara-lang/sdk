@@ -15,15 +15,15 @@ Interpreter::KesalahanInterpret::KesalahanInterpret(
     bool awal = true;
     Interpreter::KesalahanInterpret::Data data;
     for(const auto& token : kToken) {
-      if(data.baris == token.baris.nilai && data.sumber == token.sumber) {
-        data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
+      if(data.baris == token.getBaris() && data.sumber == token.getSumber()) {
+        data.indexKarakterAkhir = token.getKarakter() + token.getNilai().size();
       } else {
         if(!awal) { kData.push_back(data); }
         awal = false;
-        data.sumber = token.sumber;
-        data.baris = token.baris.nilai;
-        data.indexKarakterAwal = token.karakter.nilai;
-        data.indexKarakterAkhir = token.karakter.nilai + token.nilai.length();
+        data.sumber = token.getSumber();
+        data.baris = token.getBaris();
+        data.indexKarakterAwal = token.getKarakter();
+        data.indexKarakterAkhir = token.getKarakter() + token.getNilai().size();
       }
     }
     kData.push_back(data);

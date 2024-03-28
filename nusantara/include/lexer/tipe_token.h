@@ -1,50 +1,41 @@
 #pragma once
 
+#include "ncpp/stream/i_streamable.h"
+
 #include <string>
 
 namespace Lexer {
 
-  enum class TipeToken {
-    akhir_dari_file,
-    tidak_diketahui,
-    kembali_ke_awal_karakter,
-    baris_baru,
-    tab,
-    spasi,
-    komentar_satu_baris,
-    komentar_banyak_baris,
-    muat,
-    luar,
-    bilangan,
-    teks,
-    dinamis,
-    identifikasi,
-    angka,
-    tambah,
-    tanda_hubung,
-    asteris,
-    garis_miring,
-    persen,
-    sama_dengan,
-    seru,
-    dolar,
-    garis_bawah,
-    koma,
-    titik,
-    titik_dua,
-    titik_koma,
-    kutip_satu,
-    garis_vertikal,
-    kurung_buka,
-    kurung_tutup,
-    kurung_siku_buka,
-    kurung_siku_tutup,
-    kurung_kurawal_buka,
-    kurung_kurawal_tutup,
-    garis_miring_terbalik,
-    karakter
-  };
+  class TipeToken: public Ncpp::IStreamable {
+    public:
 
-  std::string ubahKeString(const TipeToken& tipeToken);
+      struct Nama {
+        explicit Nama(std::string nilai);
+        std::string nilai;
+      };
+
+      struct Pola {
+        explicit Pola(std::string nilai);
+        std::string nilai;
+      };
+
+      TipeToken() = default;
+
+      TipeToken(
+          const Nama& nama, const Pola& pola, const bool& skip
+      );
+      [[nodiscard]] std::string ubahKeString() const override;
+
+      [[nodiscard]] const std::string& getNama() const;
+      [[nodiscard]] const std::string& getPola() const;
+      [[nodiscard]] const bool& isSkip() const;
+
+    private:
+      std::string nama;
+      std::string pola;
+      bool skip = false;
+
+    protected:
+  };
 
 } // namespace Lexer

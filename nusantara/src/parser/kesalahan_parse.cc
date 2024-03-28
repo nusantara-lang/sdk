@@ -12,19 +12,19 @@ Parser::KesalahanParse::KesalahanParse(
 ) {
   std::vector<std::string> kKontenPerBaris;
   try {
-    kKontenPerBaris = Lexer::bacaFilePerLine(token.sumber);
+    kKontenPerBaris = Lexer::bacaFilePerLine(token.getSumber());
   } catch(const std::exception& error) { kKontenPerBaris = {}; }
   std::ostringstream ostream;
   ostream << std::format(
-                 "{}:{}:{}", token.sumber, token.baris.nilai + 1,
-                 token.karakter.nilai + 1
+                 "{}:{}:{}", token.getSumber(), token.getBaris() + 1,
+                 token.getKarakter() + 1
              )
           << "\n\n";
-  std::string prefix = std::format("{}| ", token.baris.nilai + 1);
-  if(kKontenPerBaris.size() > token.baris.nilai) {
-    ostream << prefix << kKontenPerBaris[token.baris.nilai] << "\n";
-    ostream << std::string(token.karakter.nilai + prefix.length(), ' ')
-            << std::string(token.nilai.length(), '^') << "\n";
+  std::string prefix = std::format("{}| ", token.getBaris() + 1);
+  if(kKontenPerBaris.size() > token.getBaris()) {
+    ostream << prefix << kKontenPerBaris[token.getBaris()] << "\n";
+    ostream << std::string(token.getKarakter() + prefix.length(), ' ')
+            << std::string(token.getNilai().size(), '^') << "\n";
   }
   ostream << "[P] " << pesan;
   this->pesan = ostream.str();
