@@ -1,12 +1,12 @@
 muat 'lib/inti.nusa';
 //muat 'lib/inti2.nusa';
 
-12,5;
-'{
-    "nama": "${'Aerell'}",
-    "kelas": ${10}
-}';
-'Halo Dunia! ';
+//12,5;
+//'{
+    //"nama": "${'Aerell'}",
+    //"kelas": ${10}
+//}';
+//'Halo Dunia! ';
 
 /*
 ulang bilangan i = 0; i < 10; ++i {
