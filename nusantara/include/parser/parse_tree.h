@@ -2,7 +2,6 @@
 
 #include "lexer/token.h"
 #include "ncpp/stream/i_streamable.h"
-#include "parser/parse_rule.h"
 
 #include <memory>
 #include <string>
@@ -34,7 +33,7 @@ namespace Parser {
       ParseRuleTree& operator=(ParseRuleTree&&) noexcept = default;
       ParseRuleTree(ParseRuleTree&& other) noexcept;
       ~ParseRuleTree() override = default;
-      explicit ParseRuleTree(const ParseRule& rule);
+      explicit ParseRuleTree(std::string rule);
       void addChild(std::unique_ptr<ParseTree>&& child);
       [[nodiscard]] const std::string& getRule() const;
       [[nodiscard]] const std::vector<std::unique_ptr<ParseTree>>&
