@@ -2,9 +2,13 @@
 #include "lexer/tipe_token.h"
 #include "lexer/token.h"
 #include "lexer/token_stream.h"
+#include "parser/parse_rule.h"
+#include "parser/parser.h"
+#include "parser/parse_tree.h"
 #include <cstring>
 #include <exception>
 #include <iostream>
+#include <memory>
 #include <span>
 #include <vector>
 
@@ -42,13 +46,21 @@ int main(int argc, char* argv[]) {
       }
       Lexer::TokenStream tokenStream(lexer);
       Lexer::Token token;
-      while (true) {
-        if(token.getTipe().getNama() == AKHIR_DARI_FILE) {
-          break;
+      std::vector<Parser::ParseRule> rules(
+        {
+          Parser::ParseRule(
+            "nusantara",
+            [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+              while (!parser.getTokenStream().tokenSaatIniAdalah(AKHIR_DARI_FILE)) {
+                rule.addChild(std::make_unique<Parser::ParseTokenTree>(parser.getTokenStream().tokenSelanjutNya(true)));
+              }
+            }
+          )
         }
-        token = tokenStream.tokenSelanjutNya();
-        std::cout << token << "\n";
-      }
+      );
+      Parser::Parser parser(tokenStream, rules);
+      std::unique_ptr<Parser::ParseTree> tree(parser.parse());
+      std::cout << tree->ubahKeString();
     }
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }
   return 0;

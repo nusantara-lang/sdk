@@ -3,6 +3,8 @@
 #include <memory>
 #include <sstream>
 
+Parser::ParseRuleTree::ParseRuleTree(ParseRuleTree&& other) noexcept: rule(std::move(other.rule)), children(std::move(other.children)) {}
+
 Parser::ParseRuleTree::ParseRuleTree(const ParseRule& rule): rule(rule.getNama()) {}
 
 void Parser::ParseRuleTree::addChild(std::unique_ptr<ParseTree>&& child) {

@@ -8,15 +8,16 @@
 namespace Parser {
   class Parser;
   class ParseTree;
+  class ParseRuleTree;
   class ParseRule: Ncpp::IStreamable {
     public:
-      explicit ParseRule(std::string nama, const std::function<std::unique_ptr<ParseTree>(Parser&)>& parse);
+      explicit ParseRule(std::string nama, const std::function<void(Parser&, ParseRuleTree&)>& parse);
       [[nodiscard]] const std::string& getNama() const;
       [[nodiscard]] std::string ubahKeString() const override;
-      [[nodiscard]] const std::function<std::unique_ptr<ParseTree>(Parser&)>& getParse() const;
+      std::unique_ptr<ParseTree> parsed(Parser& parser);
     private:
       std::string nama;
-      std::function<std::unique_ptr<ParseTree>(Parser&)> parse;
+      std::function<void(Parser&, ParseRuleTree&)> parse;
     protected:
   };
 

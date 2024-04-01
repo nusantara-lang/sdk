@@ -26,6 +26,11 @@ namespace Parser {
 
   class ParseRuleTree: public ParseTree {
     public:
+      ParseRuleTree(const ParseRuleTree&) = default;
+      ParseRuleTree& operator=(const ParseRuleTree&) = default;
+      ParseRuleTree& operator=(ParseRuleTree&&) noexcept = default;
+      ParseRuleTree(ParseRuleTree&& other) noexcept;
+      ~ParseRuleTree() override = default;
       explicit ParseRuleTree(const ParseRule& rule);
       void addChild(std::unique_ptr<ParseTree>&& child);
       [[nodiscard]] const std::string& getRule() const;
