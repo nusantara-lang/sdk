@@ -12,8 +12,11 @@ namespace Lexer {
 
   class Lexer {
     public:
-
-      Lexer(std::vector<TipeToken>& tipeTokens, const size_t& indexTipeTokenTidakDiketahui, const size_t& indexTipeTokenAkhirDariFile);
+      Lexer(
+          std::vector<TipeToken>& tipeTokens,
+          const size_t& indexTipeTokenTidakDiketahui,
+          const size_t& indexTipeTokenAkhirDariFile
+      );
 
       void input(const std::string& input);
 
@@ -32,7 +35,8 @@ namespace Lexer {
       std::map<std::string, std::string> sumberBersertaInput = {};
       size_t indexTipeTokenTidakDiketahui;
       size_t indexTipeTokenAkhirDariFile;
-      std::unique_ptr<Token> generateToken(std::string& input, const std::string& sumber);
+      std::unique_ptr<Token>
+      generateToken(std::string& input, const std::string& sumber);
   };
 
 } // namespace Lexer

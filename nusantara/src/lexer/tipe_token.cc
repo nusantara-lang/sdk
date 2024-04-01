@@ -8,21 +8,12 @@ Lexer::TipeToken::TipeToken(
     const Nama& nama, const Pola& pola, const bool& skip
 ):
     nama(nama.nilai),
-    pola(pola.nilai), 
-    skip(skip) 
-{}
+    pola(pola.nilai), skip(skip) {}
 
 std::string Lexer::TipeToken::ubahKeString() const { return nama; }
 
-const std::string& Lexer::TipeToken::getNama() const {
-    return this->nama;
-}
+const std::string& Lexer::TipeToken::getNama() const { return this->nama; }
 
-const std::string& Lexer::TipeToken::getPola() const {
-    return this->pola;
-}
+const std::string& Lexer::TipeToken::getPola() const { return this->pola; }
 
-const bool& Lexer::TipeToken::isSkip() const {
-    return this->skip;
-}
-
+const bool& Lexer::TipeToken::isSkip() const { return this->skip; }

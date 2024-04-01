@@ -19,8 +19,11 @@ namespace Parser {
       ParseTree& operator=(ParseTree&&) noexcept = default;
       ~ParseTree() override = default;
       [[nodiscard]] std::string ubahKeString() const override = 0;
-      [[nodiscard]] virtual std::string ubahKeString(const int& level) const = 0;
+      [[nodiscard]] virtual std::string ubahKeString(const int& level
+      ) const = 0;
+
     private:
+
     protected:
   };
 
@@ -34,12 +37,15 @@ namespace Parser {
       explicit ParseRuleTree(const ParseRule& rule);
       void addChild(std::unique_ptr<ParseTree>&& child);
       [[nodiscard]] const std::string& getRule() const;
-      [[nodiscard]] const std::vector<std::unique_ptr<ParseTree>>& getChildren() const;
+      [[nodiscard]] const std::vector<std::unique_ptr<ParseTree>>&
+      getChildren() const;
       [[nodiscard]] std::string ubahKeString() const override;
       [[nodiscard]] std::string ubahKeString(const int& level) const override;
+
     private:
       std::string rule;
       std::vector<std::unique_ptr<ParseTree>> children;
+
     protected:
   };
 
@@ -49,8 +55,10 @@ namespace Parser {
       [[nodiscard]] const Lexer::Token& getToken() const;
       [[nodiscard]] std::string ubahKeString() const override;
       [[nodiscard]] std::string ubahKeString(const int& level) const override;
+
     private:
       Lexer::Token token;
+
     protected:
   };
 

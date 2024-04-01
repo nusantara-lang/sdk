@@ -9,7 +9,15 @@
 #include <regex>
 #include <string>
 
-Lexer::Lexer::Lexer(std::vector<TipeToken>& tipeTokens, const size_t& indexTipeTokenTidakDiketahui, const size_t& indexTipeTokenAkhirDariFile): tipeTokens(tipeTokens), baris(0), karakter(0), indexTipeTokenTidakDiketahui(indexTipeTokenTidakDiketahui), indexTipeTokenAkhirDariFile(indexTipeTokenAkhirDariFile) {}
+Lexer::Lexer::Lexer(
+    std::vector<TipeToken>& tipeTokens,
+    const size_t& indexTipeTokenTidakDiketahui,
+    const size_t& indexTipeTokenAkhirDariFile
+):
+    tipeTokens(tipeTokens),
+    baris(0), karakter(0),
+    indexTipeTokenTidakDiketahui(indexTipeTokenTidakDiketahui),
+    indexTipeTokenAkhirDariFile(indexTipeTokenAkhirDariFile) {}
 
 void Lexer::Lexer::input(const std::string& input) {
   if(this->sumberBersertaInput.contains("tidak diketahui")) {
@@ -41,7 +49,10 @@ void Lexer::Lexer::inputFilePath(const std::string& filePath) {
 }
 
 Lexer::Token Lexer::Lexer::tokenSelanjutNya() {
-  Token token(this->tipeTokens.get()[this->indexTipeTokenAkhirDariFile], "tidak diketahui", this->baris, this->karakter, "\0");
+  Token token(
+      this->tipeTokens.get()[this->indexTipeTokenAkhirDariFile],
+      "tidak diketahui", this->baris, this->karakter, "\0"
+  );
   for(auto& data : this->sumberBersertaInput) {
     const std::string& sumber = data.first;
     std::string& input = data.second;
@@ -67,15 +78,21 @@ const std::vector<Lexer::TipeToken>& Lexer::Lexer::getTipeTokens() const {
   return this->tipeTokens;
 }
 
-std::unique_ptr<Lexer::Token> Lexer::Lexer::generateToken(std::string& input, const std::string& sumber) {
+std::unique_ptr<Lexer::Token>
+Lexer::Lexer::generateToken(std::string& input, const std::string& sumber) {
   if(input.empty()) { return nullptr; }
   Token::Karakter karakterTemp = this->karakter;
-  Token token(this->tipeTokens.get()[this->indexTipeTokenTidakDiketahui], sumber, this->baris, karakterTemp, "");
+  Token token(
+      this->tipeTokens.get()[this->indexTipeTokenTidakDiketahui], sumber,
+      this->baris, karakterTemp, ""
+  );
   for(const auto& tipeToken : this->tipeTokens.get()) {
-    if(
-      tipeToken.getNama() == this->tipeTokens.get()[this->indexTipeTokenTidakDiketahui].getNama() ||
-      tipeToken.getNama() == this->tipeTokens.get()[this->indexTipeTokenAkhirDariFile].getNama()
-    ) {
+    if(tipeToken.getNama() ==
+           this->tipeTokens.get()[this->indexTipeTokenTidakDiketahui].getNama(
+           ) ||
+       tipeToken.getNama() ==
+           this->tipeTokens.get()[this->indexTipeTokenAkhirDariFile].getNama(
+           )) {
       continue;
     }
     std::regex pola("^" + tipeToken.getPola());
