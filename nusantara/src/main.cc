@@ -1,11 +1,13 @@
 #include "data/parser_rule_data.h"
+#include "data/semantics_rule_data.h"
 #include "data/tipe_token_data.h"
+#include "interpreter/interpreter.h"
 #include "lexer/lexer.h"
 #include "lexer/tipe_token.h"
-#include "lexer/token.h"
 #include "lexer/token_stream.h"
 #include "parser/parse_tree.h"
 #include "parser/parser.h"
+#include "semantics/semantics.h"
 
 #include <cstring>
 #include <exception>
@@ -35,14 +37,16 @@ int main(int argc, char* argv[]) {
         lexer.inputFilePath(args[index]);
       }
       Lexer::TokenStream tokenStream(lexer);
-      Lexer::Token token;
       std::map<
           std::string,
           std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
           rules(parserRulesData());
       Parser::Parser parser(tokenStream, rules);
       std::unique_ptr<Parser::ParseTree> tree(parser.parse(PR_NUSANTARA));
-      std::cout << tree->ubahKeString();
+      Semantics::Semantics semantics(tree, semanticRulesData());
+      std::vector<std::function<std::any(Interpreter::Interpreter&)>> intructions(semantics.analysis());
+      Interpreter::Interpreter interpreter;
+      interpreter.interpret(intructions);
     }
   } catch(const std::exception& error) { std::cout << error.what() << "\n"; }
   return 0;

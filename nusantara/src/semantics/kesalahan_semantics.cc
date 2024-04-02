@@ -1,4 +1,4 @@
-#include "interpreter/kesalahan_interpret.h"
+#include "semantics/kesalahan_semantics.h"
 
 #include "lexer/alat.h"
 #include "lexer/token.h"
@@ -7,13 +7,13 @@
 #include <sstream>
 #include <vector>
 
-Interpreter::KesalahanInterpret::KesalahanInterpret(
+Semantics::KesalahanSemantics::KesalahanSemantics(
     const std::vector<Lexer::Token>& kToken, const std::string& pesan
 ) {
   if(!kToken.empty()) {
-    std::vector<Interpreter::KesalahanInterpret::Data> kData;
+    std::vector<Semantics::KesalahanSemantics::Data> kData;
     bool awal = true;
-    Interpreter::KesalahanInterpret::Data data;
+    Semantics::KesalahanSemantics::Data data;
     for(const auto& token : kToken) {
       if(data.baris == token.getBaris() && data.sumber == token.getSumber()) {
         data.indexKarakterAkhir = token.getKarakter() + token.getNilai().size();
@@ -45,13 +45,13 @@ Interpreter::KesalahanInterpret::KesalahanInterpret(
                 << std::string(data.indexKarakterAkhir, '^') << "\n";
       }
     }
-    ostream << "[I] " << pesan;
+    ostream << "[S] " << pesan;
     this->pesan = ostream.str();
   } else {
-    this->pesan = "[I] " + pesan;
+    this->pesan = "[S] " + pesan;
   }
 }
 
-const char* Interpreter::KesalahanInterpret::what() const noexcept {
+const char* Semantics::KesalahanSemantics::what() const noexcept {
   return this->pesan.c_str();
 }

@@ -6,11 +6,11 @@
 #include <string>
 #include <vector>
 
-namespace Interpreter {
+namespace Semantics {
 
-  class KesalahanInterpret: public std::exception {
+  class KesalahanSemantics: public std::exception {
     public:
-      KesalahanInterpret(
+      KesalahanSemantics(
           const std::vector<Lexer::Token>& kToken, const std::string& pesan
       );
 
@@ -26,4 +26,4 @@ namespace Interpreter {
       std::string pesan;
   };
 
-} // namespace Interpreter
+} // namespace Semantics
