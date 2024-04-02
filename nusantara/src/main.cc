@@ -7,6 +7,7 @@
 #include "lexer/token_stream.h"
 #include "parser/parse_tree.h"
 #include "parser/parser.h"
+#include "semantics/instruction.h"
 #include "semantics/semantics.h"
 
 #include <cstring>
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
       Parser::Parser parser(tokenStream, rules);
       std::unique_ptr<Parser::ParseTree> tree(parser.parse(PR_NUSANTARA));
       Semantics::Semantics semantics(tree, semanticRulesData());
-      std::vector<std::function<std::any(Interpreter::Interpreter&)>> intructions(semantics.analysis());
+      std::vector<Semantics::Intruction> intructions(semantics.analysis());
       Interpreter::Interpreter interpreter;
       interpreter.interpret(intructions);
     }

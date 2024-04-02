@@ -1,7 +1,10 @@
 #include "interpreter/interpreter.h"
+#include "semantics/instruction.h"
+#include <iostream>
 
-void Interpreter::Interpreter::interpret(const std::vector<std::function<std::any(Interpreter&)>>& intructions) {
+void Interpreter::Interpreter::interpret(const std::vector<Semantics::Intruction>& intructions) {
     for(const auto& intruction : intructions) {
-        intruction(*this);
+        std::cout << intruction.getName() << "\n";
+        intruction.getExecute()(*this);
     }
 }

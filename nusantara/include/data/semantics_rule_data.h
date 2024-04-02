@@ -3,23 +3,24 @@
 #include "data/parser_rule_data.h"
 #include "interpreter/interpreter.h"
 #include "parser/parse_tree.h"
+#include "semantics/instruction.h"
 #include "semantics/semantics.h"
 #include <any>
 #include <format>
 #include <functional>
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&, Semantics::Semantics&, std::vector<std::function<std::any(Interpreter::Interpreter&)>>&)>> semanticRulesData() {
+inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&, Semantics::Semantics&, std::vector<Semantics::Intruction>&)>> semanticRulesData() {
     return {
         {
             PR_NUSANTARA,
-            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<std::function<std::any(Interpreter::Interpreter&)>>& intructions) -> std::any {
+            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<Semantics::Intruction>& intructions) -> std::any {
                 for(const auto& child : ruleTree.getChildren()) {
                     if(const auto* pernyataan = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
                         semantics.analysis(*pernyataan, PR_PERNYATAAN, intructions);
+                        semantics.getKToken().clear();
                     }
                 }
                 return {};
@@ -27,7 +28,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
         },
         {
             PR_PERNYATAAN,
-            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<std::function<std::any(Interpreter::Interpreter&)>>& intructions) -> std::any {
+            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<Semantics::Intruction>& intructions) -> std::any {
                 for(const auto& child : ruleTree.getChildren()) {
                     if(const auto* rule = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
                         if(rule->getRule() == PR_MUAT_FILE) {
@@ -40,7 +41,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
         },
         {
             PR_MUAT_FILE,
-            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<std::function<std::any(Interpreter::Interpreter&)>>& intructions) -> std::any {
+            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<Semantics::Intruction>& intructions) -> std::any {
                 std::string filePath;
                 for(const auto& child : ruleTree.getChildren()) {
                     if(const auto* prt = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
@@ -52,6 +53,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
                     }
                 }
                 intructions.emplace_back(
+                    std::format("Memuat file '{}'.", filePath),
                     [filePath](Interpreter::Interpreter& interpreter) -> std::any {
                         std::vector<Lexer::TipeToken> tipeTokens(tipeTokensData());
                         Lexer::Lexer lexer(
@@ -65,7 +67,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
                         Parser::Parser parser(tokenStream, rules);
                         std::unique_ptr<Parser::ParseTree> tree(parser.parse(PR_NUSANTARA));
                         Semantics::Semantics semantics(tree, semanticRulesData());
-                        std::vector<std::function<std::any(Interpreter::Interpreter&)>> intructions(semantics.analysis());
+                        std::vector<Semantics::Intruction> intructions(semantics.analysis());
                         interpreter.interpret(intructions);
                         return {};
                     }
@@ -75,7 +77,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
         },
         {
             PR_EKSPRESI,
-            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<std::function<std::any(Interpreter::Interpreter&)>>& intructions) -> std::any {
+            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, std::vector<Semantics::Intruction>& intructions) -> std::any {
                 for(const auto& child : ruleTree.getChildren()) {
                     if(const auto* rule = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
                         if(rule->getRule() == PR_TEKS) {
@@ -88,7 +90,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
         },
         {
             PR_TEKS,
-            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, [[maybe_unused]] std::vector<std::function<std::any(Interpreter::Interpreter&)>>& intructions) -> std::any {
+            [](const Parser::ParseRuleTree& ruleTree, Semantics::Semantics& semantics, [[maybe_unused]] std::vector<Semantics::Intruction>& intructions) -> std::any {
                 std::string teks;
                 for(size_t index = 0; index < ruleTree.getChildren().size(); ++index) {
                     if(index <= 0 || index > ruleTree.getChildren().size() - 2) {
