@@ -5,7 +5,6 @@
 #include "lexer/token.h"
 
 #include <filesystem>
-#include <iostream>
 #include <regex>
 #include <string>
 

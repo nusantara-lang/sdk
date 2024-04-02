@@ -1,3 +1,98 @@
 #pragma once
 
+#include "data/tipe_token_data.h"
+#include "parser/parse_tree.h"
+#include "parser/parser.h"
+
+#include <functional>
+#include <map>
+
+// Root Rule
 #define PR_NUSANTARA "nusantara"
+
+// Pernyataan Rule
+#define PR_PERNYATAAN "pernyataan"
+#define PR_MUAT_FILE "muat file"
+
+// Ekspresi Rule
+#define PR_EKSPRESI "ekspresi"
+#define PR_TEKS "teks"
+
+inline std::map<
+    std::string, std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
+parserRulesData() {
+  return {
+      {PR_NUSANTARA,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         parser.getTokenStream().tokenSelanjutNya(true);
+         while(!parser.getTokenStream().tokenSaatIniAdalah(TT_AKHIR_DARI_FILE)
+         ) {
+           rule.addChild(parser.parse(PR_PERNYATAAN));
+         }
+       }},
+      {PR_PERNYATAAN,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         if(parser.getTokenStream().tokenSaatIniAdalah(TT_MUAT)) {
+           rule.addChild(parser.parse(PR_MUAT_FILE));
+           if(!parser.getTokenStream().tokenSaatIniAdalah(TT_TITIK_KOMA)) {
+             throw parser.kesalahan("Jangan lupa titik koma.");
+           }
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(true);
+         } else {
+           throw parser.kesalahan("Pernyataan tidak valid.");
+         }
+       }},
+      {PR_MUAT_FILE,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         if(!parser.getTokenStream().tokenSaatIniAdalah(TT_MUAT)) {
+           throw parser.kesalahan(
+               "Untuk memuat file harus diawali kata kunci 'muat'."
+           );
+         }
+         rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+             parser.getTokenStream().getTokenSaatIni()
+         ));
+         parser.getTokenStream().tokenSelanjutNya(true);
+         rule.addChild(parser.parse(PR_TEKS));
+       }},
+      {PR_EKSPRESI,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         if(parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
+           rule.addChild(parser.parse(PR_TEKS));
+         } else {
+           throw parser.kesalahan("Ekspresi tidak valid.");
+         }
+       }},
+      {PR_TEKS,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         // KUTIP AWAL
+         if(!parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
+           throw parser.kesalahan("Teks harus di awali dengan kutip satu.");
+         }
+         rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+             parser.getTokenStream().getTokenSaatIni()
+         ));
+         parser.getTokenStream().tokenSelanjutNya(false);
+         // ISI TEKS
+         while(!parser.getTokenStream().tokenSaatIniAtauAdalah(
+             {TT_KUTIP_SATU, TT_AKHIR_DARI_FILE}
+         )) {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
+         // KUTIP AKHIR
+         if(!parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
+           throw parser.kesalahan("Teks harus di akhiri dengan kutip satu.");
+         }
+         rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+             parser.getTokenStream().getTokenSaatIni()
+         ));
+         parser.getTokenStream().tokenSelanjutNya(true);
+       }}
+  };
+}

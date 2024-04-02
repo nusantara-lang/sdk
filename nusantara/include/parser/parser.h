@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lexer/token_stream.h"
+#include "parser/kesalahan_parse.h"
 #include "parser/parse_tree.h"
 
 #include <functional>
@@ -22,6 +23,7 @@ namespace Parser {
           std::string, std::function<void(Parser&, ParseRuleTree&)>>&
       getRules() const;
       Lexer::TokenStream& getTokenStream();
+      KesalahanParse kesalahan(const std::string& pesan);
 
     private:
       std::reference_wrapper<

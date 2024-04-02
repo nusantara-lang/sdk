@@ -12,7 +12,7 @@ namespace Lexer {
     public:
       explicit TokenStream(Lexer& lexer);
       bool tokenSaatIniAdalah(const std::string& tipe);
-      bool tokenSaatIniAdalah(const std::vector<std::string>& tipe);
+      bool tokenSaatIniAtauAdalah(const std::vector<std::string>& tipe);
       const Token& tokenSelanjutNya(const bool& skip = true);
       const Token& getTokenSaatIni();
 

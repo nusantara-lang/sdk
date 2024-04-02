@@ -34,3 +34,7 @@ Parser::Parser::getRules() const {
 Lexer::TokenStream& Parser::Parser::getTokenStream() {
   return this->tokenStream;
 }
+
+Parser::KesalahanParse Parser::Parser::kesalahan(const std::string& pesan) {
+  return {this->getTokenStream().getTokenSaatIni(), pesan};
+}

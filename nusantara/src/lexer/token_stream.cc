@@ -8,7 +8,8 @@ bool Lexer::TokenStream::tokenSaatIniAdalah(const std::string& tipe) {
   return this->tokenSaatIni.getTipe().getNama() == tipe;
 }
 
-bool Lexer::TokenStream::tokenSaatIniAdalah(const std::vector<std::string>& tipe
+bool Lexer::TokenStream::tokenSaatIniAtauAdalah(
+    const std::vector<std::string>& tipe
 ) {
   return std::ranges::any_of(tipe, [&](const auto& element) {
     return this->tokenSaatIniAdalah(element);

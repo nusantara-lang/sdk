@@ -24,7 +24,10 @@ Parser::KesalahanParse::KesalahanParse(
   if(kKontenPerBaris.size() > token.getBaris()) {
     ostream << prefix << kKontenPerBaris[token.getBaris()] << "\n";
     ostream << std::string(token.getKarakter() + prefix.length(), ' ')
-            << std::string(token.getNilai().size(), '^') << "\n";
+            << std::string(
+                   !token.getNilai().empty() ? token.getNilai().size() : 1, '^'
+               )
+            << "\n";
   }
   ostream << "[P] " << pesan;
   this->pesan = ostream.str();
