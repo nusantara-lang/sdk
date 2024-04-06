@@ -150,7 +150,7 @@ inline std::vector<Lexer::TipeToken> tipeTokensData() {
       {Lexer::TipeToken::Nama(TT_GARIS_MIRING),
        Lexer::TipeToken::Pola(TP_GARIS_MIRING),                                                  false},
       {Lexer::TipeToken::Nama(TT_GARIS_MIRING_TERBALIK),
-       Lexer::TipeToken::Pola(TP_GARIS_MIRING_TERBALIK),                                                  false},
+       Lexer::TipeToken::Pola(TP_GARIS_MIRING_TERBALIK),                                         false},
       {Lexer::TipeToken::Nama(TT_PERSEN),                   Lexer::TipeToken::Pola(TP_PERSEN),
        false                                                                                          },
       {Lexer::TipeToken::Nama(TT_SAMA_DENGAN),
