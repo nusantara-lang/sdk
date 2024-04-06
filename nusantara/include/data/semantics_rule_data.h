@@ -17,10 +17,6 @@
 #include <string>
 #include <vector>
 
-std::any createMuatFileIntruction(
-    const std::string& filePath, Interpreter::Interpreter& interpreter
-);
-
 inline std::map<
     std::string,
     std::function<std::
@@ -119,7 +115,7 @@ semanticRulesData() {
                Parser::Parser parser(tokenStream, rules);
                std::unique_ptr<Parser::ParseTree> parseRule =
                    parser.parse(PR_NUSANTARA);
-               auto* ruleTree(
+               const auto* ruleTree(
                    dynamic_cast<Parser::ParseRuleTree*>(parseRule.get())
                );
                std::vector<Semantics::Intruction> intructions;
@@ -154,15 +150,55 @@ semanticRulesData() {
        [[maybe_unused]] std::vector<Semantics::Intruction>& intructions
        ) -> std::any {
          std::string teks;
+         bool garisMiringTerbalik = false;
+         bool interpolasi = false;
          for(size_t index = 0; index < ruleTree.getChildren().size(); ++index) {
            if(index <= 0 || index > ruleTree.getChildren().size() - 2) {
              continue;
            }
-           if(const auto* ptt = dynamic_cast<Parser::ParseTokenTree*>(
-                  ruleTree.getChildren()[index].get()
-              )) {
+           if(const auto* ptt = dynamic_cast<Parser::ParseTokenTree*>(ruleTree.getChildren()[index].get())) {
              semantics.addToken(ptt->getToken());
-             teks += ptt->getToken().getNilai();
+             std::string nilai = ptt->getToken().getNilai();
+             if(!garisMiringTerbalik && nilai == "\\") {
+              garisMiringTerbalik = true;
+              continue;
+             }
+             if(garisMiringTerbalik) {
+              garisMiringTerbalik = false;
+              if(nilai[0] == 'n') {
+                nilai[0] = '\n';
+              }else if(nilai[0] == 't') {
+                nilai[0] = '\t';
+              }else if(nilai[0] == 'r') {
+                nilai[0] = '\r';
+              }
+              teks += nilai;
+              continue;
+             }
+             if(!interpolasi && nilai == "$") {
+              interpolasi = true;
+              continue;
+             }
+             if(interpolasi) {
+              interpolasi = false;
+              if(nilai == "{") {
+                ++index;
+                 if(const auto* prt = dynamic_cast<Parser::ParseRuleTree*>(ruleTree.getChildren()[index].get())) {
+                  std::any result(semantics.analysisRule(*prt, PR_EKSPRESI, intructions));
+                  if(const auto* strPtr = std::any_cast<std::string>(&result)) {
+                    nilai = *strPtr;
+                  } else if(const auto* bilanganPtr = std::any_cast<Ncpp::Bilangan>(&result)) {
+                    nilai = bilanganPtr->ubahKeString();
+                  }
+                 }
+                 ++index;
+              }else{
+                nilai = std::format("[id:{}]", nilai);
+              }
+              teks += nilai;
+              continue;
+             }
+             teks += nilai;
            }
          }
          return teks;
@@ -175,32 +211,16 @@ semanticRulesData() {
        ) -> std::any {
          std::string bilanganStr;
          for(const auto& child : ruleTree.getChildren()) {
-           if(const auto* ptt =
-                  dynamic_cast<Parser::ParseTokenTree*>(child.get())) {
+           if(const auto* ptt = dynamic_cast<Parser::ParseTokenTree*>(child.get())) {
              semantics.addToken(ptt->getToken());
              bilanganStr += ptt->getToken().getNilai();
            }
+         }
+         if(bilanganStr[0] == '0') {
+          throw semantics.kesalahan("Bilangan tidak boleh di awali nol '0'.");
          }
          return Ncpp::Bilangan(bilanganStr);
        }
   }
   };
-}
-
-inline std::any createMuatFileIntruction(
-    const std::string& filePath, Interpreter::Interpreter& interpreter
-) {
-  std::vector<Lexer::TipeToken> tipeTokens(tipeTokensData());
-  Lexer::Lexer lexer(tipeTokens, tipeTokens.size() - 1, tipeTokens.size() - 2);
-  lexer.inputFilePath(filePath);
-  Lexer::TokenStream tokenStream(lexer);
-  std::map<
-      std::string, std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
-      rules(parserRulesData());
-  Parser::Parser parser(tokenStream, rules);
-  std::unique_ptr<Parser::ParseTree> tree(parser.parse(PR_NUSANTARA));
-  Semantics::Semantics semantics(tree, semanticRulesData());
-  std::vector<Semantics::Intruction> intructions(semantics.analysis());
-  interpreter.interpret(intructions);
-  return {};
 }

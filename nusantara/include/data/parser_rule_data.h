@@ -97,10 +97,48 @@ parserRulesData() {
          while(!parser.getTokenStream().tokenSaatIniAtauAdalah(
              {TT_KUTIP_SATU, TT_AKHIR_DARI_FILE}
          )) {
-           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
-               parser.getTokenStream().getTokenSaatIni()
-           ));
-           parser.getTokenStream().tokenSelanjutNya(false);
+          // GARIS MIRING TERBALIK
+          if(parser.getTokenStream().tokenSaatIniAdalah(TT_GARIS_MIRING_TERBALIK)) {
+           for(unsigned short ulang = 0; ulang < 2; ++ulang) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+                parser.getTokenStream().getTokenSaatIni()
+            ));
+            parser.getTokenStream().tokenSelanjutNya(false);
+           }
+            continue;
+          }else if(parser.getTokenStream().tokenSaatIniAdalah(TT_DOLAR)) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+                parser.getTokenStream().getTokenSaatIni()
+            ));
+            parser.getTokenStream().tokenSelanjutNya(false);
+            if(parser.getTokenStream().tokenSaatIniAdalah(TT_IDENTIFIKASI)) {
+              rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+                  parser.getTokenStream().getTokenSaatIni()
+              ));
+              parser.getTokenStream().tokenSelanjutNya(false);
+            }else if(parser.getTokenStream().tokenSaatIniAdalah(TT_KURUNG_KURAWAL_BUKA)) {
+              rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+                  parser.getTokenStream().getTokenSaatIni()
+              ));
+              parser.getTokenStream().tokenSelanjutNya(false);
+              rule.addChild(parser.parse(PR_EKSPRESI));
+              if(parser.getTokenStream().tokenSaatIniAdalah(TT_KURUNG_KURAWAL_TUTUP)) {
+                rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+                    parser.getTokenStream().getTokenSaatIni()
+                ));
+                parser.getTokenStream().tokenSelanjutNya(false);
+              }else{
+                throw parser.kesalahan("Teks interpolasi harus diakhiri dengan kurung kurawal tutup.");
+              }
+            }else{
+              throw parser.kesalahan("Teks interpolasi harus berisi blok kode atau identifikasi.");
+            }
+            continue;
+          }
+          rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+              parser.getTokenStream().getTokenSaatIni()
+          ));
+          parser.getTokenStream().tokenSelanjutNya(false);
          }
          // KUTIP AKHIR
          if(!parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {

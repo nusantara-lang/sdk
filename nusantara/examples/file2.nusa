@@ -1,4 +1,5 @@
 muat 'examples/file.nusa';
 
-'file 02';
+'file $nama';
 10;
+2;
