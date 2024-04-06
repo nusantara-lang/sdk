@@ -17,12 +17,7 @@
 #include <string>
 #include <vector>
 
-inline std::map<
-    std::string,
-    std::function<std::
-                      any(const Parser::ParseRuleTree&, Semantics::Semantics&,
-                          std::vector<Semantics::Intruction>&)>>
-semanticRulesData() {
+inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&, Semantics::Semantics&, std::vector<Semantics::Intruction>&)>> semanticRulesData() {
   return {
       {PR_NUSANTARA,
        [](const Parser::ParseRuleTree& ruleTree,
@@ -131,17 +126,7 @@ semanticRulesData() {
        [](const Parser::ParseRuleTree& ruleTree,
        Semantics::Semantics& semantics,
        std::vector<Semantics::Intruction>& intructions) -> std::any {
-         for(const auto& child : ruleTree.getChildren()) {
-           if(const auto* rule =
-                  dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
-             if(rule->getRule() == PR_TEKS) {
-               return semantics.analysisRule(*rule, PR_TEKS, intructions);
-             } else if(rule->getRule() == PR_BILANGAN) {
-               return semantics.analysisRule(*rule, PR_BILANGAN, intructions);
-             }
-           }
-         }
-         return {};
+         
        }
   },
       {PR_TEKS,
@@ -229,6 +214,28 @@ semanticRulesData() {
          }
          return Ncpp::Bilangan(bilanganStr);
        }
-  }
+  },
+  {PR_OPERASI_NOTASI_UNARY,
+       [](const Parser::ParseRuleTree& ruleTree,
+       Semantics::Semantics& semantics,
+       [[maybe_unused]] std::vector<Semantics::Intruction>& intructions
+       ) -> std::any {}},
+  {PR_NILAI,
+       [](const Parser::ParseRuleTree& ruleTree,
+       Semantics::Semantics& semantics,
+       [[maybe_unused]] std::vector<Semantics::Intruction>& intructions
+       ) -> std::any {
+        for(const auto& child : ruleTree.getChildren()) {
+           if(const auto* rule =
+                  dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
+             if(rule->getRule() == PR_TEKS) {
+               return semantics.analysisRule(*rule, PR_TEKS, intructions);
+             } else if(rule->getRule() == PR_BILANGAN) {
+               return semantics.analysisRule(*rule, PR_BILANGAN, intructions);
+             }
+           }
+         }
+         return {};
+       }}
   };
 }

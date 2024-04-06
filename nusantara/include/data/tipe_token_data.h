@@ -42,8 +42,17 @@
 #define TP_ANGKA "[0-9]"
 #define TT_ANGKA "angka"
 
+#define TP_GELOMBANG "[~]"
+#define TT_GELOMBANG "gelombang"
+
+#define TP_TAMBAH_SATU "[+][+]"
+#define TT_TAMBAH_SATU "tambah satu"
+
 #define TP_TAMBAH "[+]"
 #define TT_TAMBAH "tambah"
+
+#define TP_KURANG_SATU "--"
+#define TT_KURANG_SATU "kurang satu"
 
 #define TP_TANDA_HUBUNG "-"
 #define TT_TANDA_HUBUNG "tanda hubung"
@@ -139,12 +148,12 @@ inline std::vector<Lexer::TipeToken> tipeTokensData() {
        false                                                                                          },
       {Lexer::TipeToken::Nama(TT_IDENTIFIKASI),
        Lexer::TipeToken::Pola(TP_IDENTIFIKASI),                                                  false},
-      {Lexer::TipeToken::Nama(TT_ANGKA),                    Lexer::TipeToken::Pola(TP_ANGKA),    false
-      },
-      {Lexer::TipeToken::Nama(TT_TAMBAH),                   Lexer::TipeToken::Pola(TP_TAMBAH),
-       false                                                                                          },
-      {Lexer::TipeToken::Nama(TT_TANDA_HUBUNG),
-       Lexer::TipeToken::Pola(TP_TANDA_HUBUNG),                                                  false},
+      {Lexer::TipeToken::Nama(TT_ANGKA), Lexer::TipeToken::Pola(TP_ANGKA), false},
+      {Lexer::TipeToken::Nama(TT_GELOMBANG), Lexer::TipeToken::Pola(TP_GELOMBANG), false},
+      {Lexer::TipeToken::Nama(TT_TAMBAH_SATU), Lexer::TipeToken::Pola(TP_TAMBAH_SATU), false},
+      {Lexer::TipeToken::Nama(TT_TAMBAH), Lexer::TipeToken::Pola(TP_TAMBAH), false},
+      {Lexer::TipeToken::Nama(TT_KURANG_SATU), Lexer::TipeToken::Pola(TP_KURANG_SATU), false},
+      {Lexer::TipeToken::Nama(TT_TANDA_HUBUNG), Lexer::TipeToken::Pola(TP_TANDA_HUBUNG), false},
       {Lexer::TipeToken::Nama(TT_ASTERIS),                  Lexer::TipeToken::Pola(TP_ASTERIS),
        false                                                                                          },
       {Lexer::TipeToken::Nama(TT_GARIS_MIRING),

@@ -33,10 +33,7 @@ int main(int argc, char* argv[]) {
       );
       lexer.inputFilePath(args[1]);
       Lexer::TokenStream tokenStream(lexer);
-      std::map<
-          std::string,
-          std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
-          rules(parserRulesData());
+      std::map<std::string, std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>> rules(parserRulesData());
       Parser::Parser parser(tokenStream, rules);
       std::unique_ptr<Parser::ParseTree> tree(parser.parse(PR_NUSANTARA));
       Semantics::Semantics semantics(tree, semanticRulesData());

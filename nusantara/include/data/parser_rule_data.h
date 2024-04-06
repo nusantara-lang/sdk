@@ -17,8 +17,14 @@
 
 // Ekspresi Rule
 #define PR_EKSPRESI "ekspresi"
+
+// Nilai Rule
+#define PR_NILAI "nilai"
 #define PR_TEKS "teks"
 #define PR_BILANGAN "bilangan"
+
+// Operasi Rule
+#define PR_OPERASI_NOTASI_UNARY "operasi notasi unary"
 
 inline std::map<
     std::string, std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
@@ -73,14 +79,10 @@ parserRulesData() {
        }},
       {PR_EKSPRESI,
        [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
-         if(parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
-           rule.addChild(parser.parse(PR_TEKS));
-         } else if(parser.getTokenStream().tokenSaatIniAtauAdalah(
-                       {TT_TANDA_HUBUNG, TT_ANGKA}
-                   )) {
-           rule.addChild(parser.parse(PR_BILANGAN));
-         } else {
-           throw parser.kesalahan("Ekspresi tidak valid.");
+         if(parser.getTokenStream().tokenSaatIniAtauAdalah({TT_TAMBAH_SATU, TT_KURANG_SATU, TT_GELOMBANG, TT_SERU, TT_KUTIP_SATU, TT_TANDA_HUBUNG, TT_ANGKA})) {
+          rule.addChild(parser.parse(PR_OPERASI_NOTASI_UNARY));
+         }else{
+          throw parser.kesalahan("Ekspresi tidak valid.");
          }
        }},
       {PR_TEKS,
@@ -198,6 +200,35 @@ parserRulesData() {
            ));
            parser.getTokenStream().tokenSelanjutNya(false);
          }
-       }}
+       }},
+       {PR_OPERASI_NOTASI_UNARY,
+        [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+          if(parser.getTokenStream().tokenSaatIniAdalah(TT_TAMBAH_SATU)) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(parser.getTokenStream().getTokenSaatIni()));
+            parser.getTokenStream().tokenSelanjutNya(false);
+          }else if(parser.getTokenStream().tokenSaatIniAdalah(TT_KURANG_SATU)) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(parser.getTokenStream().getTokenSaatIni()));
+            parser.getTokenStream().tokenSelanjutNya(false);
+          }else if(parser.getTokenStream().tokenSaatIniAdalah(TT_GELOMBANG)) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(parser.getTokenStream().getTokenSaatIni()));
+            parser.getTokenStream().tokenSelanjutNya(false);
+          }else if(parser.getTokenStream().tokenSaatIniAdalah(TT_SERU)) {
+            rule.addChild(std::make_unique<Parser::ParseTokenTree>(parser.getTokenStream().getTokenSaatIni()));
+            parser.getTokenStream().tokenSelanjutNya(false);
+          }
+          rule.addChild(parser.parse(PR_NILAI));
+        }
+       },
+       {PR_NILAI,
+        [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+          if(parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
+            rule.addChild(parser.parse(PR_TEKS));
+          } else if(parser.getTokenStream().tokenSaatIniAtauAdalah({TT_TANDA_HUBUNG, TT_ANGKA})) {
+            rule.addChild(parser.parse(PR_BILANGAN));
+          } else {
+            throw parser.kesalahan("Nilai tidak valid.");
+          }
+        }
+       }
   };
 }
