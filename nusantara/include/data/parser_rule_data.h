@@ -6,6 +6,7 @@
 
 #include <functional>
 #include <map>
+#include <memory>
 
 // Root Rule
 #define PR_NUSANTARA "nusantara"
@@ -17,6 +18,7 @@
 // Ekspresi Rule
 #define PR_EKSPRESI "ekspresi"
 #define PR_TEKS "teks"
+#define PR_BILANGAN "bilangan"
 
 inline std::map<
     std::string, std::function<void(Parser::Parser&, Parser::ParseRuleTree&)>>
@@ -34,6 +36,17 @@ parserRulesData() {
        [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
          if(parser.getTokenStream().tokenSaatIniAdalah(TT_MUAT)) {
            rule.addChild(parser.parse(PR_MUAT_FILE));
+           if(!parser.getTokenStream().tokenSaatIniAdalah(TT_TITIK_KOMA)) {
+             throw parser.kesalahan("Jangan lupa titik koma.");
+           }
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(true);
+         } else if(parser.getTokenStream().tokenSaatIniAtauAdalah(
+                       {TT_KUTIP_SATU, TT_TANDA_HUBUNG, TT_ANGKA}
+                   )) {
+           rule.addChild(parser.parse(PR_EKSPRESI));
            if(!parser.getTokenStream().tokenSaatIniAdalah(TT_TITIK_KOMA)) {
              throw parser.kesalahan("Jangan lupa titik koma.");
            }
@@ -62,6 +75,10 @@ parserRulesData() {
        [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
          if(parser.getTokenStream().tokenSaatIniAdalah(TT_KUTIP_SATU)) {
            rule.addChild(parser.parse(PR_TEKS));
+         } else if(parser.getTokenStream().tokenSaatIniAtauAdalah(
+                       {TT_TANDA_HUBUNG, TT_ANGKA}
+                   )) {
+           rule.addChild(parser.parse(PR_BILANGAN));
          } else {
            throw parser.kesalahan("Ekspresi tidak valid.");
          }
@@ -93,6 +110,47 @@ parserRulesData() {
              parser.getTokenStream().getTokenSaatIni()
          ));
          parser.getTokenStream().tokenSelanjutNya(true);
+       }},
+      {PR_BILANGAN,
+       [](Parser::Parser& parser, Parser::ParseRuleTree& rule) {
+         // TANDA HUBUNG
+         if(parser.getTokenStream().tokenSaatIniAdalah(TT_TANDA_HUBUNG)) {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
+         // ANGKA
+         while(parser.getTokenStream().tokenSaatIniAdalah(TT_ANGKA)) {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
+         // KOMA
+         if(!parser.getTokenStream().tokenSaatIniAdalah(TT_KOMA)) {
+           return;
+         } else {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
+         // ANGKA
+         if(!parser.getTokenStream().tokenSaatIniAdalah(TT_ANGKA)) {
+           throw parser.kesalahan("Bilangan desimal tidak valid.");
+         } else {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
+         while(parser.getTokenStream().tokenSaatIniAdalah(TT_ANGKA)) {
+           rule.addChild(std::make_unique<Parser::ParseTokenTree>(
+               parser.getTokenStream().getTokenSaatIni()
+           ));
+           parser.getTokenStream().tokenSelanjutNya(false);
+         }
        }}
   };
 }

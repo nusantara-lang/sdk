@@ -39,7 +39,7 @@
 #define TP_IDENTIFIKASI "[a-zA-Z_][a-zA-Z0-9_]*"
 #define TT_IDENTIFIKASI "identifikasi"
 
-#define TP_ANGKA "0-9"
+#define TP_ANGKA "[0-9]"
 #define TT_ANGKA "angka"
 
 #define TP_TAMBAH "[+]"
