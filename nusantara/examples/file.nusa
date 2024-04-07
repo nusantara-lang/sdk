@@ -1,3 +1,6 @@
 muat 'examples/file2.nusa';
 
-'file 01';
+'Umur : ${++17}';
+++10;
+--1;
+~1;

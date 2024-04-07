@@ -14,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -126,7 +127,17 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
        [](const Parser::ParseRuleTree& ruleTree,
        Semantics::Semantics& semantics,
        std::vector<Semantics::Intruction>& intructions) -> std::any {
-         
+         for(const auto& child : ruleTree.getChildren()) {
+          if(const auto* prt = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
+            if(prt->getRule() == PR_OPERASI_NOTASI_UNARY) {
+              std::any hasil(semantics.analysisRule(*prt, PR_OPERASI_NOTASI_UNARY, intructions));
+              if(const auto* intruksi = std::any_cast<Semantics::Intruction>(&hasil)) {
+                intructions.push_back(*intruksi);
+              }
+            }
+          }
+        }
+        return {};
        }
   },
       {PR_TEKS,
@@ -173,15 +184,7 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
                  if(const auto* prt = dynamic_cast<Parser::ParseRuleTree*>(
                         ruleTree.getChildren()[index].get()
                     )) {
-                   std::any result(
-                       semantics.analysisRule(*prt, PR_EKSPRESI, intructions)
-                   );
-                   if(const auto* strPtr =
-                          std::any_cast<std::string>(&result)) {
-                     nilai = *strPtr;
-                   } else if(const auto* bilanganPtr = std::any_cast<Ncpp::Bilangan>(&result)) {
-                     nilai = bilanganPtr->ubahKeString();
-                   }
+                   nilai = std::format("[ekspresi]");
                  }
                  ++index;
                } else {
@@ -219,7 +222,78 @@ inline std::map<std::string, std::function<std::any(const Parser::ParseRuleTree&
        [](const Parser::ParseRuleTree& ruleTree,
        Semantics::Semantics& semantics,
        [[maybe_unused]] std::vector<Semantics::Intruction>& intructions
-       ) -> std::any {}},
+       ) -> std::any {
+        std::string namaIntruksi("Operasi notasi unary");
+        std::optional<std::string> simbol;
+        std::any nilai;
+        for(const auto& child : ruleTree.getChildren()) {
+          if(const auto* ptt = dynamic_cast<Parser::ParseTokenTree*>(child.get())) {
+            semantics.addToken(ptt->getToken());
+            simbol = ptt->getToken().getNilai();
+          }else if(const auto* prt = dynamic_cast<Parser::ParseRuleTree*>(child.get())) {
+            nilai = semantics.analysisRule(*prt, PR_NILAI, intructions);
+          }
+        }
+        if(const auto* stringStr = std::any_cast<std::string>(&nilai)) {
+          if(simbol.has_value()) {
+            throw semantics.kesalahan(std::format("Tidak dapat melakukan operasi '{}' pada teks.", simbol.value()));
+          }
+          std::string nilaiStr(*stringStr);
+          return Semantics::Intruction(
+            namaIntruksi,
+            [nilaiStr]([[maybe_unused]]Interpreter::Interpreter& interpreter) -> std::any {
+              std::cout << nilaiStr << "\n";
+              return nilaiStr;
+            }
+          );
+        }
+        if(const auto* bilanganPtr = std::any_cast<Ncpp::Bilangan>(&nilai)) {
+          Ncpp::Bilangan nilaiBilangan(*bilanganPtr);
+          if(!simbol.has_value()) {
+            return Semantics::Intruction(
+              namaIntruksi,
+              [nilaiBilangan]([[maybe_unused]]Interpreter::Interpreter& interpreter) -> std::any {
+                std::cout << nilaiBilangan << "\n";
+                return nilaiBilangan;
+              }
+            );
+          }
+          if(simbol.value() == "++") {
+            return Semantics::Intruction(
+              namaIntruksi,
+              [nilaiBilangan]([[maybe_unused]]Interpreter::Interpreter& interpreter) -> std::any {
+                Ncpp::Bilangan nilai(++Ncpp::Bilangan(nilaiBilangan));
+                std::cout << nilai << "\n";
+                return nilai;
+              }
+            );
+          }
+          if(simbol.value() == "--") {
+            return Semantics::Intruction(
+              namaIntruksi,
+              [nilaiBilangan]([[maybe_unused]]Interpreter::Interpreter& interpreter) -> std::any {
+                Ncpp::Bilangan nilai(--Ncpp::Bilangan(nilaiBilangan));
+                std::cout << nilai << "\n";
+                return nilai;
+              }
+            );
+          }
+          if(simbol.value() == "~") {
+            return Semantics::Intruction(
+              namaIntruksi,
+              [nilaiBilangan]([[maybe_unused]]Interpreter::Interpreter& interpreter) -> std::any {
+                Ncpp::Bilangan nilai(~Ncpp::Bilangan(nilaiBilangan));
+                std::cout << nilai << "\n";
+                return nilai;
+              }
+            );
+          }
+          if(simbol.value() == "!") {
+            throw semantics.kesalahan(std::format("Tidak dapat melakukan operasi '{}' pada bilangan.", simbol.value()));
+          }
+        }
+        return {};
+       }},
   {PR_NILAI,
        [](const Parser::ParseRuleTree& ruleTree,
        Semantics::Semantics& semantics,

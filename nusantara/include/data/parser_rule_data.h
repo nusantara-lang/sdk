@@ -50,7 +50,7 @@ parserRulesData() {
            ));
            parser.getTokenStream().tokenSelanjutNya(true);
          } else if(parser.getTokenStream().tokenSaatIniAtauAdalah(
-                       {TT_KUTIP_SATU, TT_TANDA_HUBUNG, TT_ANGKA}
+                      {TT_TAMBAH_SATU, TT_KURANG_SATU, TT_GELOMBANG, TT_SERU, TT_KUTIP_SATU, TT_TANDA_HUBUNG, TT_ANGKA}
                    )) {
            rule.addChild(parser.parse(PR_EKSPRESI));
            if(!parser.getTokenStream().tokenSaatIniAdalah(TT_TITIK_KOMA)) {
